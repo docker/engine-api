@@ -8,6 +8,12 @@ import (
 	"strings"
 )
 
+// NegotiateAuther is an interface which a caller may provide for telling us if
+// we should attempt Negotiate authentication with a server.
+type NegotiateAuther interface {
+	GetNegotiateAuth() bool
+}
+
 // Middleware returns a function which wraps the passed-in Do()-style function,
 // handling any "unauthorized" errors which it returns by retrying the same
 // request with authentication.
