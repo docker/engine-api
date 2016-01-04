@@ -1,3 +1,5 @@
+[![GoDoc](https://godoc.org/github.com/docker/engine-api?status.svg)](https://godoc.org/github.com/docker/engine-api)
+
 # Introduction
 
 Engine-api is a set of Go libraries to implement client and server components compatible with the Docker engine.
