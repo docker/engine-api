@@ -1,9 +1,9 @@
-package lib
+package client
 
 import (
 	"net/url"
 
-	"github.com/docker/docker/api/types"
+	"github.com/docker/engine-api/types"
 )
 
 // ImageTag tags an image in the docker host

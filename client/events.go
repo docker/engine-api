@@ -1,13 +1,13 @@
-package lib
+package client
 
 import (
 	"io"
 	"net/url"
 	"time"
 
-	"github.com/docker/docker/api/types"
-	"github.com/docker/docker/api/types/filters"
-	timetypes "github.com/docker/docker/api/types/time"
+	"github.com/docker/engine-api/types"
+	"github.com/docker/engine-api/types/filters"
+	timetypes "github.com/docker/engine-api/types/time"
 )
 
 // Events returns a stream of events in the daemon in a ReadCloser.

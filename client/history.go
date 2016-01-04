@@ -1,10 +1,10 @@
-package lib
+package client
 
 import (
 	"encoding/json"
 	"net/url"
 
-	"github.com/docker/docker/api/types"
+	"github.com/docker/engine-api/types"
 )
 
 // ImageHistory returns the changes in an image in history format.

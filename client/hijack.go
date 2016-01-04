@@ -1,4 +1,4 @@
-package lib
+package client
 
 import (
 	"crypto/tls"
@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/docker/docker/api/types"
+	"github.com/docker/engine-api/types"
 )
 
 // tlsClientCon holds tls information and a dialed connection.

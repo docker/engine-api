@@ -1,10 +1,10 @@
-package lib
+package client
 
 import (
 	"io"
 	"net/url"
 
-	"github.com/docker/docker/api/types"
+	"github.com/docker/engine-api/types"
 )
 
 // ImageImport creates a new image based in the source options.

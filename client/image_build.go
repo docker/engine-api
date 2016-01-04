@@ -1,4 +1,4 @@
-package lib
+package client
 
 import (
 	"encoding/base64"
@@ -9,8 +9,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/docker/docker/api/types"
-	"github.com/docker/docker/api/types/container"
+	"github.com/docker/engine-api/types"
+	"github.com/docker/engine-api/types/container"
 	"github.com/docker/go-units"
 )
 

@@ -1,12 +1,12 @@
-package lib
+package client
 
 import (
 	"encoding/json"
 	"net/http"
 	"net/url"
 
-	"github.com/docker/docker/api/types"
-	"github.com/docker/docker/api/types/registry"
+	"github.com/docker/engine-api/types"
+	"github.com/docker/engine-api/types/registry"
 )
 
 // ImageSearch makes the docker host to search by a term in a remote registry.

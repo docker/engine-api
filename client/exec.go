@@ -1,9 +1,9 @@
-package lib
+package client
 
 import (
 	"encoding/json"
 
-	"github.com/docker/docker/api/types"
+	"github.com/docker/engine-api/types"
 )
 
 // ContainerExecCreate creates a new exec configuration to run an exec process.

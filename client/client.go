@@ -1,4 +1,4 @@
-package lib
+package client
 
 import (
 	"crypto/tls"

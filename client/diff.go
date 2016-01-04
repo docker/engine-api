@@ -1,10 +1,10 @@
-package lib
+package client
 
 import (
 	"encoding/json"
 	"net/url"
 
-	"github.com/docker/docker/api/types"
+	"github.com/docker/engine-api/types"
 )
 
 // ContainerDiff shows differences in a container filesystem since it was started.

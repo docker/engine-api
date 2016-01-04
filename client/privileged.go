@@ -1,4 +1,4 @@
-package lib
+package client
 
 // RequestPrivilegeFunc is a function interface that
 // clients can supply to retry operations after

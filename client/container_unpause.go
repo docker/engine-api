@@ -1,4 +1,4 @@
-package lib
+package client
 
 // ContainerUnpause resumes the process execution within a container
 func (cli *Client) ContainerUnpause(containerID string) error {
