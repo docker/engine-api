@@ -78,7 +78,7 @@ func GetTimestamp(value string, reference time.Time) (string, error) {
 	var err error
 
 	if parseInLocation {
-		t, err = time.ParseInLocation(format, value, time.FixedZone(time.Now().Zone()))
+		t, err = time.ParseInLocation(format, value, time.FixedZone(reference.Zone()))
 	} else {
 		t, err = time.Parse(format, value)
 	}

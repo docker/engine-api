@@ -7,7 +7,7 @@ import (
 )
 
 func TestGetTimestamp(t *testing.T) {
-	now := time.Now()
+	now := time.Now().In(time.UTC)
 	cases := []struct {
 		in, expected string
 		expectedErr  bool
