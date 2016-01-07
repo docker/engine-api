@@ -184,6 +184,13 @@ type Resources struct {
 	Ulimits              []*units.Ulimit // List of ulimits to be set in the container
 }
 
+// UpdateConfig holds the mutable attributes of a Container.
+// Those attributes can be updated at runtime.
+type UpdateConfig struct {
+	// Contains container's resources (cgroups, ulimits)
+	Resources
+}
+
 // HostConfig the non-portable Config structure of a container.
 // Here, "non-portable" means "dependent of the host we are running on".
 // Portable information *should* appear in Config.
