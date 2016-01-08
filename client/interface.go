@@ -58,7 +58,7 @@ type APIClient interface {
 	ImageSave(imageIDs []string) (io.ReadCloser, error)
 	ImageTag(options types.ImageTagOptions) error
 	Info() (types.Info, error)
-	NetworkConnect(networkID, containerID string) error
+	NetworkConnect(networkID, containerID string, config *network.NetworkingConfig) error
 	NetworkCreate(options types.NetworkCreate) (types.NetworkCreateResponse, error)
 	NetworkDisconnect(networkID, containerID string) error
 	NetworkInspect(networkID string) (types.NetworkResource, error)
@@ -71,3 +71,6 @@ type APIClient interface {
 	VolumeList(filter filters.Args) (types.VolumesListResponse, error)
 	VolumeRemove(volumeID string) error
 }
+
+// Ensure that Client always implements APIClient.
+var _ APIClient = &Client{}
