@@ -2,6 +2,11 @@
 
 Items starting with DEPRECATE are important deprecation notices. For more information on the list of deprecated APIs please have a look at https://docs.docker.com/misc/deprecated/ where target removal dates can also be found.
 
+## 0.1.3 (2016-01-07)
+
+- Fix issue sending all network configurations for a per network request.
+
+
 ## 0.1.2 (2016-01-07)
 
 ### Client
@@ -17,6 +22,7 @@ Items starting with DEPRECATE are important deprecation notices. For more inform
 - Add PidsStats to show PID stats.
 - Add graph storage options to host configuration.
 - Add NetworkConfig and EndpointIPAMConfig structs. (docker 1.10)
+
 
 ## 0.1.1 (2016-01-06)
 
