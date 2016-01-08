@@ -31,6 +31,7 @@ type EndpointSettings struct {
 	// Configurations
 	IPAMConfig *EndpointIPAMConfig
 	// Operational data
+	NetworkID           string
 	EndpointID          string
 	Gateway             string
 	IPAddress           string
