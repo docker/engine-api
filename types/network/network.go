@@ -30,6 +30,7 @@ type EndpointIPAMConfig struct {
 type EndpointSettings struct {
 	// Configurations
 	IPAMConfig *EndpointIPAMConfig
+	Links      []string
 	// Operational data
 	EndpointID          string
 	Gateway             string
