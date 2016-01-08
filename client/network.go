@@ -31,10 +31,10 @@ func (cli *Client) NetworkRemove(networkID string) error {
 }
 
 // NetworkConnect connects a container to an existent network in the docker host.
-func (cli *Client) NetworkConnect(networkID, containerID string, networkingConfig *network.NetworkingConfig) error {
+func (cli *Client) NetworkConnect(networkID, containerID string, config *network.EndpointSettings) error {
 	nc := types.NetworkConnect{
 		Container:      containerID,
-		EndpointConfig: networkingConfig.EndpointsConfig[networkID],
+		EndpointConfig: config,
 	}
 	resp, err := cli.post("/networks/"+networkID+"/connect", nil, nc, nil)
 	ensureReaderClosed(resp)

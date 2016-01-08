@@ -58,7 +58,7 @@ type APIClient interface {
 	ImageSave(imageIDs []string) (io.ReadCloser, error)
 	ImageTag(options types.ImageTagOptions) error
 	Info() (types.Info, error)
-	NetworkConnect(networkID, containerID string, config *network.NetworkingConfig) error
+	NetworkConnect(networkID, containerID string, config *network.EndpointSettings) error
 	NetworkCreate(options types.NetworkCreate) (types.NetworkCreateResponse, error)
 	NetworkDisconnect(networkID, containerID string) error
 	NetworkInspect(networkID string) (types.NetworkResource, error)
