@@ -2,7 +2,24 @@
 
 Items starting with DEPRECATE are important deprecation notices. For more information on the list of deprecated APIs please have a look at https://docs.docker.com/misc/deprecated/ where target removal dates can also be found.
 
+## 0.2.0 (2016-01-11)
+
+### Client
+
+- Allow to force network disconnection. (docker 1.10)
+
+### Types
+
+- Add global and local alias configuration to network endpoint.
+- Add network ID to network endpoint.
+- Add IPAM options.
+- Add Seccomp options.
+- Fix issue referencing OOMKillDisable.
+
+
 ## 0.1.3 (2016-01-07)
+
+### Client
 
 - Fix issue sending all network configurations for a per network request.
 
