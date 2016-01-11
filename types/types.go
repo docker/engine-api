@@ -404,6 +404,7 @@ type NetworkCreate struct {
 	CheckDuplicate bool
 	Driver         string
 	IPAM           network.IPAM
+	Internal       bool
 	Options        map[string]string
 }
 
