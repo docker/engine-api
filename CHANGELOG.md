@@ -2,6 +2,17 @@
 
 Items starting with DEPRECATE are important deprecation notices. For more information on the list of deprecated APIs please have a look at https://docs.docker.com/misc/deprecated/ where target removal dates can also be found.
 
+## 0.2.1 (2016-01-12)
+
+### Client
+
+- Fix issue detecting missing images on container creation.
+
+### Types
+
+- Remove invalid json tag in endpoint configuration.
+- Add missing fields in info structure.
+
 ## 0.2.0 (2016-01-11)
 
 ### Client
