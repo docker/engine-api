@@ -55,7 +55,11 @@ func NewEnvClient() (*Client, error) {
 		}
 	}
 
-	return NewClient(os.Getenv("DOCKER_HOST"), os.Getenv("DOCKER_API_VERSION"), transport, nil)
+	host := os.Getenv("DOCKER_HOST")
+	if host == "" {
+		host = DefaultDockerHost
+	}
+	return NewClient(host, os.Getenv("DOCKER_API_VERSION"), transport, nil)
 }
 
 // NewClient initializes a new API client for the given host and API version.
