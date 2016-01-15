@@ -388,6 +388,7 @@ type NetworkResource struct {
 	Scope      string
 	Driver     string
 	IPAM       network.IPAM
+	Internal   bool
 	Containers map[string]EndpointResource
 	Options    map[string]string
 }
