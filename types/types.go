@@ -199,6 +199,7 @@ type Info struct {
 	Images             int
 	Driver             string
 	DriverStatus       [][2]string
+	SystemStatus       [][2]string
 	Plugins            PluginsInfo
 	MemoryLimit        bool
 	SwapLimit          bool
