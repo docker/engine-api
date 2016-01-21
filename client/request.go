@@ -174,3 +174,26 @@ func isTimeout(err error) bool {
 	t, ok := e.(timeout)
 	return ok && t.Timeout()
 }
+
+// isUnauthorized returns true if an operation fails with
+// and authorization error.
+// If the server returns a 500 error, we check the error message
+// response because the real error could have been streamed there.
+func isUnauthorized(resp *serverResponse, err error) bool {
+	switch resp.statusCode {
+	case http.StatusUnauthorized:
+		return true
+	case http.StatusInternalServerError:
+		if err == nil {
+			return false
+		}
+		loError := strings.ToLower(err.Error())
+		if strings.Contains(loError, "authentication is required") ||
+			strings.Contains(loError, "status 401") ||
+			strings.Contains(loError, "unauthorized") ||
+			strings.Contains(loError, "status code 401") {
+			return true
+		}
+	}
+	return false
+}
