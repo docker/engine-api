@@ -47,12 +47,6 @@ func main() {
 
 The types package includes all typed structures that client and server serialize to execute operations.
 
-### Server
-
-The server package includes API endpoints that applications compatible with the Docker engine API can reuse. It also provides useful middlewares and helpers to handle http requests.
-
-This package is still pending to be extracted from the Docker engine.
-
 ## License
 
 engine-api is licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) for the full license text.
