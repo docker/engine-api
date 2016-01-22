@@ -224,8 +224,6 @@ type Info struct {
 	Architecture       string
 	IndexServerAddress string
 	RegistryConfig     *registry.ServiceConfig
-	InitSha1           string
-	InitPath           string
 	NCPU               int
 	MemTotal           int64
 	DockerRootDir      string
