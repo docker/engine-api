@@ -2,7 +2,6 @@ package client
 
 import (
 	"encoding/json"
-	"net/http"
 	"net/url"
 
 	"github.com/docker/engine-api/types"
@@ -17,7 +16,7 @@ func (cli *Client) ImageSearch(options types.ImageSearchOptions, privilegeFunc R
 	query.Set("term", options.Term)
 
 	resp, err := cli.tryImageSearch(query, options.RegistryAuth)
-	if resp.statusCode == http.StatusUnauthorized {
+	if isUnauthorized(resp, err) {
 		newAuthHeader, privilegeErr := privilegeFunc()
 		if privilegeErr != nil {
 			return results, privilegeErr
