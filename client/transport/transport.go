@@ -1,7 +1,7 @@
+// Package transport provides function to send request to remote endpoints.
 package transport
 
 import (
-	"crypto/tls"
 	"fmt"
 	"net"
 	"net/http"
@@ -11,10 +11,10 @@ import (
 // apiTransport holds information about the http transport to connect with the API.
 type apiTransport struct {
 	*http.Client
-	tlsConfig *tls.Config
+	*tlsInfo
 }
 
-// newTransportWithHTTP creates a new transport based on the provided proto, address and http client.
+// NewTransportWithHTTP creates a new transport based on the provided proto, address and http client.
 // It uses Docker's default http transport configuration if the client is nil.
 // It does not modify the client's transport if it's not nil.
 func NewTransportWithHTTP(proto, addr string, client *http.Client) (Client, error) {
@@ -34,27 +34,9 @@ func NewTransportWithHTTP(proto, addr string, client *http.Client) (Client, erro
 	}
 
 	return &apiTransport{
-		Client:    client,
-		tlsConfig: transport.TLSClientConfig,
+		Client:  client,
+		tlsInfo: &tlsInfo{transport.TLSClientConfig},
 	}, nil
-}
-
-// TLSConfig returns the TLS configuration.
-func (a *apiTransport) TLSConfig() *tls.Config {
-	return a.tlsConfig
-}
-
-// Scheme returns protocol scheme to use.
-func (a *apiTransport) Scheme() string {
-	if a.tlsConfig != nil {
-		return "https"
-	}
-	return "http"
-}
-
-// Secure returns true if there is a TLS configuration.
-func (a *apiTransport) Secure() bool {
-	return a.tlsConfig != nil
 }
 
 // defaultTransport creates a new http.Transport with Docker's

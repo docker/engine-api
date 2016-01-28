@@ -53,6 +53,12 @@ The server package includes API endpoints that applications compatible with the 
 
 This package is still pending to be extracted from the Docker engine.
 
+## Developing
+
+engine-api requires some minimal libraries that you can download running `go get ./...`.
+
+To run tests, use this command `go test -tags=test ./...`. We use build tags to isolate functions and structures that are only available for testing.
+
 ## License
 
 engine-api is licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) for the full license text.
