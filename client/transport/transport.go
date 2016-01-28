@@ -1,4 +1,4 @@
-package client
+package transport
 
 import (
 	"crypto/tls"
@@ -10,19 +10,14 @@ import (
 
 // apiTransport holds information about the http transport to connect with the API.
 type apiTransport struct {
-	// httpClient holds the client transport instance. Exported to keep the old code running.
-	httpClient *http.Client
-	// scheme holds the scheme of the client i.e. https.
-	scheme string
-	// tlsConfig holds the tls configuration to use in hijacked requests.
+	*http.Client
 	tlsConfig *tls.Config
 }
 
-// newAPITransport creates a new transport based on the provided proto, address and client.
+// newTransportWithHTTP creates a new transport based on the provided proto, address and http client.
 // It uses Docker's default http transport configuration if the client is nil.
 // It does not modify the client's transport if it's not nil.
-func newAPITransport(proto, addr string, client *http.Client) (*apiTransport, error) {
-	scheme := "http"
+func NewTransportWithHTTP(proto, addr string, client *http.Client) (Client, error) {
 	var transport *http.Transport
 
 	if client != nil {
@@ -38,25 +33,10 @@ func newAPITransport(proto, addr string, client *http.Client) (*apiTransport, er
 		}
 	}
 
-	if transport.TLSClientConfig != nil {
-		scheme = "https"
-	}
-
 	return &apiTransport{
-		httpClient: client,
-		scheme:     scheme,
-		tlsConfig:  transport.TLSClientConfig,
+		Client:    client,
+		tlsConfig: transport.TLSClientConfig,
 	}, nil
-}
-
-// HTTPClient returns the http client.
-func (a *apiTransport) HTTPClient() *http.Client {
-	return a.httpClient
-}
-
-// Scheme returns the api scheme.
-func (a *apiTransport) Scheme() string {
-	return a.scheme
 }
 
 // TLSConfig returns the TLS configuration.
@@ -64,8 +44,16 @@ func (a *apiTransport) TLSConfig() *tls.Config {
 	return a.tlsConfig
 }
 
-// IsTLS returns true if there is a TLS configuration.
-func (a *apiTransport) IsTLS() bool {
+// Scheme returns protocol scheme to use.
+func (a *apiTransport) Scheme() string {
+	if a.tlsConfig != nil {
+		return "https"
+	}
+	return "http"
+}
+
+// Secure returns true if there is a TLS configuration.
+func (a *apiTransport) Secure() bool {
 	return a.tlsConfig != nil
 }
 
@@ -89,3 +77,5 @@ func defaultTransport(proto, addr string) *http.Transport {
 
 	return tr
 }
+
+var _ Client = &apiTransport{}
