@@ -88,7 +88,7 @@ func (cli *Client) sendClientRequest(method, path string, query url.Values, body
 		req.Header.Set("Content-Type", "text/plain")
 	}
 
-	resp, err := cli.httpClient.Do(req)
+	resp, err := cli.doWithMiddlewares(cli.httpClient.Do)(req)
 	if resp != nil {
 		serverResp.statusCode = resp.StatusCode
 	}
