@@ -34,3 +34,38 @@ func TestGetAPIPath(t *testing.T) {
 		}
 	}
 }
+
+func TestParseHost(t *testing.T) {
+	cases := []struct {
+		host  string
+		proto string
+		addr  string
+		base  string
+		err   bool
+	}{
+		{"", "", "", "", true},
+		{"foobar", "", "", "", true},
+		{"foo://bar", "foo", "bar", "", false},
+		{"tcp://localhost:2476", "tcp", "localhost:2476", "", false},
+		{"tcp://localhost:2476/path", "tcp", "localhost:2476", "/path", false},
+	}
+
+	for _, cs := range cases {
+		p, a, b, e := parseHost(cs.host)
+		if cs.err && e == nil {
+			t.Fatalf("expected error, got nil")
+		}
+		if !cs.err && e != nil {
+			t.Fatal(e)
+		}
+		if cs.proto != p {
+			t.Fatalf("expected proto %s, got %s", cs.proto, p)
+		}
+		if cs.addr != a {
+			t.Fatalf("expected addr %s, got %s", cs.addr, a)
+		}
+		if cs.base != b {
+			t.Fatalf("expected base %s, got %s", cs.base, b)
+		}
+	}
+}
