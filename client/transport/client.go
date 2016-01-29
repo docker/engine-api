@@ -5,10 +5,16 @@ import (
 	"net/http"
 )
 
-// Client is an interface that abstracts all remote connections.
-type Client interface {
+// Sender is an interface that clients must implement
+// to be able to send requests to a remote connection.
+type Sender interface {
 	// Do sends request to a remote endpoint.
 	Do(*http.Request) (*http.Response, error)
+}
+
+// Client is an interface that abstracts all remote connections.
+type Client interface {
+	Sender
 	// Secure tells whether the connection is secure or not.
 	Secure() bool
 	// Scheme returns the connection protocol the client uses.

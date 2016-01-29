@@ -10,8 +10,9 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/docker/engine-api/client/transport/cancellable"
+
 	"golang.org/x/net/context"
-	"golang.org/x/net/context/ctxhttp"
 )
 
 // serverResponse is a wrapper for http API responses.
@@ -106,7 +107,7 @@ func (cli *Client) sendClientRequest(ctx context.Context, method, path string, q
 		req.Header.Set("Content-Type", "text/plain")
 	}
 
-	resp, err := ctxhttp.Do(ctx, cli.httpClient, req)
+	resp, err := cancellable.Do(ctx, cli.transport, req)
 	if resp != nil {
 		serverResp.statusCode = resp.StatusCode
 	}
