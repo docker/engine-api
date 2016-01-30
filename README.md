@@ -55,9 +55,11 @@ This package is still pending to be extracted from the Docker engine.
 
 ## Developing
 
-engine-api requires some minimal libraries that you can download running `go get ./...`.
+engine-api requires some minimal libraries that you can download running `make deps`.
 
-To run tests, use this command `go test -tags=test ./...`. We use build tags to isolate functions and structures that are only available for testing.
+To run tests, use the command `make test`. We use build tags to isolate functions and structures that are only available for testing.
+
+To validate the sources, use the command `make validate`.
 
 ## License
 

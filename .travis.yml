@@ -6,11 +6,5 @@
   go:
     - 1.5
     - tip
-  install:
-    - go get -t ./...
-    - go get github.com/golang/lint/golint
-  script:
-    - go vet ./...
-    - test -z "$(golint ./... | tee /dev/stderr)"
-    - test -z "$(gofmt -s -l . | tee /dev/stderr)"
-    - go test -tags=test -v ./...
+  install: make deps
+  script: make validate && make test
