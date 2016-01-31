@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/docker/engine-api/client/transport"
 	"github.com/docker/engine-api/types"
 )
 
@@ -156,9 +157,12 @@ func tlsDialWithDialer(dialer *net.Dialer, network, addr string, config *tls.Con
 }
 
 func dial(proto, addr string, tlsConfig *tls.Config) (net.Conn, error) {
-	if tlsConfig != nil && proto != "unix" {
+	if tlsConfig != nil && proto != "unix" && proto != "npipe" {
 		// Notice this isn't Go standard's tls.Dial function
 		return tlsDial(proto, addr, tlsConfig)
+	}
+	if proto == "npipe" {
+		return transport.DialPipe(addr, 32*time.Second)
 	}
 	return net.Dial(proto, addr)
 }
