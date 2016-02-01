@@ -28,9 +28,8 @@ func infoMock(req *http.Request) (*http.Response, error) {
 }
 
 func TestInfo(t *testing.T) {
-	mockClient := transport.NewMockClient(nil, infoMock)
 	client := &Client{
-		transport: mockClient,
+		transport: transport.NewMockClient(nil, infoMock),
 	}
 
 	info, err := client.Info()
