@@ -12,6 +12,7 @@ import (
 type apiTransport struct {
 	*http.Client
 	*tlsInfo
+	transport *http.Transport
 }
 
 // NewTransportWithHTTP creates a new transport based on the provided proto, address and http client.
@@ -34,9 +35,15 @@ func NewTransportWithHTTP(proto, addr string, client *http.Client) (Client, erro
 	}
 
 	return &apiTransport{
-		Client:  client,
-		tlsInfo: &tlsInfo{transport.TLSClientConfig},
+		Client:    client,
+		tlsInfo:   &tlsInfo{transport.TLSClientConfig},
+		transport: transport,
 	}, nil
+}
+
+// CancelRequest stops a request execution.
+func (a *apiTransport) CancelRequest(req *http.Request) {
+	a.transport.CancelRequest(req)
 }
 
 // defaultTransport creates a new http.Transport with Docker's
