@@ -59,6 +59,10 @@ func defaultTransport(proto, addr string) *http.Transport {
 		tr.Dial = func(_, _ string) (net.Conn, error) {
 			return net.DialTimeout(proto, addr, timeout)
 		}
+	} else if proto == "npipe" {
+		tr.Dial = func(_, _ string) (net.Conn, error) {
+			return DialPipe(addr, timeout)
+		}
 	} else {
 		tr.Proxy = http.ProxyFromEnvironment
 		tr.Dial = (&net.Dialer{Timeout: timeout}).Dial
