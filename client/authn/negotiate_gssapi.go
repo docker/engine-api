@@ -9,6 +9,8 @@ import (
 	"os"
 	"strings"
 	"unsafe"
+
+	"github.com/docker/engine-api/client/logger"
 )
 
 // #cgo pkg-config: krb5-gssapi
@@ -21,6 +23,7 @@ import (
 // };
 import "C"
 
+// negotiate is an AuthResponder that handles authentication with an GSS API.
 type negotiate struct {
 	logger   Logger
 	major    C.OM_uint32
@@ -28,32 +31,52 @@ type negotiate struct {
 	hostname string
 }
 
-func getErrorDesc(major, minor C.OM_uint32, mech C.gss_OID) string {
-	var mj, mn C.gss_buffer_desc
-	var str string
-	var cm, mc C.OM_uint32
-
-	major = C.gss_display_status(&cm, major, C.GSS_C_GSS_CODE, nil, &mc, &mj)
-	if major == 0 && mj.value != nil && mj.length > 0 {
-		str = string(C.GoBytes(mj.value, C.int(mj.length)))
-		C.gss_release_buffer(nil, &mj)
+// NewGSSAuth creates a negotiate auth responder with a callback
+func NewGSSAuth() AuthResponder {
+	return &negotiate{
+		logger: logger.Silent{},
 	}
-	if minor != 0 {
-		major = C.gss_display_status(&cm, minor, C.GSS_C_MECH_CODE, mech, &mc, &mn)
-		if major == 0 && mn.value != nil && mn.length > 0 {
-			if str != "" {
-				str = str + ": " + string(C.GoBytes(mn.value, C.int(mn.length)))
-			} else {
-				str = "?: " + string(C.GoBytes(mn.value, C.int(mn.length)))
-			}
-			C.gss_release_buffer(nil, &mn)
-		}
-	}
-	return str
 }
 
-func (n *negotiate) scheme() string {
+// SetLogger sets the logger for the negotiate auth responder.
+func (n *negotiate) SetLogger(l logger.Logger) {
+	n.logger = l
+}
+
+// Scheme returns the scheme the negotiate auth responder handles.
+func (n *negotiate) Scheme() string {
 	return "Negotiate"
+}
+
+// AuthRespond handles authentication for the negotiate auth responder.
+func (n *negotiate) AuthRespond(challenge string, req *http.Request) (result bool, err error) {
+	if n.hostname == "" {
+		serverhost := req.Host
+		if serverhost == "" {
+			serverhost = req.URL.Host
+		}
+		if serverhost[0] == os.PathSeparator {
+			serverhost, _ = os.Hostname()
+		}
+		sep := strings.LastIndex(serverhost, ":")
+		if sep > -1 && sep > strings.LastIndex(serverhost, "]") {
+			serverhost = serverhost[:sep]
+		}
+		n.hostname = serverhost
+	}
+	return n.authStep(challenge, req)
+}
+
+// AuthCompleted finishes authentication for the negotiate auth responder.
+func (n *negotiate) AuthCompleted(challenge string, resp *http.Response) (completed bool, err error) {
+	var minor C.OM_uint32
+	completed, err = n.authStep(challenge, nil)
+	// Reset state, in case we need to do all of this again.
+	if n.ctx != nil {
+		C.gss_delete_sec_context(&minor, &n.ctx, nil)
+		n.ctx = nil
+	}
+	return
 }
 
 func (n *negotiate) authStep(challenge string, req *http.Request) (result bool, err error) {
@@ -69,17 +92,17 @@ func (n *negotiate) authStep(challenge string, req *http.Request) (result bool, 
 		if len(fields) > 1 {
 			token, err := base64.StdEncoding.DecodeString(fields[1])
 			if err != nil {
-				n.logger.Error(fmt.Sprintf("error decoding Negotiate token from server: \"%s\"", fields[1]))
+				n.logger.Errorf("error decoding Negotiate token from server: \"%s\"", fields[1])
 				return false, err
 			}
-			n.logger.Debug(fmt.Sprintf("gssapi: received token \"%s\"", fields[1]))
+			n.logger.Debugf("gssapi: received token \"%s\"", fields[1])
 			itoken.value = unsafe.Pointer(&token[0])
 			itoken.length = C.size_t(len(token))
 			itokenptr = &itoken
 		}
 		// Work out the server's GSSAPI name.
 		service := "HTTP@" + n.hostname
-		n.logger.Debug(fmt.Sprintf("gssapi: using service name \"%s\"", service))
+		n.logger.Debugf("gssapi: using service name \"%s\"", service)
 		// Import the name.
 		namebuf.value = unsafe.Pointer(C.CString(service))
 		defer C.free(namebuf.value)
@@ -105,9 +128,9 @@ func (n *negotiate) authStep(challenge string, req *http.Request) (result bool, 
 		// Check for complete or partial success.
 		if n.major != C.GSS_S_COMPLETE && n.major != C.GSS_S_CONTINUE_NEEDED {
 			if itokenptr != nil {
-				n.logger.Info(fmt.Sprintf("error generating GSSAPI session initiation token (%s), not attempting Negotiate auth", getErrorDesc(n.major, minor, nil)))
+				n.logger.Infof("error generating GSSAPI session initiation token (%s), not attempting Negotiate auth", getErrorDesc(n.major, minor, nil))
 			} else {
-				n.logger.Debug(fmt.Sprintf("error generating GSSAPI session initiation token (%s), not attempting Negotiate auth", getErrorDesc(n.major, minor, nil)))
+				n.logger.Debugf("error generating GSSAPI session initiation token (%s), not attempting Negotiate auth", getErrorDesc(n.major, minor, nil))
 			}
 			return false, nil
 		}
@@ -120,7 +143,7 @@ func (n *negotiate) authStep(challenge string, req *http.Request) (result bool, 
 			response := C.GoBytes(otoken.value, C.int(otoken.length))
 			token := base64.StdEncoding.EncodeToString(response)
 			req.Header.Add("Authorization", "Negotiate "+token)
-			n.logger.Debug(fmt.Sprintf("gssapi: generated token \"%s\"", token))
+			n.logger.Debugf("gssapi: generated token \"%s\"", token)
 		}
 		if n.major == C.GSS_S_CONTINUE_NEEDED {
 			n.logger.Debug("gssapi: continue needed")
@@ -132,46 +155,26 @@ func (n *negotiate) authStep(challenge string, req *http.Request) (result bool, 
 	return false, nil
 }
 
-func (n *negotiate) authRespond(challenge string, req *http.Request) (result bool, err error) {
-	if n.hostname == "" {
-		serverhost := req.Host
-		if serverhost == "" {
-			serverhost = req.URL.Host
-		}
-		if serverhost[0] == os.PathSeparator {
-			serverhost, _ = os.Hostname()
-		}
-		sep := strings.LastIndex(serverhost, ":")
-		if sep > -1 && sep > strings.LastIndex(serverhost, "]") {
-			serverhost = serverhost[:sep]
-		}
-		n.hostname = serverhost
-	}
-	return n.authStep(challenge, req)
-}
+func getErrorDesc(major, minor C.OM_uint32, mech C.gss_OID) string {
+	var mj, mn C.gss_buffer_desc
+	var str string
+	var cm, mc C.OM_uint32
 
-func (n *negotiate) authCompleted(challenge string, resp *http.Response) (completed bool, err error) {
-	var minor C.OM_uint32
-	completed, err = n.authStep(challenge, nil)
-	// Reset state, in case we need to do all of this again.
-	if n.ctx != nil {
-		C.gss_delete_sec_context(&minor, &n.ctx, nil)
-		n.ctx = nil
+	major = C.gss_display_status(&cm, major, C.GSS_C_GSS_CODE, nil, &mc, &mj)
+	if major == 0 && mj.value != nil && mj.length > 0 {
+		str = string(C.GoBytes(mj.value, C.int(mj.length)))
+		C.gss_release_buffer(nil, &mj)
 	}
-	return
-}
-
-func createNegotiate(logger Logger, authers []interface{}) authResponder {
-	for _, auther := range authers {
-		if b, ok := auther.(NegotiateAuther); ok {
-			if b != nil && b.GetNegotiateAuth() {
-				return &negotiate{logger: logger}
+	if minor != 0 {
+		major = C.gss_display_status(&cm, minor, C.GSS_C_MECH_CODE, mech, &mc, &mn)
+		if major == 0 && mn.value != nil && mn.length > 0 {
+			if str != "" {
+				str = str + ": " + string(C.GoBytes(mn.value, C.int(mn.length)))
+			} else {
+				str = "?: " + string(C.GoBytes(mn.value, C.int(mn.length)))
 			}
+			C.gss_release_buffer(nil, &mn)
 		}
 	}
-	return nil
-}
-
-func init() {
-	authResponderCreators = append(authResponderCreators, createNegotiate)
+	return str
 }

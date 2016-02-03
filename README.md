@@ -43,6 +43,56 @@ func main() {
 }
 ```
 
+#### Middlewares
+
+The engine-api client can use middlewares to handle logic around requests and responses.
+
+A middleware is a function that takes a `transport.Sender` as an argument and returns a new `transport.Sender`. The client creates a chain with those middlewares before sending requests to the remote host.
+
+The [Cookies middleware](client/transport/cookie.go) is an example of a client middleware:
+
+```go
+func main() {
+	client, _ := client.NewEnvClient()
+	cookieJar, _ := cookiejar.New(nil)
+	cookies := transport.NewCookieJarMiddleware(cookieJar)
+
+	client.AddMiddlewares(cookies)
+}
+```
+
+#### Authentication
+
+The engine-api can use different authentication methods, they are implemented in the [client/authn package](client/authn/authn.go). An authentication method implements `authn.AuthResponder`. They are added to the client using `Client.AuthenticateWith`:
+
+```go
+func main() {
+	client, _ := client.NewEnvClient()
+	basicAuthCallback := func(realm string) (user, password string, err error) {
+		return "admin", "password", nil
+	}
+	basicAuth := authn.NewBasicAuth(basicAuthCallback)
+
+	bearerAuthCallback := func(challenge string) (token string, err error) {
+		return "token", nil
+	}
+	bearerAuth := authn.NewBearerAuth(bearerAuthCallback)
+	
+	client.AuthenticateWith(basicAuth, bearerAuth)
+}
+```
+
+#### Logger
+
+The engine-api client offers a Logger interface that a caller can supply. By default, the client uses a [silent logger](client/logger/logger.go) that doesn't produce any output. [Logrus](https://godoc.org/github.com/Sirupsen/logrus), for instance, satisfies this interface.
+
+```go
+func main() {
+	client, _ := client.NewEnvClient()
+	client.SetLogger(logrus.StandardLogger())
+}
+```
+
 ### Types
 
 The types package includes all typed structures that client and server serialize to execute operations.

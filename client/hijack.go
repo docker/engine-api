@@ -68,10 +68,11 @@ func (cli *Client) postHijacked(path string, query url.Values, body interface{},
 	defer clientconn.Close()
 
 	// Server hijacks the connection, error 'connection closed' expected
-	resp, err := cli.doWithMiddlewares(clientconn.Do)(req)
+	sender := cli.loadAllMiddlewares(clientconn)
+	resp, err := sender.Do(req)
 
 	if resp.StatusCode != http.StatusSwitchingProtocols {
-		cli.debugf("[hijack] Error %d hijacking", resp.StatusCode)
+		cli.logger.Debugf("[hijack] Error %d hijacking", resp.StatusCode)
 		if err != nil {
 			return types.HijackedResponse{}, err
 		}

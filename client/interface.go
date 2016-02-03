@@ -2,11 +2,12 @@ package client
 
 import (
 	"io"
-	"net/http"
 
 	"golang.org/x/net/context"
 
 	"github.com/docker/engine-api/client/authn"
+	"github.com/docker/engine-api/client/logger"
+	"github.com/docker/engine-api/client/middleware"
 	"github.com/docker/engine-api/types"
 	"github.com/docker/engine-api/types/container"
 	"github.com/docker/engine-api/types/filters"
@@ -16,6 +17,8 @@ import (
 
 // APIClient is an interface that clients that talk with a docker server must implement.
 type APIClient interface {
+	AddMiddlewares(middlewares ...middleware.Middleware)
+	AuthenticateWith(responders ...authn.AuthResponder)
 	ClientVersion() string
 	ContainerAttach(options types.ContainerAttachOptions) (types.HijackedResponse, error)
 	ContainerCommit(options types.ContainerCommitOptions) (types.ContainerCommitResponse, error)
@@ -70,23 +73,11 @@ type APIClient interface {
 	NetworkRemove(networkID string) error
 	RegistryLogin(auth types.AuthConfig) (types.AuthResponse, error)
 	ServerVersion() (types.Version, error)
-	SetAuth(m ...interface{})
-	SetLogger(logger Logger)
+	SetLogger(logger logger.Logger)
 	VolumeCreate(options types.VolumeCreateRequest) (types.Volume, error)
 	VolumeInspect(volumeID string) (types.Volume, error)
 	VolumeList(filter filters.Args) (types.VolumesListResponse, error)
 	VolumeRemove(volumeID string) error
-}
-
-// Logger is an interface for debug and logging callbacks.
-type Logger interface {
-	authn.Logger
-}
-
-// CookieJarGetter is an interface which a caller may provide for us if we
-// should be storing and using cookies which are set by a server.
-type CookieJarGetter interface {
-	GetCookieJar() http.CookieJar
 }
 
 // Ensure that Client always implements APIClient.

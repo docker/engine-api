@@ -10,6 +10,10 @@ import (
 
 	"github.com/docker/engine-api/client/transport"
 	"github.com/docker/go-connections/tlsconfig"
+
+	"github.com/docker/engine-api/client/authn"
+	"github.com/docker/engine-api/client/logger"
+	"github.com/docker/engine-api/client/middleware"
 )
 
 // Client is the API client that performs all operations
@@ -28,9 +32,9 @@ type Client struct {
 	// custom http headers configured by users.
 	customHTTPHeaders map[string]string
 	// logging callbacks, if we're meant to log messages
-	logger Logger
-	// authentication-related callbacks
-	authers []interface{}
+	logger logger.Logger
+	// middlewares stores functions that act as middlewares
+	middlewares []middleware.Middleware
 }
 
 // NewEnvClient initializes a new API client based on environment variables.
@@ -88,48 +92,32 @@ func NewClient(host string, version string, client *http.Client, httpHeaders map
 		transport:         transport,
 		version:           version,
 		customHTTPHeaders: httpHeaders,
+		logger:            logger.Silent{},
 	}, nil
 }
 
-// SetAuth sets callbacks that the library can use to obtain information which
-// is needs in order to authenticate to the server.
-func (cli *Client) SetAuth(m ...interface{}) {
-	cli.authers = m
+// AddMiddlewares appends middlewares to the request chain.
+func (cli *Client) AddMiddlewares(middlewares ...middleware.Middleware) {
+	cli.middlewares = append(cli.middlewares, middlewares...)
+}
+
+// AuthenticateWith adds authentication methods to the client requests.
+func (cli *Client) AuthenticateWith(responders ...authn.AuthResponder) {
+	cli.AddMiddlewares(authn.NewAuthResponderMiddleware(cli.logger, responders...))
 }
 
 // SetLogger sets a callback that the client can use to log debugging
-// messages.  The callback should not treat messages which are passed to it as
+// messages. The callback should not treat messages which are passed to it as
 // format specifiers.
-func (cli *Client) SetLogger(logger Logger) {
-	cli.logger = logger
+func (cli *Client) SetLogger(l logger.Logger) {
+	cli.logger = l
 }
 
-// debugf passes debugging messages to the callback, if one is set
-func (cli *Client) debugf(format string, args ...interface{}) {
-	if cli.logger != nil {
-		cli.logger.Debug(fmt.Sprintf(format, args...))
-	}
-}
-
-// debug passes a debugging message to the callback, if one is set
-func (cli *Client) debug(formatted string) {
-	if cli.logger != nil {
-		cli.logger.Debug(formatted)
-	}
-}
-
-// infof passes informational messages to the callback, if one is set
-func (cli *Client) infof(format string, args ...interface{}) {
-	if cli.logger != nil {
-		cli.logger.Info(fmt.Sprintf(format, args...))
-	}
-}
-
-// errorf passes error messages to the right callback, if one is set
-func (cli *Client) errorf(format string, args ...interface{}) {
-	if cli.logger != nil {
-		cli.logger.Error(fmt.Sprintf(format, args...))
-	}
+// ClientVersion returns the version string associated with this
+// instance of the Client. Note that this value can be changed
+// via the DOCKER_API_VERSION env var.
+func (cli *Client) ClientVersion() string {
+	return cli.version
 }
 
 // getAPIPath returns the versioned request path to call the api.
@@ -148,11 +136,13 @@ func (cli *Client) getAPIPath(p string, query url.Values) string {
 	return apiPath
 }
 
-// ClientVersion returns the version string associated with this
-// instance of the Client. Note that this value can be changed
-// via the DOCKER_API_VERSION env var.
-func (cli *Client) ClientVersion() string {
-	return cli.version
+// loadAllMiddlewares execute the middleware chain to create a final Sender.
+func (cli *Client) loadAllMiddlewares(sender transport.Sender) transport.Sender {
+	final := sender
+	for _, m := range cli.middlewares {
+		final = m(final)
+	}
+	return final
 }
 
 // parseHost verifies that the given host strings is valid.

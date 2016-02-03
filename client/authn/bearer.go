@@ -1,38 +1,53 @@
 package authn
 
 import (
-	"errors"
+	"fmt"
 	"net/http"
+
+	"github.com/docker/engine-api/client/logger"
 )
 
-// BearerAuther is an interface which a caller may provide for obtaining a
-// token to use in attempting Bearer authentication with a server.
-type BearerAuther interface {
-	GetBearerAuth(challenge string) (token string, err error)
-}
+// BearerAuthCallback is an interface which a caller may provide for obtaining a
+// token to use in attempting bearer authentication with a server.
+type BearerAuthCallback func(challenge string) (token string, err error)
 
+// bearer is an AuthResponder that handles bearer authentication.
 type bearer struct {
-	logger Logger
-	token  string
-	auther BearerAuther
+	logger   logger.Logger
+	token    string
+	callback BearerAuthCallback
 }
 
-func (b *bearer) scheme() string {
+// NewBearerAuth creates a Bearer auth responder with a callback
+func NewBearerAuth(callback BearerAuthCallback) AuthResponder {
+	return &bearer{
+		logger:   logger.Silent{},
+		callback: callback,
+	}
+}
+
+// SetLogger sets the logger for the bearer auth responder.
+func (b *bearer) SetLogger(l logger.Logger) {
+	b.logger = l
+}
+
+// Scheme returns the scheme the bearer auth responder handles.
+func (b *bearer) Scheme() string {
 	return "Bearer"
 }
 
-func (b *bearer) authRespond(challenge string, req *http.Request) (result bool, err error) {
-	token := b.token
-	if token != "" {
+// AuthRespond handles authentication for the bearer auth responder.
+func (b *bearer) AuthRespond(challenge string, req *http.Request) (result bool, err error) {
+	if b.token != "" {
 		b.logger.Debug("using previously-supplied Bearer token")
-		req.Header.Add("Authorization", "Bearer "+token)
+		req.Header.Add("Authorization", b.header())
 		return true, nil
 	}
-	if b.auther == nil {
+	if b.callback == nil {
 		b.logger.Debug("failed to obtain token for Bearer auth")
 		return false, nil
 	}
-	token, err = b.auther.GetBearerAuth(challenge)
+	token, err := b.callback(challenge)
 	if err != nil {
 		return false, err
 	}
@@ -41,30 +56,18 @@ func (b *bearer) authRespond(challenge string, req *http.Request) (result bool, 
 		return false, nil
 	}
 	b.token = token
-	req.Header.Add("Authorization", "Bearer "+b.token)
+	req.Header.Add("Authorization", b.header())
 	return true, nil
 }
 
-func (b *bearer) authCompleted(challenge string, resp *http.Response) (result bool, err error) {
+// AuthCompleted finishes authentication for the bearer auth responder.
+func (b *bearer) AuthCompleted(challenge string, resp *http.Response) (result bool, err error) {
 	if challenge == "" {
 		return true, nil
 	}
-	return false, errors.New("Error: unexpected WWW-Authenticate header in server response")
+	return false, errUnexpectedAuthenticateHeader
 }
 
-func createBearer(logger Logger, authers []interface{}) authResponder {
-	var ba BearerAuther
-	for _, auther := range authers {
-		if b, ok := auther.(BearerAuther); ok {
-			ba = b
-			if ba != nil {
-				break
-			}
-		}
-	}
-	return &bearer{logger: logger, auther: ba}
-}
-
-func init() {
-	authResponderCreators = append(authResponderCreators, createBearer)
+func (b *bearer) header() string {
+	return fmt.Sprintf("%s %s", b.Scheme(), b.token)
 }

@@ -10,6 +10,8 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/docker/engine-api/client/transport/cancellable"
+
 	"golang.org/x/net/context"
 )
 
@@ -105,7 +107,8 @@ func (cli *Client) sendClientRequest(ctx context.Context, method, path string, q
 		req.Header.Set("Content-Type", "text/plain")
 	}
 
-	resp, err := cli.doWithMiddlewares(cli.httpClient.Do)(req)
+	sender := cli.loadAllMiddlewares(cli.transport)
+	resp, err := cancellable.Do(ctx, sender, req)
 	if resp != nil {
 		serverResp.statusCode = resp.StatusCode
 	}
