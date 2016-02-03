@@ -9,6 +9,9 @@ deps:
 test:
 	go test -tags=test ./...
 
+test_experimental:
+	go test -tags="test experimental" ./...
+
 validate:
 	go vet ./...
 	test -z "$(golint ./... | tee /dev/stderr)"
