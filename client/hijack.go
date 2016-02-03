@@ -10,8 +10,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/docker/engine-api/client/transport"
 	"github.com/docker/engine-api/types"
+	"github.com/docker/go-connections/sockets"
 )
 
 // tlsClientCon holds tls information and a dialed connection.
@@ -162,7 +162,7 @@ func dial(proto, addr string, tlsConfig *tls.Config) (net.Conn, error) {
 		return tlsDial(proto, addr, tlsConfig)
 	}
 	if proto == "npipe" {
-		return transport.DialPipe(addr, 32*time.Second)
+		return sockets.DialPipe(addr, 32*time.Second)
 	}
 	return net.Dial(proto, addr)
 }
