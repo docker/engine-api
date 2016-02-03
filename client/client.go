@@ -67,7 +67,7 @@ func NewEnvClient() (*Client, error) {
 // It uses the given http client as transport.
 // It also initializes the custom http headers to add to each request.
 func NewClient(host string, version string, client *http.Client, httpHeaders map[string]string) (*Client, error) {
-	proto, addr, basePath, err := parseHost(host)
+	proto, addr, basePath, err := ParseHost(host)
 	if err != nil {
 		return nil, err
 	}
@@ -110,8 +110,8 @@ func (cli *Client) ClientVersion() string {
 	return cli.version
 }
 
-// parseHost verifies that the given host strings is valid.
-func parseHost(host string) (string, string, string, error) {
+// ParseHost verifies that the given host strings is valid.
+func ParseHost(host string) (string, string, string, error) {
 	protoAddrParts := strings.SplitN(host, "://", 2)
 	if len(protoAddrParts) == 1 {
 		return "", "", "", fmt.Errorf("unable to parse docker host `%s`", host)
