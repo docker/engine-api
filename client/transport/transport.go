@@ -3,9 +3,9 @@ package transport
 
 import (
 	"fmt"
-	"net"
 	"net/http"
-	"time"
+
+	"github.com/docker/go-connections/sockets"
 )
 
 // apiTransport holds information about the http transport to connect with the API.
@@ -50,24 +50,7 @@ func (a *apiTransport) CancelRequest(req *http.Request) {
 // default transport configuration.
 func defaultTransport(proto, addr string) *http.Transport {
 	tr := new(http.Transport)
-
-	// Why 32? See https://github.com/docker/docker/pull/8035.
-	timeout := 32 * time.Second
-	if proto == "unix" {
-		// No need for compression in local communications.
-		tr.DisableCompression = true
-		tr.Dial = func(_, _ string) (net.Conn, error) {
-			return net.DialTimeout(proto, addr, timeout)
-		}
-	} else if proto == "npipe" {
-		tr.Dial = func(_, _ string) (net.Conn, error) {
-			return DialPipe(addr, timeout)
-		}
-	} else {
-		tr.Proxy = http.ProxyFromEnvironment
-		tr.Dial = (&net.Dialer{Timeout: timeout}).Dial
-	}
-
+	sockets.ConfigureTransport(tr, proto, addr)
 	return tr
 }
 

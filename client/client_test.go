@@ -51,7 +51,7 @@ func TestParseHost(t *testing.T) {
 	}
 
 	for _, cs := range cases {
-		p, a, b, e := parseHost(cs.host)
+		p, a, b, e := ParseHost(cs.host)
 		if cs.err && e == nil {
 			t.Fatalf("expected error, got nil")
 		}
