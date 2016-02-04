@@ -16,7 +16,7 @@ type requestCanceler interface {
 	CancelRequest(*http.Request)
 }
 
-func canceler(client transport.Client, req *http.Request) func() {
+func canceler(client transport.Sender, req *http.Request) func() {
 	rc, ok := client.(requestCanceler)
 	if !ok {
 		return func() {}

@@ -36,7 +36,7 @@ func Do(ctx context.Context, client transport.Sender, req *http.Request) (*http.
 		client = http.DefaultClient
 	}
 
-	// Request cancelation changed in Go 1.5, see cancelreq.go and cancelreq_go14.go.
+	// Request cancelation changed in Go 1.5, see canceler.go and canceler_go14.go.
 	cancel := canceler(client, req)
 
 	type responseAndError struct {
