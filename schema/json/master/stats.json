@@ -1,0 +1,494 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "blkio_stats": {
+                "type": "object",
+                "properties": {
+                    "io_merged_recursive": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "major": {
+                                    "type": "integer"
+                                },
+                                "minor": {
+                                    "type": "integer"
+                                },
+                                "op": {
+                                    "type": "string"
+                                },
+                                "value": {
+                                    "type": "integer"
+                                }
+                            },
+                            "required": [
+                                "major",
+                                "minor",
+                                "op",
+                                "value"
+                            ]
+                        }
+                    },
+                    "io_queue_recursive": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "major": {
+                                    "type": "integer"
+                                },
+                                "minor": {
+                                    "type": "integer"
+                                },
+                                "op": {
+                                    "type": "string"
+                                },
+                                "value": {
+                                    "type": "integer"
+                                }
+                            },
+                            "required": [
+                                "major",
+                                "minor",
+                                "op",
+                                "value"
+                            ]
+                        }
+                    },
+                    "io_service_bytes_recursive": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "major": {
+                                    "type": "integer"
+                                },
+                                "minor": {
+                                    "type": "integer"
+                                },
+                                "op": {
+                                    "type": "string"
+                                },
+                                "value": {
+                                    "type": "integer"
+                                }
+                            },
+                            "required": [
+                                "major",
+                                "minor",
+                                "op",
+                                "value"
+                            ]
+                        }
+                    },
+                    "io_service_time_recursive": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "major": {
+                                    "type": "integer"
+                                },
+                                "minor": {
+                                    "type": "integer"
+                                },
+                                "op": {
+                                    "type": "string"
+                                },
+                                "value": {
+                                    "type": "integer"
+                                }
+                            },
+                            "required": [
+                                "major",
+                                "minor",
+                                "op",
+                                "value"
+                            ]
+                        }
+                    },
+                    "io_serviced_recursive": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "major": {
+                                    "type": "integer"
+                                },
+                                "minor": {
+                                    "type": "integer"
+                                },
+                                "op": {
+                                    "type": "string"
+                                },
+                                "value": {
+                                    "type": "integer"
+                                }
+                            },
+                            "required": [
+                                "major",
+                                "minor",
+                                "op",
+                                "value"
+                            ]
+                        }
+                    },
+                    "io_time_recursive": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "major": {
+                                    "type": "integer"
+                                },
+                                "minor": {
+                                    "type": "integer"
+                                },
+                                "op": {
+                                    "type": "string"
+                                },
+                                "value": {
+                                    "type": "integer"
+                                }
+                            },
+                            "required": [
+                                "major",
+                                "minor",
+                                "op",
+                                "value"
+                            ]
+                        }
+                    },
+                    "io_wait_time_recursive": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "major": {
+                                    "type": "integer"
+                                },
+                                "minor": {
+                                    "type": "integer"
+                                },
+                                "op": {
+                                    "type": "string"
+                                },
+                                "value": {
+                                    "type": "integer"
+                                }
+                            },
+                            "required": [
+                                "major",
+                                "minor",
+                                "op",
+                                "value"
+                            ]
+                        }
+                    },
+                    "sectors_recursive": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "major": {
+                                    "type": "integer"
+                                },
+                                "minor": {
+                                    "type": "integer"
+                                },
+                                "op": {
+                                    "type": "string"
+                                },
+                                "value": {
+                                    "type": "integer"
+                                }
+                            },
+                            "required": [
+                                "major",
+                                "minor",
+                                "op",
+                                "value"
+                            ]
+                        }
+                    }
+                },
+                "required": [
+                    "io_service_bytes_recursive",
+                    "io_serviced_recursive",
+                    "io_queue_recursive",
+                    "io_service_time_recursive",
+                    "io_wait_time_recursive",
+                    "io_merged_recursive",
+                    "io_time_recursive",
+                    "sectors_recursive"
+                ]
+            },
+            "cpu_stats": {
+                "type": "object",
+                "properties": {
+                    "cpu_usage": {
+                        "type": "object",
+                        "properties": {
+                            "percpu_usage": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer"
+                                }
+                            },
+                            "total_usage": {
+                                "type": "integer"
+                            },
+                            "usage_in_kernelmode": {
+                                "type": "integer"
+                            },
+                            "usage_in_usermode": {
+                                "type": "integer"
+                            }
+                        },
+                        "required": [
+                            "total_usage",
+                            "percpu_usage",
+                            "usage_in_kernelmode",
+                            "usage_in_usermode"
+                        ]
+                    },
+                    "system_cpu_usage": {
+                        "type": "integer"
+                    },
+                    "throttling_data": {
+                        "type": "object",
+                        "properties": {
+                            "periods": {
+                                "type": "integer"
+                            },
+                            "throttled_periods": {
+                                "type": "integer"
+                            },
+                            "throttled_time": {
+                                "type": "integer"
+                            }
+                        },
+                        "required": [
+                            "periods",
+                            "throttled_periods",
+                            "throttled_time"
+                        ]
+                    }
+                },
+                "required": [
+                    "cpu_usage",
+                    "system_cpu_usage"
+                ]
+            },
+            "memory_stats": {
+                "type": "object",
+                "properties": {
+                    "failcnt": {
+                        "type": "integer"
+                    },
+                    "limit": {
+                        "type": "integer"
+                    },
+                    "max_usage": {
+                        "type": "integer"
+                    },
+                    "stats": {
+                        "type": "object",
+                        "properties": {
+                            ".*": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "usage": {
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "usage",
+                    "max_usage",
+                    "stats",
+                    "failcnt",
+                    "limit"
+                ]
+            },
+            "pids_stats": {
+                "type": "object",
+                "properties": {
+                    "current": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "precpu_stats": {
+                "type": "object",
+                "properties": {
+                    "cpu_usage": {
+                        "type": "object",
+                        "properties": {
+                            "percpu_usage": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer"
+                                }
+                            },
+                            "total_usage": {
+                                "type": "integer"
+                            },
+                            "usage_in_kernelmode": {
+                                "type": "integer"
+                            },
+                            "usage_in_usermode": {
+                                "type": "integer"
+                            }
+                        },
+                        "required": [
+                            "total_usage",
+                            "percpu_usage",
+                            "usage_in_kernelmode",
+                            "usage_in_usermode"
+                        ]
+                    },
+                    "system_cpu_usage": {
+                        "type": "integer"
+                    },
+                    "throttling_data": {
+                        "type": "object",
+                        "properties": {
+                            "periods": {
+                                "type": "integer"
+                            },
+                            "throttled_periods": {
+                                "type": "integer"
+                            },
+                            "throttled_time": {
+                                "type": "integer"
+                            }
+                        },
+                        "required": [
+                            "periods",
+                            "throttled_periods",
+                            "throttled_time"
+                        ]
+                    }
+                },
+                "required": [
+                    "cpu_usage",
+                    "system_cpu_usage"
+                ]
+            },
+            "read": {
+                "type": "object",
+                "properties": {
+                    "loc": {
+                        "type": "object",
+                        "properties": {
+                            "cacheEnd": {
+                                "type": "integer"
+                            },
+                            "cacheStart": {
+                                "type": "integer"
+                            },
+                            "cacheZone": {
+                                "type": "object",
+                                "properties": {
+                                    "isDST": {
+                                        "type": "bool"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "offset": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "required": [
+                                    "name",
+                                    "offset",
+                                    "isDST"
+                                ]
+                            },
+                            "name": {
+                                "type": "string"
+                            },
+                            "tx": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "index": {
+                                            "type": "integer"
+                                        },
+                                        "isstd": {
+                                            "type": "bool"
+                                        },
+                                        "isutc": {
+                                            "type": "bool"
+                                        },
+                                        "when": {
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "required": [
+                                        "when",
+                                        "index",
+                                        "isstd",
+                                        "isutc"
+                                    ]
+                                }
+                            },
+                            "zone": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "isDST": {
+                                            "type": "bool"
+                                        },
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "offset": {
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "required": [
+                                        "name",
+                                        "offset",
+                                        "isDST"
+                                    ]
+                                }
+                            }
+                        },
+                        "required": [
+                            "name",
+                            "zone",
+                            "tx",
+                            "cacheStart",
+                            "cacheEnd",
+                            "cacheZone"
+                        ]
+                    },
+                    "nsec": {
+                        "type": "integer"
+                    },
+                    "sec": {
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "sec",
+                    "nsec",
+                    "loc"
+                ]
+            }
+        },
+        "required": [
+            "read"
+        ]
+    }
+}

@@ -1,0 +1,19 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "Kind": {
+                "type": "integer"
+            },
+            "Path": {
+                "type": "string"
+            }
+        },
+        "required": [
+            "Kind",
+            "Path"
+        ]
+    }
+}

@@ -1,0 +1,361 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "properties": {
+        "Architecture": {
+            "type": "string"
+        },
+        "Author": {
+            "type": "string"
+        },
+        "Comment": {
+            "type": "string"
+        },
+        "Config": {
+            "type": "object",
+            "properties": {
+                "ArgsEscaped": {
+                    "type": "bool"
+                },
+                "AttachStderr": {
+                    "type": "bool"
+                },
+                "AttachStdin": {
+                    "type": "bool"
+                },
+                "AttachStdout": {
+                    "type": "bool"
+                },
+                "Cmd": {
+                    "type": "object",
+                    "properties": {
+                        "parts": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "required": [
+                        "parts"
+                    ]
+                },
+                "Domainname": {
+                    "type": "string"
+                },
+                "Entrypoint": {
+                    "type": "object",
+                    "properties": {
+                        "parts": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "required": [
+                        "parts"
+                    ]
+                },
+                "Env": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "ExposedPorts": {
+                    "type": "object",
+                    "properties": {
+                        ".*": {
+                            "type": "object"
+                        }
+                    }
+                },
+                "Hostname": {
+                    "type": "string"
+                },
+                "Image": {
+                    "type": "string"
+                },
+                "Labels": {
+                    "type": "object",
+                    "properties": {
+                        ".*": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "MacAddress": {
+                    "type": "string"
+                },
+                "NetworkDisabled": {
+                    "type": "bool"
+                },
+                "OnBuild": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "OpenStdin": {
+                    "type": "bool"
+                },
+                "PublishService": {
+                    "type": "string"
+                },
+                "StdinOnce": {
+                    "type": "bool"
+                },
+                "StopSignal": {
+                    "type": "string"
+                },
+                "Tty": {
+                    "type": "bool"
+                },
+                "User": {
+                    "type": "string"
+                },
+                "Volumes": {
+                    "type": "object",
+                    "properties": {
+                        ".*": {
+                            "type": "object"
+                        }
+                    }
+                },
+                "WorkingDir": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "Hostname",
+                "Domainname",
+                "User",
+                "AttachStdin",
+                "AttachStdout",
+                "AttachStderr",
+                "Tty",
+                "OpenStdin",
+                "StdinOnce",
+                "Env",
+                "Cmd",
+                "Image",
+                "Volumes",
+                "WorkingDir",
+                "Entrypoint",
+                "OnBuild",
+                "Labels"
+            ]
+        },
+        "Container": {
+            "type": "string"
+        },
+        "ContainerConfig": {
+            "type": "object",
+            "properties": {
+                "ArgsEscaped": {
+                    "type": "bool"
+                },
+                "AttachStderr": {
+                    "type": "bool"
+                },
+                "AttachStdin": {
+                    "type": "bool"
+                },
+                "AttachStdout": {
+                    "type": "bool"
+                },
+                "Cmd": {
+                    "type": "object",
+                    "properties": {
+                        "parts": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "required": [
+                        "parts"
+                    ]
+                },
+                "Domainname": {
+                    "type": "string"
+                },
+                "Entrypoint": {
+                    "type": "object",
+                    "properties": {
+                        "parts": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "required": [
+                        "parts"
+                    ]
+                },
+                "Env": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "ExposedPorts": {
+                    "type": "object",
+                    "properties": {
+                        ".*": {
+                            "type": "object"
+                        }
+                    }
+                },
+                "Hostname": {
+                    "type": "string"
+                },
+                "Image": {
+                    "type": "string"
+                },
+                "Labels": {
+                    "type": "object",
+                    "properties": {
+                        ".*": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "MacAddress": {
+                    "type": "string"
+                },
+                "NetworkDisabled": {
+                    "type": "bool"
+                },
+                "OnBuild": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "OpenStdin": {
+                    "type": "bool"
+                },
+                "PublishService": {
+                    "type": "string"
+                },
+                "StdinOnce": {
+                    "type": "bool"
+                },
+                "StopSignal": {
+                    "type": "string"
+                },
+                "Tty": {
+                    "type": "bool"
+                },
+                "User": {
+                    "type": "string"
+                },
+                "Volumes": {
+                    "type": "object",
+                    "properties": {
+                        ".*": {
+                            "type": "object"
+                        }
+                    }
+                },
+                "WorkingDir": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "Hostname",
+                "Domainname",
+                "User",
+                "AttachStdin",
+                "AttachStdout",
+                "AttachStderr",
+                "Tty",
+                "OpenStdin",
+                "StdinOnce",
+                "Env",
+                "Cmd",
+                "Image",
+                "Volumes",
+                "WorkingDir",
+                "Entrypoint",
+                "OnBuild",
+                "Labels"
+            ]
+        },
+        "Created": {
+            "type": "string"
+        },
+        "DockerVersion": {
+            "type": "string"
+        },
+        "GraphDriver": {
+            "type": "object",
+            "properties": {
+                "Data": {
+                    "type": "object",
+                    "properties": {
+                        ".*": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "Name": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "Name",
+                "Data"
+            ]
+        },
+        "Id": {
+            "type": "string"
+        },
+        "Os": {
+            "type": "string"
+        },
+        "Parent": {
+            "type": "string"
+        },
+        "RepoDigests": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "RepoTags": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "Size": {
+            "type": "integer"
+        },
+        "VirtualSize": {
+            "type": "integer"
+        }
+    },
+    "required": [
+        "Id",
+        "RepoTags",
+        "RepoDigests",
+        "Parent",
+        "Comment",
+        "Created",
+        "Container",
+        "ContainerConfig",
+        "DockerVersion",
+        "Author",
+        "Config",
+        "Architecture",
+        "Os",
+        "Size",
+        "VirtualSize",
+        "GraphDriver"
+    ]
+}

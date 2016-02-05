@@ -1,0 +1,15 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "Deleted": {
+                "type": "string"
+            },
+            "Untagged": {
+                "type": "string"
+            }
+        }
+    }
+}

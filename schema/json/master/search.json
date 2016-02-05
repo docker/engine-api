@@ -1,0 +1,35 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "description": {
+                "type": "string"
+            },
+            "is_automated": {
+                "type": "bool"
+            },
+            "is_official": {
+                "type": "bool"
+            },
+            "is_trusted": {
+                "type": "bool"
+            },
+            "name": {
+                "type": "string"
+            },
+            "star_count": {
+                "type": "integer"
+            }
+        },
+        "required": [
+            "star_count",
+            "is_official",
+            "name",
+            "is_trusted",
+            "is_automated",
+            "description"
+        ]
+    }
+}
