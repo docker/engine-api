@@ -13,12 +13,7 @@ import (
 
 func TestContainerInspectError(t *testing.T) {
 	client := &Client{
-		transport: transport.NewMockClient(nil, func(req *http.Request) (*http.Response, error) {
-			return &http.Response{
-				StatusCode: http.StatusInternalServerError,
-				Body:       ioutil.NopCloser(bytes.NewReader([]byte("Server error"))),
-			}, nil
-		}),
+		transport: transport.NewMockClient(nil, transport.ErrorMock(http.StatusInternalServerError, "Server error")),
 	}
 
 	_, err := client.ContainerInspect("nothing")
@@ -29,12 +24,7 @@ func TestContainerInspectError(t *testing.T) {
 
 func TestContainerInspectContainerNotFound(t *testing.T) {
 	client := &Client{
-		transport: transport.NewMockClient(nil, func(req *http.Request) (*http.Response, error) {
-			return &http.Response{
-				StatusCode: http.StatusNotFound,
-				Body:       ioutil.NopCloser(bytes.NewReader([]byte(""))),
-			}, nil
-		}),
+		transport: transport.NewMockClient(nil, transport.ErrorMock(http.StatusNotFound, "Server error")),
 	}
 
 	_, err := client.ContainerInspect("unknown")

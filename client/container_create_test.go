@@ -10,28 +10,56 @@ import (
 
 	"github.com/docker/engine-api/client/transport"
 	"github.com/docker/engine-api/types"
+	"github.com/docker/engine-api/types/container"
 )
 
-func containerCreateWithNameMock(req *http.Request) (*http.Response, error) {
-	name := req.URL.Query().Get("name")
-	if name != "container_name" {
-		return nil, fmt.Errorf("container name not set in URL query properly. Expected `container_name`, got %s", name)
+func TestContainerCreateError(t *testing.T) {
+	client := &Client{
+		transport: transport.NewMockClient(nil, transport.ErrorMock(http.StatusInternalServerError, "Server error")),
 	}
-	b, err := json.Marshal(types.ContainerCreateResponse{
-		ID: "container_id",
-	})
-	if err != nil {
-		return nil, err
+	_, err := client.ContainerCreate(nil, nil, nil, "nothing")
+	if err == nil || err.Error() != "Error response from daemon: Server error" {
+		t.Fatalf("expected a Server Error, got %v", err)
 	}
-	return &http.Response{
-		StatusCode: http.StatusOK,
-		Body:       ioutil.NopCloser(bytes.NewReader(b)),
-	}, nil
+
+	// 404 doesn't automagitally means an unknown image
+	client = &Client{
+		transport: transport.NewMockClient(nil, transport.ErrorMock(http.StatusNotFound, "Server error")),
+	}
+	_, err = client.ContainerCreate(nil, nil, nil, "nothing")
+	if err == nil || err.Error() != "Error response from daemon: Server error" {
+		t.Fatalf("expected a Server Error, got %v", err)
+	}
+}
+
+func TestContainerCreateImageNotFound(t *testing.T) {
+	client := &Client{
+		transport: transport.NewMockClient(nil, transport.ErrorMock(http.StatusNotFound, "No such image")),
+	}
+	_, err := client.ContainerCreate(&container.Config{Image: "unknown_image"}, nil, nil, "unknown")
+	if err == nil || !IsErrImageNotFound(err) {
+		t.Fatalf("expected a imageNotFound error, got %v", err)
+	}
 }
 
 func TestContainerCreateWithName(t *testing.T) {
 	client := &Client{
-		transport: transport.NewMockClient(nil, containerCreateWithNameMock),
+		transport: transport.NewMockClient(nil, func(req *http.Request) (*http.Response, error) {
+			name := req.URL.Query().Get("name")
+			if name != "container_name" {
+				return nil, fmt.Errorf("container name not set in URL query properly. Expected `container_name`, got %s", name)
+			}
+			b, err := json.Marshal(types.ContainerCreateResponse{
+				ID: "container_id",
+			})
+			if err != nil {
+				return nil, err
+			}
+			return &http.Response{
+				StatusCode: http.StatusOK,
+				Body:       ioutil.NopCloser(bytes.NewReader(b)),
+			}, nil
+		}),
 	}
 
 	r, err := client.ContainerCreate(nil, nil, nil, "container_name")
