@@ -55,7 +55,7 @@ func (n *negotiate) AuthRespond(challenge string, req *http.Request) (result boo
 		if serverhost == "" {
 			serverhost = req.URL.Host
 		}
-		if serverhost[0] == os.PathSeparator {
+		if len(serverhost) == 0 || serverhost[0] == os.PathSeparator {
 			serverhost, _ = os.Hostname()
 		}
 		sep := strings.LastIndex(serverhost, ":")
