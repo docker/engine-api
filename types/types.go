@@ -217,6 +217,7 @@ type Info struct {
 	SystemTime         string
 	ExecutionDriver    string
 	LoggingDriver      string
+	CgroupDriver       string
 	NEventsListener    int
 	KernelVersion      string
 	OperatingSystem    string
