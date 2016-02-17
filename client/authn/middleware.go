@@ -1,7 +1,9 @@
 package authn
 
 import (
+	"bytes"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -40,8 +42,14 @@ func (a authMiddleware) Do(req *http.Request) (resp *http.Response, err error) {
 	// We may have to issue the request multiple times, so
 	// we need to be able to rewind and recover everything
 	// we've sent.
-	rewinder := makeRewinder(req.Body)
-	req.Body = rewinder
+	var body bytes.Buffer
+	if req.Body != nil {
+		io.Copy(&body, req.Body)
+		if closer, ok := req.Body.(io.Closer); ok {
+			closer.Close()
+		}
+		req.Body = ioutil.NopCloser(bytes.NewReader(body.Bytes()))
+	}
 	resp, err = a.next.Do(req)
 	// If we previously tried to authenticate, or this
 	// isn't an authentication-required error, we're done.
@@ -96,8 +104,9 @@ func (a authMiddleware) Do(req *http.Request) (resp *http.Response, err error) {
 		} else {
 			ioutil.ReadAll(resp.Body)
 			resp.Body.Close()
-			rewinder.Rewind()
-			req.Body = ioutil.NopCloser(rewinder)
+			if req.Body != nil {
+				req.Body = ioutil.NopCloser(bytes.NewReader(body.Bytes()))
+			}
 			resp, err = a.next.Do(req)
 		}
 	}
