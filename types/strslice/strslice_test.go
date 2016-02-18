@@ -7,19 +7,23 @@ import (
 )
 
 func TestStrSliceMarshalJSON(t *testing.T) {
-	strss := map[*StrSlice]string{
-		nil:         "",
-		&StrSlice{}: "null",
-		&StrSlice{[]string{"/bin/sh", "-c", "echo"}}: `["/bin/sh","-c","echo"]`,
-	}
+	for _, testcase := range []struct {
+		input    StrSlice
+		expected string
+	}{
+		{input: nil, expected: ""},
 
-	for strs, expected := range strss {
-		data, err := strs.MarshalJSON()
+		// MADNESS(stevvooe): No clue why nil would be "" but empty would be
+		// "null". Maintaining compatibility. This is pretty bad.
+		{StrSlice{}, "null"},
+		{StrSlice{"/bin/sh", "-c", "echo"}, `["/bin/sh","-c","echo"]`},
+	} {
+		data, err := testcase.input.MarshalJSON()
 		if err != nil {
 			t.Fatal(err)
 		}
-		if string(data) != expected {
-			t.Fatalf("Expected %v, got %v", expected, string(data))
+		if string(data) != testcase.expected {
+			t.Fatalf("%#v: expected %v, got %v", testcase.input, testcase.expected, string(data))
 		}
 	}
 }
@@ -31,28 +35,21 @@ func TestStrSliceUnmarshalJSON(t *testing.T) {
 		`["/bin/sh","-c","echo"]`: {"/bin/sh", "-c", "echo"},
 	}
 	for json, expectedParts := range parts {
-		strs := &StrSlice{
-			[]string{"default", "values"},
-		}
+		strs := StrSlice{"default", "values"}
 		if err := strs.UnmarshalJSON([]byte(json)); err != nil {
 			t.Fatal(err)
 		}
 
-		actualParts := strs.Slice()
-		if len(actualParts) != len(expectedParts) {
-			t.Fatalf("Expected %v parts, got %v (%v)", len(expectedParts), len(actualParts), expectedParts)
+		actualParts := []string(strs)
+		if !reflect.DeepEqual(actualParts, expectedParts) {
+			t.Fatalf("%#v: expected %v, got %v", json, expectedParts, actualParts)
 		}
-		for index, part := range actualParts {
-			if part != expectedParts[index] {
-				t.Fatalf("Expected %v, got %v", expectedParts, actualParts)
-				break
-			}
-		}
+
 	}
 }
 
 func TestStrSliceUnmarshalString(t *testing.T) {
-	var e *StrSlice
+	var e StrSlice
 	echo, err := json.Marshal("echo")
 	if err != nil {
 		t.Fatal(err)
@@ -61,18 +58,17 @@ func TestStrSliceUnmarshalString(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	slice := e.Slice()
-	if len(slice) != 1 {
-		t.Fatalf("expected 1 element after unmarshal: %q", slice)
+	if len(e) != 1 {
+		t.Fatalf("expected 1 element after unmarshal: %q", e)
 	}
 
-	if slice[0] != "echo" {
-		t.Fatalf("expected `echo`, got: %q", slice[0])
+	if e[0] != "echo" {
+		t.Fatalf("expected `echo`, got: %q", e[0])
 	}
 }
 
 func TestStrSliceUnmarshalSlice(t *testing.T) {
-	var e *StrSlice
+	var e StrSlice
 	echo, err := json.Marshal([]string{"echo"})
 	if err != nil {
 		t.Fatal(err)
@@ -81,55 +77,27 @@ func TestStrSliceUnmarshalSlice(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	slice := e.Slice()
-	if len(slice) != 1 {
-		t.Fatalf("expected 1 element after unmarshal: %q", slice)
+	if len(e) != 1 {
+		t.Fatalf("expected 1 element after unmarshal: %q", e)
 	}
 
-	if slice[0] != "echo" {
-		t.Fatalf("expected `echo`, got: %q", slice[0])
+	if e[0] != "echo" {
+		t.Fatalf("expected `echo`, got: %q", e[0])
 	}
 }
 
 func TestStrSliceToString(t *testing.T) {
-	slices := map[*StrSlice]string{
-		New(""):           "",
-		New("one"):        "one",
-		New("one", "two"): "one two",
-	}
-	for s, expected := range slices {
-		toString := s.ToString()
-		if toString != expected {
-			t.Fatalf("Expected %v, got %v", expected, toString)
-		}
-	}
-}
-
-func TestStrSliceLen(t *testing.T) {
-	var emptyStrSlice *StrSlice
-	slices := map[*StrSlice]int{
-		New(""):           1,
-		New("one"):        1,
-		New("one", "two"): 2,
-		emptyStrSlice:     0,
-	}
-	for s, expected := range slices {
-		if s.Len() != expected {
-			t.Fatalf("Expected %d, got %d", s.Len(), expected)
-		}
-	}
-}
-
-func TestStrSliceSlice(t *testing.T) {
-	var emptyStrSlice *StrSlice
-	slices := map[*StrSlice][]string{
-		New("one"):        {"one"},
-		New("one", "two"): {"one", "two"},
-		emptyStrSlice:     nil,
-	}
-	for s, expected := range slices {
-		if !reflect.DeepEqual(s.Slice(), expected) {
-			t.Fatalf("Expected %v, got %v", s.Slice(), expected)
+	for _, testcase := range []struct {
+		input    StrSlice
+		expected string
+	}{
+		{New(""), ""},
+		{New("one"), "one"},
+		{New("one", "two"), "one two"},
+	} {
+		toString := testcase.input.String()
+		if toString != testcase.expected {
+			t.Fatalf("Expected %v, got %v", testcase.expected, toString)
 		}
 	}
 }
