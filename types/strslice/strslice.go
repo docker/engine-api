@@ -9,22 +9,6 @@ import (
 // We need to override the json decoder to accept both options.
 type StrSlice []string
 
-// MarshalJSON Marshals (or serializes) the StrSlice into the json format.
-// This method is needed to implement json.Marshaller.
-func (e StrSlice) MarshalJSON() ([]byte, error) {
-	if e == nil {
-		return []byte{}, nil
-	}
-
-	if len(e) == 0 {
-		// TODO(stevvooe): This doesn't seem right at all, but the test cases
-		// enforce. Remove if this isn't necessary as this is very unfortunate
-		// behavior.
-		return []byte("null"), nil
-	}
-	return json.Marshal([]string(e))
-}
-
 // UnmarshalJSON decodes the byte slice whether it's a string or an array of
 // strings. This method is needed to implement json.Unmarshaler.
 func (e *StrSlice) UnmarshalJSON(b []byte) error {

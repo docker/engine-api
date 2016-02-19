@@ -11,14 +11,13 @@ func TestStrSliceMarshalJSON(t *testing.T) {
 		input    StrSlice
 		expected string
 	}{
-		{input: nil, expected: ""},
-
 		// MADNESS(stevvooe): No clue why nil would be "" but empty would be
-		// "null". Maintaining compatibility. This is pretty bad.
-		{StrSlice{}, "null"},
+		// "null". Had to make a change here that may affect compatibility.
+		{input: nil, expected: "null"},
+		{StrSlice{}, "[]"},
 		{StrSlice{"/bin/sh", "-c", "echo"}, `["/bin/sh","-c","echo"]`},
 	} {
-		data, err := testcase.input.MarshalJSON()
+		data, err := json.Marshal(testcase.input)
 		if err != nil {
 			t.Fatal(err)
 		}
