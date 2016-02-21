@@ -144,8 +144,7 @@ func TestImageBuild(t *testing.T) {
 			buildOptions: types.ImageBuildOptions{
 				AuthConfigs: map[string]types.AuthConfig{
 					"https://index.docker.io/v1/": {
-						Auth:  "dG90bwo=",
-						Email: "john@doe.com",
+						Auth: "dG90bwo=",
 					},
 				},
 			},
@@ -153,7 +152,7 @@ func TestImageBuild(t *testing.T) {
 				"rm": "0",
 			},
 			expectedTags:           []string{},
-			expectedRegistryConfig: "eyJodHRwczovL2luZGV4LmRvY2tlci5pby92MS8iOnsiYXV0aCI6ImRHOTBid289IiwiZW1haWwiOiJqb2huQGRvZS5jb20ifX0=",
+			expectedRegistryConfig: "eyJodHRwczovL2luZGV4LmRvY2tlci5pby92MS8iOnsiYXV0aCI6ImRHOTBid289In19",
 		},
 	}
 	for _, buildCase := range buildCases {
