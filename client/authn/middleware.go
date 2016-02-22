@@ -26,7 +26,7 @@ func NewAuthResponderMiddleware(logger logger.Logger, auth ...AuthResponder) mid
 	responders := make(map[string]AuthResponder)
 	for _, a := range auth {
 		a.SetLogger(logger)
-		responders[a.Scheme()] = a
+		responders[strings.ToLower(a.Scheme())] = a
 	}
 
 	return func(next transport.Sender) transport.Sender {
