@@ -166,6 +166,7 @@ type LogConfig struct {
 type Resources struct {
 	// Applicable to all platforms
 	CPUShares int64 `json:"CpuShares"` // CPU shares (relative weight vs. other containers)
+	Memory    int64 // Memory limit (in bytes)
 
 	// Applicable to UNIX platforms
 	CgroupParent         string // Parent cgroup.
@@ -181,13 +182,17 @@ type Resources struct {
 	CpusetMems           string          // CpusetMems 0-2, 0,1
 	Devices              []DeviceMapping // List of devices to map inside the container
 	KernelMemory         int64           // Kernel memory limit (in bytes)
-	Memory               int64           // Memory limit (in bytes)
 	MemoryReservation    int64           // Memory soft limit (in bytes)
 	MemorySwap           int64           // Total memory usage (memory + swap); set `-1` to enable unlimited swap
 	MemorySwappiness     *int64          // Tuning container memory swappiness behaviour
 	OomKillDisable       *bool           // Whether to disable OOM Killer or not
 	PidsLimit            int64           // Setting pids limit for a container
 	Ulimits              []*units.Ulimit // List of ulimits to be set in the container
+
+	// Applicable to Windows
+	BlkioIOps   uint64 // Maximum IOps for the container system drive
+	BlkioBps    uint64 // Maximum Bytes per second for the container system drive
+	SandboxSize uint64 // System drive will be expanded to at least this size (in bytes)
 }
 
 // UpdateConfig holds the mutable attributes of a Container.
