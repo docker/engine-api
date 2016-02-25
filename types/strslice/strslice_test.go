@@ -84,19 +84,3 @@ func TestStrSliceUnmarshalSlice(t *testing.T) {
 		t.Fatalf("expected `echo`, got: %q", e[0])
 	}
 }
-
-func TestStrSliceToString(t *testing.T) {
-	for _, testcase := range []struct {
-		input    StrSlice
-		expected string
-	}{
-		{New(""), ""},
-		{New("one"), "one"},
-		{New("one", "two"), "one two"},
-	} {
-		toString := testcase.input.String()
-		if toString != testcase.expected {
-			t.Fatalf("Expected %v, got %v", testcase.expected, toString)
-		}
-	}
-}
