@@ -215,6 +215,8 @@ type Resources struct {
 	Ulimits              []*units.Ulimit // List of ulimits to be set in the container
 
 	// Applicable to Windows
+	CPUCount    int64  `json:"CpuCount"`   // CPU count
+	CPUPercent  int64  `json:"CpuPercent"` // CPU percent
 	BlkioIOps   uint64 // Maximum IOps for the container system drive
 	BlkioBps    uint64 // Maximum Bytes per second for the container system drive
 	SandboxSize uint64 // System drive will be expanded to at least this size (in bytes)
