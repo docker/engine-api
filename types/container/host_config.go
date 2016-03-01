@@ -180,6 +180,7 @@ type Resources struct {
 	CpusetCpus           string          // CpusetCpus 0-2, 0,1
 	CpusetMems           string          // CpusetMems 0-2, 0,1
 	Devices              []DeviceMapping // List of devices to map inside the container
+	DiskQuota            int64           // Disk limit (in bytes)
 	KernelMemory         int64           // Kernel memory limit (in bytes)
 	Memory               int64           // Memory limit (in bytes)
 	MemoryReservation    int64           // Memory soft limit (in bytes)
