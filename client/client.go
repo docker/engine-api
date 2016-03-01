@@ -10,6 +10,10 @@ import (
 
 	"github.com/docker/engine-api/client/transport"
 	"github.com/docker/go-connections/tlsconfig"
+
+	"github.com/docker/engine-api/client/authn"
+	"github.com/docker/engine-api/client/logger"
+	"github.com/docker/engine-api/client/middleware"
 )
 
 // Client is the API client that performs all operations
@@ -27,6 +31,10 @@ type Client struct {
 	version string
 	// custom http headers configured by users.
 	customHTTPHeaders map[string]string
+	// logging callbacks, if we're meant to log messages
+	logger logger.Logger
+	// middlewares stores functions that act as middlewares
+	middlewares []middleware.Middleware
 }
 
 // NewEnvClient initializes a new API client based on environment variables.
@@ -84,7 +92,32 @@ func NewClient(host string, version string, client *http.Client, httpHeaders map
 		transport:         transport,
 		version:           version,
 		customHTTPHeaders: httpHeaders,
+		logger:            logger.Silent{},
 	}, nil
+}
+
+// AddMiddlewares appends middlewares to the request chain.
+func (cli *Client) AddMiddlewares(middlewares ...middleware.Middleware) {
+	cli.middlewares = append(cli.middlewares, middlewares...)
+}
+
+// AuthenticateWith adds authentication methods to the client requests.
+func (cli *Client) AuthenticateWith(responders ...authn.AuthResponder) {
+	cli.AddMiddlewares(authn.NewAuthResponderMiddleware(cli.logger, responders...))
+}
+
+// SetLogger sets a callback that the client can use to log debugging
+// messages. The callback should not treat messages which are passed to it as
+// format specifiers.
+func (cli *Client) SetLogger(l logger.Logger) {
+	cli.logger = l
+}
+
+// ClientVersion returns the version string associated with this
+// instance of the Client. Note that this value can be changed
+// via the DOCKER_API_VERSION env var.
+func (cli *Client) ClientVersion() string {
+	return cli.version
 }
 
 // getAPIPath returns the versioned request path to call the api.
@@ -103,11 +136,13 @@ func (cli *Client) getAPIPath(p string, query url.Values) string {
 	return apiPath
 }
 
-// ClientVersion returns the version string associated with this
-// instance of the Client. Note that this value can be changed
-// via the DOCKER_API_VERSION env var.
-func (cli *Client) ClientVersion() string {
-	return cli.version
+// loadAllMiddlewares execute the middleware chain to create a final Sender.
+func (cli *Client) loadAllMiddlewares(sender transport.Sender) transport.Sender {
+	final := sender
+	for _, m := range cli.middlewares {
+		final = m(final)
+	}
+	return final
 }
 
 // ParseHost verifies that the given host strings is valid.

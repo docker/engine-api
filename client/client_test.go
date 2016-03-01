@@ -1,9 +1,36 @@
 package client
 
 import (
+	"net/http/cookiejar"
 	"net/url"
 	"testing"
+
+	"github.com/docker/engine-api/client/authn"
+	"github.com/docker/engine-api/client/transport"
 )
+
+func ExampleClient_AuthenticateWith() {
+	client, _ := NewEnvClient()
+	basicAuthCallback := func(realm string) (user, password string, err error) {
+		return "admin", "password", nil
+	}
+	basicAuth := authn.NewBasicAuth(basicAuthCallback)
+
+	bearerAuthCallback := func(challenge string) (token string, err error) {
+		return "token", nil
+	}
+	bearerAuth := authn.NewBearerAuth(bearerAuthCallback)
+
+	client.AuthenticateWith(basicAuth, bearerAuth)
+}
+
+func ExampleClient_AddMiddlewares() {
+	client, _ := NewEnvClient()
+	cookieJar, _ := cookiejar.New(nil)
+	cookies := transport.NewCookieJarMiddleware(cookieJar)
+
+	client.AddMiddlewares(cookies)
+}
 
 func TestGetAPIPath(t *testing.T) {
 	cases := []struct {
@@ -67,5 +94,30 @@ func TestParseHost(t *testing.T) {
 		if cs.base != b {
 			t.Fatalf("expected base %s, got %s", cs.base, b)
 		}
+	}
+}
+
+func TestAddMiddlewares(t *testing.T) {
+	m1 := func(n transport.Sender) transport.Sender {
+		return n
+	}
+	m2 := m1
+	client := &Client{}
+	client.AddMiddlewares(m1, m2)
+	if len(client.middlewares) != 2 {
+		t.Fatalf("expected 2 middlewares, got %v", len(client.middlewares))
+	}
+}
+
+func TestAuthenticateWith(t *testing.T) {
+	basicAuthCallback := func(realm string) (user, password string, err error) {
+		return "admin", "password", nil
+	}
+	basicAuth := authn.NewBasicAuth(basicAuthCallback)
+
+	client := &Client{}
+	client.AuthenticateWith(basicAuth)
+	if len(client.middlewares) != 1 {
+		t.Fatalf("expected 1 middlewares, got %v", len(client.middlewares))
 	}
 }

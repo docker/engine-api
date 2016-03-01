@@ -107,7 +107,8 @@ func (cli *Client) sendClientRequest(ctx context.Context, method, path string, q
 		req.Header.Set("Content-Type", "text/plain")
 	}
 
-	resp, err := cancellable.Do(ctx, cli.transport, req)
+	sender := cli.loadAllMiddlewares(cli.transport)
+	resp, err := cancellable.Do(ctx, sender, req)
 	if resp != nil {
 		serverResp.statusCode = resp.StatusCode
 	}
