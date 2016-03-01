@@ -65,6 +65,30 @@ func (n IpcMode) Container() string {
 	return ""
 }
 
+// UsernsMode represents userns mode in the container.
+type UsernsMode string
+
+// IsHost indicates whether the container uses the host's userns.
+func (n UsernsMode) IsHost() bool {
+	return n == "host"
+}
+
+// IsPrivate indicates whether the container uses the a private userns.
+func (n UsernsMode) IsPrivate() bool {
+	return !(n.IsHost())
+}
+
+// Valid indicates whether the userns is valid.
+func (n UsernsMode) Valid() bool {
+	parts := strings.Split(string(n), ":")
+	switch mode := parts[0]; mode {
+	case "", "host":
+	default:
+		return false
+	}
+	return true
+}
+
 // UTSMode represents the UTS namespace of the container.
 type UTSMode string
 
