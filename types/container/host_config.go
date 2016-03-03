@@ -261,6 +261,7 @@ type HostConfig struct {
 	StorageOpt      []string          // Storage driver options per container.
 	Tmpfs           map[string]string `json:",omitempty"` // List of tmpfs (mounts) used for the container
 	UTSMode         UTSMode           // UTS namespace to use for the container
+	UsernsMode      UsernsMode        // The user namespace to use for the container
 	ShmSize         int64             // Total shm memory usage
 	Sysctls         map[string]string `json:",omitempty"` // List of Namespaced sysctls used for the container
 
