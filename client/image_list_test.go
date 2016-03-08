@@ -11,6 +11,7 @@ import (
 
 	"github.com/docker/engine-api/types"
 	"github.com/docker/engine-api/types/filters"
+	"golang.org/x/net/context"
 )
 
 func TestImageListError(t *testing.T) {
@@ -18,7 +19,7 @@ func TestImageListError(t *testing.T) {
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
 
-	_, err := client.ImageList(types.ImageListOptions{})
+	_, err := client.ImageList(context.Background(), types.ImageListOptions{})
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server Error, got %v", err)
 	}
@@ -110,7 +111,7 @@ func TestImageList(t *testing.T) {
 			}),
 		}
 
-		images, err := client.ImageList(listCase.options)
+		images, err := client.ImageList(context.Background(), listCase.options)
 		if err != nil {
 			t.Fatal(err)
 		}

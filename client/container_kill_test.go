@@ -6,13 +6,15 @@ import (
 	"io/ioutil"
 	"net/http"
 	"testing"
+
+	"golang.org/x/net/context"
 )
 
 func TestContainerKillError(t *testing.T) {
 	client := &Client{
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
-	err := client.ContainerKill("nothing", "SIGKILL")
+	err := client.ContainerKill(context.Background(), "nothing", "SIGKILL")
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server Error, got %v", err)
 	}
@@ -32,7 +34,7 @@ func TestContainerKill(t *testing.T) {
 		}),
 	}
 
-	err := client.ContainerKill("container_id", "SIGKILL")
+	err := client.ContainerKill(context.Background(), "container_id", "SIGKILL")
 	if err != nil {
 		t.Fatal(err)
 	}

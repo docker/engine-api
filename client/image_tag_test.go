@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/docker/engine-api/types"
+	"golang.org/x/net/context"
 )
 
 func TestImageTagError(t *testing.T) {
@@ -16,7 +17,7 @@ func TestImageTagError(t *testing.T) {
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
 
-	err := client.ImageTag(types.ImageTagOptions{})
+	err := client.ImageTag(context.Background(), types.ImageTagOptions{})
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server Error, got %v", err)
 	}
@@ -72,7 +73,7 @@ func TestImageTag(t *testing.T) {
 				}, nil
 			}),
 		}
-		err := client.ImageTag(types.ImageTagOptions{
+		err := client.ImageTag(context.Background(), types.ImageTagOptions{
 			ImageID:        "image_id",
 			Force:          tagCase.force,
 			RepositoryName: tagCase.repositoryName,

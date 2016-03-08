@@ -9,13 +9,14 @@ import (
 	"testing"
 
 	"github.com/docker/engine-api/types"
+	"golang.org/x/net/context"
 )
 
 func TestContainerRemoveError(t *testing.T) {
 	client := &Client{
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
-	err := client.ContainerRemove(types.ContainerRemoveOptions{})
+	err := client.ContainerRemove(context.Background(), types.ContainerRemoveOptions{})
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server Error, got %v", err)
 	}
@@ -48,7 +49,7 @@ func TestContainerRemove(t *testing.T) {
 		}),
 	}
 
-	err := client.ContainerRemove(types.ContainerRemoveOptions{
+	err := client.ContainerRemove(context.Background(), types.ContainerRemoveOptions{
 		ContainerID:   "container_id",
 		RemoveVolumes: true,
 		Force:         true,

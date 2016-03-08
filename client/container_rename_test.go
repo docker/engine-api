@@ -7,13 +7,15 @@ import (
 	"net/http"
 	"strings"
 	"testing"
+
+	"golang.org/x/net/context"
 )
 
 func TestContainerRenameError(t *testing.T) {
 	client := &Client{
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
-	err := client.ContainerRename("nothing", "newNothing")
+	err := client.ContainerRename(context.Background(), "nothing", "newNothing")
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server Error, got %v", err)
 	}
@@ -37,7 +39,7 @@ func TestContainerRename(t *testing.T) {
 		}),
 	}
 
-	err := client.ContainerRename("container_id", "newName")
+	err := client.ContainerRename(context.Background(), "container_id", "newName")
 	if err != nil {
 		t.Fatal(err)
 	}

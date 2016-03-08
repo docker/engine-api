@@ -10,13 +10,14 @@ import (
 
 	"github.com/docker/engine-api/types"
 	"github.com/docker/engine-api/types/container"
+	"golang.org/x/net/context"
 )
 
 func TestContainerCreateError(t *testing.T) {
 	client := &Client{
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
-	_, err := client.ContainerCreate(nil, nil, nil, "nothing")
+	_, err := client.ContainerCreate(context.Background(), nil, nil, nil, "nothing")
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server Error, got %v", err)
 	}
@@ -25,7 +26,7 @@ func TestContainerCreateError(t *testing.T) {
 	client = &Client{
 		transport: newMockClient(nil, errorMock(http.StatusNotFound, "Server error")),
 	}
-	_, err = client.ContainerCreate(nil, nil, nil, "nothing")
+	_, err = client.ContainerCreate(context.Background(), nil, nil, nil, "nothing")
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server Error, got %v", err)
 	}
@@ -35,7 +36,7 @@ func TestContainerCreateImageNotFound(t *testing.T) {
 	client := &Client{
 		transport: newMockClient(nil, errorMock(http.StatusNotFound, "No such image")),
 	}
-	_, err := client.ContainerCreate(&container.Config{Image: "unknown_image"}, nil, nil, "unknown")
+	_, err := client.ContainerCreate(context.Background(), &container.Config{Image: "unknown_image"}, nil, nil, "unknown")
 	if err == nil || !IsErrImageNotFound(err) {
 		t.Fatalf("expected a imageNotFound error, got %v", err)
 	}
@@ -61,7 +62,7 @@ func TestContainerCreateWithName(t *testing.T) {
 		}),
 	}
 
-	r, err := client.ContainerCreate(nil, nil, nil, "container_name")
+	r, err := client.ContainerCreate(context.Background(), nil, nil, nil, "container_name")
 	if err != nil {
 		t.Fatal(err)
 	}

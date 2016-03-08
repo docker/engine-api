@@ -11,6 +11,7 @@ import (
 
 	"github.com/docker/engine-api/types"
 	"github.com/docker/engine-api/types/filters"
+	"golang.org/x/net/context"
 )
 
 func TestVolumeListError(t *testing.T) {
@@ -18,7 +19,7 @@ func TestVolumeListError(t *testing.T) {
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
 
-	_, err := client.VolumeList(filters.NewArgs())
+	_, err := client.VolumeList(context.Background(), filters.NewArgs())
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server Error, got %v", err)
 	}
@@ -85,7 +86,7 @@ func TestVolumeList(t *testing.T) {
 			}),
 		}
 
-		volumeResponse, err := client.VolumeList(listCase.filters)
+		volumeResponse, err := client.VolumeList(context.Background(), listCase.filters)
 		if err != nil {
 			t.Fatal(err)
 		}

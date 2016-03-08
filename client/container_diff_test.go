@@ -8,13 +8,14 @@ import (
 	"testing"
 
 	"github.com/docker/engine-api/types"
+	"golang.org/x/net/context"
 )
 
 func TestContainerDiffError(t *testing.T) {
 	client := &Client{
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
-	_, err := client.ContainerDiff("nothing")
+	_, err := client.ContainerDiff(context.Background(), "nothing")
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server Error, got %v", err)
 	}
@@ -44,7 +45,7 @@ func TestContainerDiff(t *testing.T) {
 		}),
 	}
 
-	changes, err := client.ContainerDiff("container_id")
+	changes, err := client.ContainerDiff(context.Background(), "container_id")
 	if err != nil {
 		t.Fatal(err)
 	}

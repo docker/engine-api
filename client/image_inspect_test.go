@@ -11,6 +11,7 @@ import (
 	"testing"
 
 	"github.com/docker/engine-api/types"
+	"golang.org/x/net/context"
 )
 
 func TestImageInspectError(t *testing.T) {
@@ -18,7 +19,7 @@ func TestImageInspectError(t *testing.T) {
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
 
-	_, _, err := client.ImageInspectWithRaw("nothing", true)
+	_, _, err := client.ImageInspectWithRaw(context.Background(), "nothing", true)
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server Error, got %v", err)
 	}
@@ -29,7 +30,7 @@ func TestImageInspectImageNotFound(t *testing.T) {
 		transport: newMockClient(nil, errorMock(http.StatusNotFound, "Server error")),
 	}
 
-	_, _, err := client.ImageInspectWithRaw("unknown", true)
+	_, _, err := client.ImageInspectWithRaw(context.Background(), "unknown", true)
 	if err == nil || !IsErrImageNotFound(err) {
 		t.Fatalf("expected a imageNotFound error, got %v", err)
 	}
@@ -82,7 +83,7 @@ func TestImageInspect(t *testing.T) {
 			}),
 		}
 
-		imageInspect, _, err := client.ImageInspectWithRaw("image_id", inspectCase.size)
+		imageInspect, _, err := client.ImageInspectWithRaw(context.Background(), "image_id", inspectCase.size)
 		if err != nil {
 			t.Fatal(err)
 		}

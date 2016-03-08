@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	"github.com/docker/engine-api/types"
+	"golang.org/x/net/context"
 )
 
 func TestVolumeCreateError(t *testing.T) {
@@ -17,7 +18,7 @@ func TestVolumeCreateError(t *testing.T) {
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
 
-	_, err := client.VolumeCreate(types.VolumeCreateRequest{})
+	_, err := client.VolumeCreate(context.Background(), types.VolumeCreateRequest{})
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server Error, got %v", err)
 	}
@@ -51,7 +52,7 @@ func TestVolumeCreate(t *testing.T) {
 		}),
 	}
 
-	volume, err := client.VolumeCreate(types.VolumeCreateRequest{
+	volume, err := client.VolumeCreate(context.Background(), types.VolumeCreateRequest{
 		Name:   "myvolume",
 		Driver: "mydriver",
 		DriverOpts: map[string]string{

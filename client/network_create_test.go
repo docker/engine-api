@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	"github.com/docker/engine-api/types"
+	"golang.org/x/net/context"
 )
 
 func TestNetworkCreateError(t *testing.T) {
@@ -17,7 +18,7 @@ func TestNetworkCreateError(t *testing.T) {
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
 
-	_, err := client.NetworkCreate(types.NetworkCreate{})
+	_, err := client.NetworkCreate(context.Background(), types.NetworkCreate{})
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server Error, got %v", err)
 	}
@@ -50,7 +51,7 @@ func TestNetworkCreate(t *testing.T) {
 		}),
 	}
 
-	networkResponse, err := client.NetworkCreate(types.NetworkCreate{
+	networkResponse, err := client.NetworkCreate(context.Background(), types.NetworkCreate{
 		Name:           "mynetwork",
 		CheckDuplicate: true,
 		Driver:         "mydriver",

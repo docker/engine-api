@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	"github.com/docker/engine-api/types"
+	"golang.org/x/net/context"
 )
 
 func TestImageRemoveError(t *testing.T) {
@@ -17,7 +18,7 @@ func TestImageRemoveError(t *testing.T) {
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
 
-	_, err := client.ImageRemove(types.ImageRemoveOptions{})
+	_, err := client.ImageRemove(context.Background(), types.ImageRemoveOptions{})
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server Error, got %v", err)
 	}
@@ -80,7 +81,7 @@ func TestImageRemove(t *testing.T) {
 				}, nil
 			}),
 		}
-		imageDeletes, err := client.ImageRemove(types.ImageRemoveOptions{
+		imageDeletes, err := client.ImageRemove(context.Background(), types.ImageRemoveOptions{
 			ImageID:       "image_id",
 			Force:         removeCase.force,
 			PruneChildren: removeCase.pruneChildren,
