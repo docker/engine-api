@@ -11,13 +11,14 @@ import (
 
 	"github.com/docker/engine-api/types"
 	"github.com/docker/engine-api/types/filters"
+	"golang.org/x/net/context"
 )
 
 func TestContainerListError(t *testing.T) {
 	client := &Client{
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
-	_, err := client.ContainerList(types.ContainerListOptions{})
+	_, err := client.ContainerList(context.Background(), types.ContainerListOptions{})
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server Error, got %v", err)
 	}
@@ -80,7 +81,7 @@ func TestContainerList(t *testing.T) {
 	filters.Add("label", "label1")
 	filters.Add("label", "label2")
 	filters.Add("before", "container")
-	containers, err := client.ContainerList(types.ContainerListOptions{
+	containers, err := client.ContainerList(context.Background(), types.ContainerListOptions{
 		Size:   true,
 		All:    true,
 		Since:  "container",

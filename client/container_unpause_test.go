@@ -7,13 +7,15 @@ import (
 	"net/http"
 	"strings"
 	"testing"
+
+	"golang.org/x/net/context"
 )
 
 func TestContainerUnpauseError(t *testing.T) {
 	client := &Client{
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
-	err := client.ContainerUnpause("nothing")
+	err := client.ContainerUnpause(context.Background(), "nothing")
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server Error, got %v", err)
 	}
@@ -32,7 +34,7 @@ func TestContainerUnpause(t *testing.T) {
 			}, nil
 		}),
 	}
-	err := client.ContainerUnpause("container_id")
+	err := client.ContainerUnpause(context.Background(), "container_id")
 	if err != nil {
 		t.Fatal(err)
 	}

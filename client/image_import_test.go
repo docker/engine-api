@@ -6,13 +6,11 @@ import (
 	"io/ioutil"
 	"net/http"
 	"reflect"
+	"strings"
 	"testing"
 
-	"golang.org/x/net/context"
-
-	"strings"
-
 	"github.com/docker/engine-api/types"
+	"golang.org/x/net/context"
 )
 
 func TestImageImportError(t *testing.T) {

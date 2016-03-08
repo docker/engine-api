@@ -9,13 +9,14 @@ import (
 	"testing"
 
 	"github.com/docker/engine-api/types"
+	"golang.org/x/net/context"
 )
 
 func TestContainerCommitError(t *testing.T) {
 	client := &Client{
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
-	_, err := client.ContainerCommit(types.ContainerCommitOptions{
+	_, err := client.ContainerCommit(context.Background(), types.ContainerCommitOptions{
 		ContainerID: "nothing",
 	})
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
@@ -75,7 +76,7 @@ func TestContainerCommit(t *testing.T) {
 		}),
 	}
 
-	r, err := client.ContainerCommit(types.ContainerCommitOptions{
+	r, err := client.ContainerCommit(context.Background(), types.ContainerCommitOptions{
 		ContainerID:    expectedContainerID,
 		RepositoryName: expectedRepositoryName,
 		Tag:            expectedTag,

@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/docker/engine-api/types"
+	"golang.org/x/net/context"
 )
 
 func TestContainerInspectError(t *testing.T) {
@@ -15,7 +16,7 @@ func TestContainerInspectError(t *testing.T) {
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
 
-	_, err := client.ContainerInspect("nothing")
+	_, err := client.ContainerInspect(context.Background(), "nothing")
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server Error, got %v", err)
 	}
@@ -26,7 +27,7 @@ func TestContainerInspectContainerNotFound(t *testing.T) {
 		transport: newMockClient(nil, errorMock(http.StatusNotFound, "Server error")),
 	}
 
-	_, err := client.ContainerInspect("unknown")
+	_, err := client.ContainerInspect(context.Background(), "unknown")
 	if err == nil || !IsErrContainerNotFound(err) {
 		t.Fatalf("expected a containerNotFound error, got %v", err)
 	}
@@ -52,7 +53,7 @@ func TestContainerInspect(t *testing.T) {
 		}),
 	}
 
-	r, err := client.ContainerInspect("container_id")
+	r, err := client.ContainerInspect(context.Background(), "container_id")
 	if err != nil {
 		t.Fatal(err)
 	}

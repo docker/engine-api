@@ -7,13 +7,15 @@ import (
 	"net/http"
 	"strings"
 	"testing"
+
+	"golang.org/x/net/context"
 )
 
 func TestContainerRestartError(t *testing.T) {
 	client := &Client{
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
-	err := client.ContainerRestart("nothing", 0)
+	err := client.ContainerRestart(context.Background(), "nothing", 0)
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server Error, got %v", err)
 	}
@@ -37,7 +39,7 @@ func TestContainerRestart(t *testing.T) {
 		}),
 	}
 
-	err := client.ContainerRestart("container_id", 100)
+	err := client.ContainerRestart(context.Background(), "container_id", 100)
 	if err != nil {
 		t.Fatal(err)
 	}

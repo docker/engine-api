@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	"github.com/docker/engine-api/types"
+	"golang.org/x/net/context"
 )
 
 func TestNetworkDisconnectError(t *testing.T) {
@@ -17,7 +18,7 @@ func TestNetworkDisconnectError(t *testing.T) {
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
 
-	err := client.NetworkDisconnect("network_id", "container_id", false)
+	err := client.NetworkDisconnect(context.Background(), "network_id", "container_id", false)
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server Error, got %v", err)
 	}
@@ -56,7 +57,7 @@ func TestNetworkDisconnect(t *testing.T) {
 		}),
 	}
 
-	err := client.NetworkDisconnect("network_id", "container_id", true)
+	err := client.NetworkDisconnect(context.Background(), "network_id", "container_id", true)
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -10,13 +10,14 @@ import (
 	"testing"
 
 	"github.com/docker/engine-api/types"
+	"golang.org/x/net/context"
 )
 
 func TestImageHistoryError(t *testing.T) {
 	client := &Client{
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
-	_, err := client.ImageHistory("nothing")
+	_, err := client.ImageHistory(context.Background(), "nothing")
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server error, got %v", err)
 	}
@@ -49,7 +50,7 @@ func TestImageHistory(t *testing.T) {
 			}, nil
 		}),
 	}
-	imageHistories, err := client.ImageHistory("image_id")
+	imageHistories, err := client.ImageHistory(context.Background(), "image_id")
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -9,13 +9,14 @@ import (
 	"testing"
 
 	"github.com/docker/engine-api/types"
+	"golang.org/x/net/context"
 )
 
 func TestContainerResizeError(t *testing.T) {
 	client := &Client{
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
-	err := client.ContainerResize(types.ResizeOptions{})
+	err := client.ContainerResize(context.Background(), types.ResizeOptions{})
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server Error, got %v", err)
 	}
@@ -25,7 +26,7 @@ func TestContainerExecResizeError(t *testing.T) {
 	client := &Client{
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
-	err := client.ContainerExecResize(types.ResizeOptions{})
+	err := client.ContainerExecResize(context.Background(), types.ResizeOptions{})
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server Error, got %v", err)
 	}
@@ -36,7 +37,7 @@ func TestContainerResize(t *testing.T) {
 		transport: newMockClient(nil, resizeTransport("/containers/container_id/resize")),
 	}
 
-	err := client.ContainerResize(types.ResizeOptions{
+	err := client.ContainerResize(context.Background(), types.ResizeOptions{
 		ID:     "container_id",
 		Height: 500,
 		Width:  600,
@@ -51,7 +52,7 @@ func TestContainerExecResize(t *testing.T) {
 		transport: newMockClient(nil, resizeTransport("/exec/exec_id/resize")),
 	}
 
-	err := client.ContainerExecResize(types.ResizeOptions{
+	err := client.ContainerExecResize(context.Background(), types.ResizeOptions{
 		ID:     "exec_id",
 		Height: 500,
 		Width:  600,

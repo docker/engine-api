@@ -12,6 +12,7 @@ import (
 
 	"github.com/docker/engine-api/types"
 	"github.com/docker/go-connections/sockets"
+	"golang.org/x/net/context"
 )
 
 // tlsClientCon holds tls information and a dialed connection.
@@ -30,7 +31,7 @@ func (c *tlsClientCon) CloseWrite() error {
 }
 
 // postHijacked sends a POST request and hijacks the connection.
-func (cli *Client) postHijacked(path string, query url.Values, body interface{}, headers map[string][]string) (types.HijackedResponse, error) {
+func (cli *Client) postHijacked(ctx context.Context, path string, query url.Values, body interface{}, headers map[string][]string) (types.HijackedResponse, error) {
 	bodyEncoded, err := encodeData(body)
 	if err != nil {
 		return types.HijackedResponse{}, err

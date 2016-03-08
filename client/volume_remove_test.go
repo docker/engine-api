@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"strings"
 	"testing"
+
+	"golang.org/x/net/context"
 )
 
 func TestVolumeRemoveError(t *testing.T) {
@@ -14,7 +16,7 @@ func TestVolumeRemoveError(t *testing.T) {
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
 
-	err := client.VolumeRemove("volume_id")
+	err := client.VolumeRemove(context.Background(), "volume_id")
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server Error, got %v", err)
 	}
@@ -38,7 +40,7 @@ func TestVolumeRemove(t *testing.T) {
 		}),
 	}
 
-	err := client.VolumeRemove("volume_id")
+	err := client.VolumeRemove(context.Background(), "volume_id")
 	if err != nil {
 		t.Fatal(err)
 	}

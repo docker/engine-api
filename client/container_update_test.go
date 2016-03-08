@@ -9,13 +9,14 @@ import (
 	"testing"
 
 	"github.com/docker/engine-api/types/container"
+	"golang.org/x/net/context"
 )
 
 func TestContainerUpdateError(t *testing.T) {
 	client := &Client{
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
-	err := client.ContainerUpdate("nothing", container.UpdateConfig{})
+	err := client.ContainerUpdate(context.Background(), "nothing", container.UpdateConfig{})
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server Error, got %v", err)
 	}
@@ -35,7 +36,7 @@ func TestContainerUpdate(t *testing.T) {
 		}),
 	}
 
-	err := client.ContainerUpdate("container_id", container.UpdateConfig{
+	err := client.ContainerUpdate(context.Background(), "container_id", container.UpdateConfig{
 		Resources: container.Resources{
 			CPUPeriod: 1,
 		},
