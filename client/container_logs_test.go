@@ -8,7 +8,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/docker/engine-api/client/transport"
 	"github.com/docker/engine-api/types"
 
 	"golang.org/x/net/context"
@@ -16,7 +15,7 @@ import (
 
 func TestContainerLogsError(t *testing.T) {
 	client := &Client{
-		transport: transport.NewMockClient(nil, transport.ErrorMock(http.StatusInternalServerError, "Server error")),
+		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
 	_, err := client.ContainerLogs(context.Background(), types.ContainerLogsOptions{})
 	if err == nil || err.Error() != "Error response from daemon: Server error" {

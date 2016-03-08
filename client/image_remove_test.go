@@ -9,13 +9,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/docker/engine-api/client/transport"
 	"github.com/docker/engine-api/types"
 )
 
 func TestImageRemoveError(t *testing.T) {
 	client := &Client{
-		transport: transport.NewMockClient(nil, transport.ErrorMock(http.StatusInternalServerError, "Server error")),
+		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
 
 	_, err := client.ImageRemove(types.ImageRemoveOptions{})
@@ -49,7 +48,7 @@ func TestImageRemove(t *testing.T) {
 	}
 	for _, removeCase := range removeCases {
 		client := &Client{
-			transport: transport.NewMockClient(nil, func(req *http.Request) (*http.Response, error) {
+			transport: newMockClient(nil, func(req *http.Request) (*http.Response, error) {
 				if !strings.HasPrefix(req.URL.Path, expectedURL) {
 					return nil, fmt.Errorf("expected URL '%s', got '%s'", expectedURL, req.URL)
 				}

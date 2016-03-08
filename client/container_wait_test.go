@@ -11,7 +11,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/docker/engine-api/client/transport"
 	"github.com/docker/engine-api/types"
 
 	"golang.org/x/net/context"
@@ -19,7 +18,7 @@ import (
 
 func TestContainerWaitError(t *testing.T) {
 	client := &Client{
-		transport: transport.NewMockClient(nil, transport.ErrorMock(http.StatusInternalServerError, "Server error")),
+		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
 	code, err := client.ContainerWait(context.Background(), "nothing")
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
@@ -33,7 +32,7 @@ func TestContainerWaitError(t *testing.T) {
 func TestContainerWait(t *testing.T) {
 	expectedURL := "/containers/container_id/wait"
 	client := &Client{
-		transport: transport.NewMockClient(nil, func(req *http.Request) (*http.Response, error) {
+		transport: newMockClient(nil, func(req *http.Request) (*http.Response, error) {
 			if !strings.HasPrefix(req.URL.Path, expectedURL) {
 				return nil, fmt.Errorf("Expected URL '%s', got '%s'", expectedURL, req.URL)
 			}

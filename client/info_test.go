@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/docker/engine-api/client/transport"
 	"github.com/docker/engine-api/types"
 )
 
@@ -29,7 +28,7 @@ func infoMock(req *http.Request) (*http.Response, error) {
 
 func TestInfo(t *testing.T) {
 	client := &Client{
-		transport: transport.NewMockClient(nil, infoMock),
+		transport: newMockClient(nil, infoMock),
 	}
 
 	info, err := client.Info()

@@ -6,13 +6,11 @@ import (
 	"io/ioutil"
 	"net/http"
 	"testing"
-
-	"github.com/docker/engine-api/client/transport"
 )
 
 func TestContainerStopError(t *testing.T) {
 	client := &Client{
-		transport: transport.NewMockClient(nil, transport.ErrorMock(http.StatusInternalServerError, "Server error")),
+		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
 	err := client.ContainerStop("nothing", 0)
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
@@ -22,7 +20,7 @@ func TestContainerStopError(t *testing.T) {
 
 func TestContainerStop(t *testing.T) {
 	client := &Client{
-		transport: transport.NewMockClient(nil, func(req *http.Request) (*http.Response, error) {
+		transport: newMockClient(nil, func(req *http.Request) (*http.Response, error) {
 			t := req.URL.Query().Get("t")
 			if t != "100" {
 				return nil, fmt.Errorf("t (timeout) not set in URL query properly. Expected '100', got %s", t)

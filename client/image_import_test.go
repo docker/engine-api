@@ -10,14 +10,14 @@ import (
 
 	"golang.org/x/net/context"
 
-	"github.com/docker/engine-api/client/transport"
-	"github.com/docker/engine-api/types"
 	"strings"
+
+	"github.com/docker/engine-api/types"
 )
 
 func TestImageImportError(t *testing.T) {
 	client := &Client{
-		transport: transport.NewMockClient(nil, transport.ErrorMock(http.StatusInternalServerError, "Server error")),
+		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
 	_, err := client.ImageImport(context.Background(), types.ImageImportOptions{})
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
@@ -28,7 +28,7 @@ func TestImageImportError(t *testing.T) {
 func TestImageImport(t *testing.T) {
 	expectedURL := "/images/create"
 	client := &Client{
-		transport: transport.NewMockClient(nil, func(r *http.Request) (*http.Response, error) {
+		transport: newMockClient(nil, func(r *http.Request) (*http.Response, error) {
 			if !strings.HasPrefix(r.URL.Path, expectedURL) {
 				return nil, fmt.Errorf("Expected URL '%s', got '%s'", expectedURL, r.URL)
 			}

@@ -10,13 +10,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/docker/engine-api/client/transport"
 	"github.com/docker/engine-api/types"
 )
 
 func TestImageInspectError(t *testing.T) {
 	client := &Client{
-		transport: transport.NewMockClient(nil, transport.ErrorMock(http.StatusInternalServerError, "Server error")),
+		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
 
 	_, _, err := client.ImageInspectWithRaw("nothing", true)
@@ -27,7 +26,7 @@ func TestImageInspectError(t *testing.T) {
 
 func TestImageInspectImageNotFound(t *testing.T) {
 	client := &Client{
-		transport: transport.NewMockClient(nil, transport.ErrorMock(http.StatusNotFound, "Server error")),
+		transport: newMockClient(nil, errorMock(http.StatusNotFound, "Server error")),
 	}
 
 	_, _, err := client.ImageInspectWithRaw("unknown", true)
@@ -58,7 +57,7 @@ func TestImageInspect(t *testing.T) {
 	}
 	for _, inspectCase := range inspectCases {
 		client := &Client{
-			transport: transport.NewMockClient(nil, func(req *http.Request) (*http.Response, error) {
+			transport: newMockClient(nil, func(req *http.Request) (*http.Response, error) {
 				if !strings.HasPrefix(req.URL.Path, expectedURL) {
 					return nil, fmt.Errorf("Expected URL '%s', got '%s'", expectedURL, req.URL)
 				}

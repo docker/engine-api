@@ -8,13 +8,12 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/docker/engine-api/client/transport"
 	"github.com/docker/engine-api/types"
 )
 
 func TestContainerExecCreateError(t *testing.T) {
 	client := &Client{
-		transport: transport.NewMockClient(nil, transport.ErrorMock(http.StatusInternalServerError, "Server error")),
+		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
 	_, err := client.ContainerExecCreate(types.ExecConfig{})
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
@@ -24,7 +23,7 @@ func TestContainerExecCreateError(t *testing.T) {
 
 func TestContainerExecCreate(t *testing.T) {
 	client := &Client{
-		transport: transport.NewMockClient(nil, func(req *http.Request) (*http.Response, error) {
+		transport: newMockClient(nil, func(req *http.Request) (*http.Response, error) {
 			// FIXME validate the content is the given ExecConfig ?
 			if err := req.ParseForm(); err != nil {
 				return nil, err
@@ -62,7 +61,7 @@ func TestContainerExecCreate(t *testing.T) {
 
 func TestContainerExecStartError(t *testing.T) {
 	client := &Client{
-		transport: transport.NewMockClient(nil, transport.ErrorMock(http.StatusInternalServerError, "Server error")),
+		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
 	err := client.ContainerExecStart("nothing", types.ExecStartCheck{})
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
@@ -72,7 +71,7 @@ func TestContainerExecStartError(t *testing.T) {
 
 func TestContainerExecStart(t *testing.T) {
 	client := &Client{
-		transport: transport.NewMockClient(nil, func(req *http.Request) (*http.Response, error) {
+		transport: newMockClient(nil, func(req *http.Request) (*http.Response, error) {
 			if err := req.ParseForm(); err != nil {
 				return nil, err
 			}
@@ -102,7 +101,7 @@ func TestContainerExecStart(t *testing.T) {
 
 func TestContainerExecInspectError(t *testing.T) {
 	client := &Client{
-		transport: transport.NewMockClient(nil, transport.ErrorMock(http.StatusInternalServerError, "Server error")),
+		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
 	_, err := client.ContainerExecInspect("nothing")
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
@@ -112,7 +111,7 @@ func TestContainerExecInspectError(t *testing.T) {
 
 func TestContainerExecInspect(t *testing.T) {
 	client := &Client{
-		transport: transport.NewMockClient(nil, func(req *http.Request) (*http.Response, error) {
+		transport: newMockClient(nil, func(req *http.Request) (*http.Response, error) {
 			b, err := json.Marshal(types.ContainerExecInspect{
 				ExecID:      "exec_id",
 				ContainerID: "container_id",

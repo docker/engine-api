@@ -8,13 +8,12 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/docker/engine-api/client/transport"
 	"github.com/docker/engine-api/types"
 )
 
 func TestContainerCommitError(t *testing.T) {
 	client := &Client{
-		transport: transport.NewMockClient(nil, transport.ErrorMock(http.StatusInternalServerError, "Server error")),
+		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
 	_, err := client.ContainerCommit(types.ContainerCommitOptions{
 		ContainerID: "nothing",
@@ -33,7 +32,7 @@ func TestContainerCommit(t *testing.T) {
 	expectedChanges := []string{"change1", "change2"}
 
 	client := &Client{
-		transport: transport.NewMockClient(nil, func(req *http.Request) (*http.Response, error) {
+		transport: newMockClient(nil, func(req *http.Request) (*http.Response, error) {
 			query := req.URL.Query()
 			containerID := query.Get("container")
 			if containerID != expectedContainerID {

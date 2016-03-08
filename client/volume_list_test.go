@@ -9,14 +9,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/docker/engine-api/client/transport"
 	"github.com/docker/engine-api/types"
 	"github.com/docker/engine-api/types/filters"
 )
 
 func TestVolumeListError(t *testing.T) {
 	client := &Client{
-		transport: transport.NewMockClient(nil, transport.ErrorMock(http.StatusInternalServerError, "Server error")),
+		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
 
 	_, err := client.VolumeList(filters.NewArgs())
@@ -59,7 +58,7 @@ func TestVolumeList(t *testing.T) {
 
 	for _, listCase := range listCases {
 		client := &Client{
-			transport: transport.NewMockClient(nil, func(req *http.Request) (*http.Response, error) {
+			transport: newMockClient(nil, func(req *http.Request) (*http.Response, error) {
 				if !strings.HasPrefix(req.URL.Path, expectedURL) {
 					return nil, fmt.Errorf("Expected URL '%s', got '%s'", expectedURL, req.URL)
 				}
