@@ -5,13 +5,11 @@ import (
 	"io/ioutil"
 	"net/http"
 	"testing"
-
-	"github.com/docker/engine-api/client/transport"
 )
 
 func TestContainerStartError(t *testing.T) {
 	client := &Client{
-		transport: transport.NewMockClient(nil, transport.ErrorMock(http.StatusInternalServerError, "Server error")),
+		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
 	err := client.ContainerStart("nothing")
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
@@ -21,7 +19,7 @@ func TestContainerStartError(t *testing.T) {
 
 func TestContainerStart(t *testing.T) {
 	client := &Client{
-		transport: transport.NewMockClient(nil, func(req *http.Request) (*http.Response, error) {
+		transport: newMockClient(nil, func(req *http.Request) (*http.Response, error) {
 			return &http.Response{
 				StatusCode: http.StatusOK,
 				Body:       ioutil.NopCloser(bytes.NewReader([]byte(""))),

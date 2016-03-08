@@ -9,14 +9,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/docker/engine-api/client/transport"
 	"github.com/docker/engine-api/types"
 	"github.com/docker/engine-api/types/filters"
 )
 
 func TestContainerListError(t *testing.T) {
 	client := &Client{
-		transport: transport.NewMockClient(nil, transport.ErrorMock(http.StatusInternalServerError, "Server error")),
+		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
 	_, err := client.ContainerList(types.ContainerListOptions{})
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
@@ -28,7 +27,7 @@ func TestContainerList(t *testing.T) {
 	expectedURL := "/containers/json"
 	expectedFilters := `{"before":{"container":true},"label":{"label1":true,"label2":true}}`
 	client := &Client{
-		transport: transport.NewMockClient(nil, func(req *http.Request) (*http.Response, error) {
+		transport: newMockClient(nil, func(req *http.Request) (*http.Response, error) {
 			if !strings.HasPrefix(req.URL.Path, expectedURL) {
 				return nil, fmt.Errorf("Expected URL '%s', got '%s'", expectedURL, req.URL)
 			}

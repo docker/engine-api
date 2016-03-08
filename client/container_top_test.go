@@ -9,13 +9,12 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/docker/engine-api/client/transport"
 	"github.com/docker/engine-api/types"
 )
 
 func TestContainerTopError(t *testing.T) {
 	client := &Client{
-		transport: transport.NewMockClient(nil, transport.ErrorMock(http.StatusInternalServerError, "Server error")),
+		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
 	_, err := client.ContainerTop("nothing", []string{})
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
@@ -31,7 +30,7 @@ func TestContainerTop(t *testing.T) {
 	expectedTitles := []string{"title1", "title2"}
 
 	client := &Client{
-		transport: transport.NewMockClient(nil, func(req *http.Request) (*http.Response, error) {
+		transport: newMockClient(nil, func(req *http.Request) (*http.Response, error) {
 			query := req.URL.Query()
 			args := query.Get("ps_args")
 			if args != "arg1 arg2" {

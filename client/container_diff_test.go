@@ -7,13 +7,12 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/docker/engine-api/client/transport"
 	"github.com/docker/engine-api/types"
 )
 
 func TestContainerDiffError(t *testing.T) {
 	client := &Client{
-		transport: transport.NewMockClient(nil, transport.ErrorMock(http.StatusInternalServerError, "Server error")),
+		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
 	_, err := client.ContainerDiff("nothing")
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
@@ -24,7 +23,7 @@ func TestContainerDiffError(t *testing.T) {
 
 func TestContainerDiff(t *testing.T) {
 	client := &Client{
-		transport: transport.NewMockClient(nil, func(req *http.Request) (*http.Response, error) {
+		transport: newMockClient(nil, func(req *http.Request) (*http.Response, error) {
 			b, err := json.Marshal([]types.ContainerChange{
 				{
 					Kind: 0,

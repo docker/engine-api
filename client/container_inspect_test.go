@@ -7,13 +7,12 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/docker/engine-api/client/transport"
 	"github.com/docker/engine-api/types"
 )
 
 func TestContainerInspectError(t *testing.T) {
 	client := &Client{
-		transport: transport.NewMockClient(nil, transport.ErrorMock(http.StatusInternalServerError, "Server error")),
+		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
 
 	_, err := client.ContainerInspect("nothing")
@@ -24,7 +23,7 @@ func TestContainerInspectError(t *testing.T) {
 
 func TestContainerInspectContainerNotFound(t *testing.T) {
 	client := &Client{
-		transport: transport.NewMockClient(nil, transport.ErrorMock(http.StatusNotFound, "Server error")),
+		transport: newMockClient(nil, errorMock(http.StatusNotFound, "Server error")),
 	}
 
 	_, err := client.ContainerInspect("unknown")
@@ -35,7 +34,7 @@ func TestContainerInspectContainerNotFound(t *testing.T) {
 
 func TestContainerInspect(t *testing.T) {
 	client := &Client{
-		transport: transport.NewMockClient(nil, func(req *http.Request) (*http.Response, error) {
+		transport: newMockClient(nil, func(req *http.Request) (*http.Response, error) {
 			content, err := json.Marshal(types.ContainerJSON{
 				ContainerJSONBase: &types.ContainerJSONBase{
 					ID:    "container_id",

@@ -8,13 +8,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/docker/engine-api/client/transport"
 	"github.com/docker/engine-api/types/container"
 )
 
 func TestContainerUpdateError(t *testing.T) {
 	client := &Client{
-		transport: transport.NewMockClient(nil, transport.ErrorMock(http.StatusInternalServerError, "Server error")),
+		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
 	err := client.ContainerUpdate("nothing", container.UpdateConfig{})
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
@@ -25,7 +24,7 @@ func TestContainerUpdateError(t *testing.T) {
 func TestContainerUpdate(t *testing.T) {
 	expectedURL := "/containers/container_id/update"
 	client := &Client{
-		transport: transport.NewMockClient(nil, func(req *http.Request) (*http.Response, error) {
+		transport: newMockClient(nil, func(req *http.Request) (*http.Response, error) {
 			if !strings.HasPrefix(req.URL.Path, expectedURL) {
 				return nil, fmt.Errorf("Expected URL '%s', got '%s'", expectedURL, req.URL)
 			}

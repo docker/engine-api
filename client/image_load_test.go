@@ -9,13 +9,11 @@ import (
 	"testing"
 
 	"golang.org/x/net/context"
-
-	"github.com/docker/engine-api/client/transport"
 )
 
 func TestImageLoadError(t *testing.T) {
 	client := &Client{
-		transport: transport.NewMockClient(nil, transport.ErrorMock(http.StatusInternalServerError, "Server error")),
+		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
 
 	_, err := client.ImageLoad(context.Background(), nil, true)
@@ -53,7 +51,7 @@ func TestImageLoad(t *testing.T) {
 	}
 	for _, loadCase := range loadCases {
 		client := &Client{
-			transport: transport.NewMockClient(nil, func(req *http.Request) (*http.Response, error) {
+			transport: newMockClient(nil, func(req *http.Request) (*http.Response, error) {
 				if !strings.HasPrefix(req.URL.Path, expectedURL) {
 					return nil, fmt.Errorf("Expected URL '%s', got '%s'", expectedURL, req.URL)
 				}
