@@ -9,16 +9,16 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/docker/engine-api/client/transport"
 	"github.com/docker/engine-api/types"
+	"golang.org/x/net/context"
 )
 
 func TestVolumeInspectError(t *testing.T) {
 	client := &Client{
-		transport: transport.NewMockClient(nil, transport.ErrorMock(http.StatusInternalServerError, "Server error")),
+		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
 
-	_, err := client.VolumeInspect("nothing")
+	_, err := client.VolumeInspect(context.Background(), "nothing")
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server Error, got %v", err)
 	}
@@ -26,10 +26,10 @@ func TestVolumeInspectError(t *testing.T) {
 
 func TestVolumeInspectNotFound(t *testing.T) {
 	client := &Client{
-		transport: transport.NewMockClient(nil, transport.ErrorMock(http.StatusNotFound, "Server error")),
+		transport: newMockClient(nil, errorMock(http.StatusNotFound, "Server error")),
 	}
 
-	_, err := client.VolumeInspect("unknown")
+	_, err := client.VolumeInspect(context.Background(), "unknown")
 	if err == nil || !IsErrVolumeNotFound(err) {
 		t.Fatalf("expected a volumeNotFound error, got %v", err)
 	}
@@ -38,7 +38,7 @@ func TestVolumeInspectNotFound(t *testing.T) {
 func TestVolumeInspect(t *testing.T) {
 	expectedURL := "/volumes/volume_id"
 	client := &Client{
-		transport: transport.NewMockClient(nil, func(req *http.Request) (*http.Response, error) {
+		transport: newMockClient(nil, func(req *http.Request) (*http.Response, error) {
 			if !strings.HasPrefix(req.URL.Path, expectedURL) {
 				return nil, fmt.Errorf("Expected URL '%s', got '%s'", expectedURL, req.URL)
 			}
@@ -60,7 +60,7 @@ func TestVolumeInspect(t *testing.T) {
 		}),
 	}
 
-	v, err := client.VolumeInspect("volume_id")
+	v, err := client.VolumeInspect(context.Background(), "volume_id")
 	if err != nil {
 		t.Fatal(err)
 	}
