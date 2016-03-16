@@ -14,6 +14,7 @@
 			"calavera",
 			"dongluochen",
 			"mhbauer",
+			"vdemeester"
 		]
 
 [people]
@@ -37,3 +38,8 @@
 	Name = "Morgan Bauer"
 	Email = "mbauer@us.ibm.com"
 	GitHub = "mhbauer"
+
+	[people.vdemeester]
+	Name = "Vincent Demeester"
+	Email = "vincent@sbr.pm"
+	GitHub = "vdemeester"
