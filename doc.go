@@ -15,7 +15,7 @@ Other programs, like Docker Machine, can set the default Docker engine environme
 All request arguments are defined as typed structures in the types package. For instance, this is how to get all containers running in the host:
 
 	options := types.ContainerListOptions{All: true}
-	containers, err := cli.ContainerList(options)
+	containers, err := cli.ContainerList(context.Background(), options)
 
 */
 package engineapi

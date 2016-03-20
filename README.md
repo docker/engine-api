@@ -20,8 +20,10 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/docker/engine-api/client"
 	"github.com/docker/engine-api/types"
+	"golang.org/x/net/context"
 )
 
 func main() {
@@ -32,7 +34,7 @@ func main() {
 	}
 
 	options := types.ContainerListOptions{All: true}
-	containers, err := cli.ContainerList(options)
+	containers, err := cli.ContainerList(context.Background(), options)
 	if err != nil {
 		panic(err)
 	}
