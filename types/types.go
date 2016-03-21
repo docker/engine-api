@@ -103,6 +103,13 @@ type GraphDriverData struct {
 	Data map[string]string
 }
 
+// RootFS returns Image's RootFS description including the layer IDs.
+type RootFS struct {
+	Type      string
+	Layers    []string `json:",omitempty"`
+	BaseLayer string   `json:",omitempty"`
+}
+
 // ImageInspect contains response of Remote API:
 // GET "/images/{name:.*}/json"
 type ImageInspect struct {
@@ -122,6 +129,7 @@ type ImageInspect struct {
 	Size            int64
 	VirtualSize     int64
 	GraphDriver     GraphDriverData
+	RootFS          RootFS
 }
 
 // Port stores open ports info of container
