@@ -2,6 +2,52 @@
 
 Items starting with DEPRECATE are important deprecation notices. For more information on the list of deprecated APIs please have a look at https://docs.docker.com/misc/deprecated/ where target removal dates can also be found.
 
+## 0.3.0 (2016-03-22)
+
+### Client
+
+- Add context to every function.
+- Fix issue loading a default TLS CA.
+- Allow to configure the client with a given http.Client.
+- Add support for Windows named pipes.
+- Set default host for Solaris.
+- Add quiet flag for image load.
+- Add ability to hijack connections through a proxy.
+- Correctly set content type for image load.
+- Add support for getting token for login.
+
+### Types
+
+- Add struct for update restart policy.
+- Add human friendly State for container.
+- Use OS specific host when DOCKER_HOST is not set.
+- Rename Status in info to SystemStatus.
+- Add internal flag to network inspect.
+- Add disk quota field to container.
+- Add EnableIPv6 fields.
+- Add Mounts to container.
+- Add cgroup driver to info.
+- Add userns to host config.
+- Remove email from AuthConfig.
+- Make AuthConfig fields optional.
+- Add IO resource settings for Windows.
+- Add storage driver to host config.
+- Update NetworkName to return proper user defined network names.
+- Support joining cgroups by container id.
+- Add KernelMemory to info.
+- Add UsernsMode to container config.
+- Add CPU resource control for Windows.
+- Add AutoRemove to host config.
+- Add Status field to Volume.
+- Add Label to Image, Network and Volume.
+- Add RootFS to container.
+
+## 0.2.3 (2016-02-02)
+
+### Types
+
+- Add missing status field.
+
 ## 0.2.2 (2016-01-13)
 
 ### Client
