@@ -21,6 +21,7 @@ func TestGetAPIPath(t *testing.T) {
 		{"v1.22", "/containers/json", nil, "/v1.22/containers/json"},
 		{"v1.22", "/containers/json", url.Values{}, "/v1.22/containers/json"},
 		{"v1.22", "/containers/json", url.Values{"s": []string{"c"}}, "/v1.22/containers/json?s=c"},
+		{"v1.22", "/networks/kiwl$%^", nil, "/v1.22/networks/kiwl$%25%5E"},
 	}
 
 	for _, cs := range cases {
