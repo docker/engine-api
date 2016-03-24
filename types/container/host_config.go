@@ -89,7 +89,7 @@ func (n UsernsMode) Valid() bool {
 	return true
 }
 
-// Cgroup Spec represents the cgroup to use for the container.
+// CgroupSpec represents the cgroup to use for the container.
 type CgroupSpec string
 
 func (c CgroupSpec) IsContainer() bool {
@@ -113,7 +113,7 @@ func (c CgroupSpec) Container() string {
 // UTSMode represents the UTS namespace of the container.
 type UTSMode string
 
-// IsPrivate indicates whether the container uses it's private UTS namespace.
+// IsPrivate indicates whether the container uses its private UTS namespace.
 func (n UTSMode) IsPrivate() bool {
 	return !(n.IsHost())
 }
@@ -137,7 +137,7 @@ func (n UTSMode) Valid() bool {
 // PidMode represents the pid stack of the container.
 type PidMode string
 
-// IsPrivate indicates whether the container uses it's private pid stack.
+// IsPrivate indicates whether the container uses its private pid stack.
 func (n PidMode) IsPrivate() bool {
 	return !(n.IsHost())
 }
