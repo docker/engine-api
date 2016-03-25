@@ -15,12 +15,17 @@ import (
 // and it tries one more time.
 // It's up to the caller to handle the io.ReadCloser and close it properly.
 //
-// FIXME(vdemeester): there is currently few way to use this from docker/docker
+// FIXME(vdemeester): there is currently used in a few way in docker/docker
 // - if not in trusted content, ref is used to pass the whole reference, and tag is empty
 // - if in trusted content, ref is used to pass the reference name, and tag for the digest
-func (cli *Client) ImagePull(ctx context.Context, ref, tag string, options types.ImagePullOptions) (io.ReadCloser, error) {
+func (cli *Client) ImagePull(ctx context.Context, ref string, options types.ImagePullOptions) (io.ReadCloser, error) {
+	repository, tag, err := parseReference(ref)
+	if err != nil {
+		return nil, err
+	}
+
 	query := url.Values{}
-	query.Set("fromImage", ref)
+	query.Set("fromImage", repository)
 	if tag != "" {
 		query.Set("tag", tag)
 	}

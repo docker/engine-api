@@ -47,18 +47,18 @@ type APIClient interface {
 	CopyToContainer(ctx context.Context, options types.CopyToContainerOptions) error
 	Events(ctx context.Context, options types.EventsOptions) (io.ReadCloser, error)
 	ImageBuild(ctx context.Context, context io.Reader, options types.ImageBuildOptions) (types.ImageBuildResponse, error)
-	ImageCreate(ctx context.Context, options types.ImageCreateOptions) (io.ReadCloser, error)
+	ImageCreate(ctx context.Context, parentReference string, options types.ImageCreateOptions) (io.ReadCloser, error)
 	ImageHistory(ctx context.Context, image string) ([]types.ImageHistory, error)
-	ImageImport(ctx context.Context, options types.ImageImportOptions) (io.ReadCloser, error)
+	ImageImport(ctx context.Context, source types.ImageImportSource, ref string, options types.ImageImportOptions) (io.ReadCloser, error)
 	ImageInspectWithRaw(ctx context.Context, image string, getSize bool) (types.ImageInspect, []byte, error)
 	ImageList(ctx context.Context, options types.ImageListOptions) ([]types.Image, error)
 	ImageLoad(ctx context.Context, input io.Reader, quiet bool) (types.ImageLoadResponse, error)
-	ImagePull(ctx context.Context, ref, tag string, options types.ImagePullOptions) (io.ReadCloser, error)
-	ImagePush(ctx context.Context, ref, tag string, options types.ImagePushOptions) (io.ReadCloser, error)
+	ImagePull(ctx context.Context, ref string, options types.ImagePullOptions) (io.ReadCloser, error)
+	ImagePush(ctx context.Context, ref string, options types.ImagePushOptions) (io.ReadCloser, error)
 	ImageRemove(ctx context.Context, image string, options types.ImageRemoveOptions) ([]types.ImageDelete, error)
 	ImageSearch(ctx context.Context, term string, options types.ImageSearchOptions) ([]registry.SearchResult, error)
 	ImageSave(ctx context.Context, images []string) (io.ReadCloser, error)
-	ImageTag(ctx context.Context, image, repository, tag string, options types.ImageTagOptions) error
+	ImageTag(ctx context.Context, image, ref string, options types.ImageTagOptions) error
 	Info(ctx context.Context) (types.Info, error)
 	NetworkConnect(ctx context.Context, networkID, container string, config *network.EndpointSettings) error
 	NetworkCreate(ctx context.Context, name string, options types.NetworkCreate) (types.NetworkCreateResponse, error)

@@ -151,19 +151,19 @@ type ImageBuildResponse struct {
 
 // ImageCreateOptions holds information to create images.
 type ImageCreateOptions struct {
-	Parent       string // Parent is the name of the image to pull
-	Tag          string // Tag is the name to tag this image with
 	RegistryAuth string // RegistryAuth is the base64 encoded credentials for the registry
+}
+
+// ImageImportSource holds source information for ImageImport
+type ImageImportSource struct {
+	Source     io.Reader // Source is the data to send to the server to create this image from (mutually exclusive with SourceName)
+	SourceName string    // SourceName is the name of the image to pull (mutually exclusive with Source)
 }
 
 // ImageImportOptions holds information to import images from the client host.
 type ImageImportOptions struct {
-	Source         io.Reader // Source is the data to send to the server to create this image from (mutually exclusive with SourceName)
-	SourceName     string    // SourceName is the name of the image to pull (mutually exclusive with Source)
-	RepositoryName string    // RepositoryName is the name of the repository to import this image into
-	Message        string    // Message is the message to tag the image with
-	Tag            string    // Tag is the name to tag this image with
-	Changes        []string  // Changes are the raw changes to apply to this image
+	Message string   // Message is the message to tag the image with
+	Changes []string // Changes are the raw changes to apply to this image
 }
 
 // ImageListOptions holds parameters to filter the list of images with.

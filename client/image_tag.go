@@ -3,12 +3,18 @@ package client
 import (
 	"net/url"
 
-	"github.com/docker/engine-api/types"
 	"golang.org/x/net/context"
+
+	"github.com/docker/engine-api/types"
 )
 
 // ImageTag tags an image in the docker host
-func (cli *Client) ImageTag(ctx context.Context, imageID, repository, tag string, options types.ImageTagOptions) error {
+func (cli *Client) ImageTag(ctx context.Context, imageID, ref string, options types.ImageTagOptions) error {
+	repository, tag, err := parseReference(ref)
+	if err != nil {
+		return err
+	}
+
 	query := url.Values{}
 	query.Set("repo", repository)
 	query.Set("tag", tag)

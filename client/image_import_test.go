@@ -17,7 +17,7 @@ func TestImageImportError(t *testing.T) {
 	client := &Client{
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
-	_, err := client.ImageImport(context.Background(), types.ImageImportOptions{})
+	_, err := client.ImageImport(context.Background(), types.ImageImportSource{}, "image:tag", types.ImageImportOptions{})
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server error, got %v", err)
 	}
@@ -59,13 +59,12 @@ func TestImageImport(t *testing.T) {
 			}, nil
 		}),
 	}
-	importResponse, err := client.ImageImport(context.Background(), types.ImageImportOptions{
-		Source:         strings.NewReader("source"),
-		SourceName:     "image_source",
-		RepositoryName: "repository_name",
-		Message:        "A message",
-		Tag:            "imported",
-		Changes:        []string{"change1", "change2"},
+	importResponse, err := client.ImageImport(context.Background(), types.ImageImportSource{
+		Source:     strings.NewReader("source"),
+		SourceName: "image_source",
+	}, "repository_name:imported", types.ImageImportOptions{
+		Message: "A message",
+		Changes: []string{"change1", "change2"},
 	})
 	if err != nil {
 		t.Fatal(err)
