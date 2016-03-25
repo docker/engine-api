@@ -12,17 +12,15 @@ import (
 
 // ContainerAttachOptions holds parameters to attach to a container.
 type ContainerAttachOptions struct {
-	ContainerID string
-	Stream      bool
-	Stdin       bool
-	Stdout      bool
-	Stderr      bool
-	DetachKeys  string
+	Stream     bool
+	Stdin      bool
+	Stdout     bool
+	Stderr     bool
+	DetachKeys string
 }
 
 // ContainerCommitOptions holds parameters to commit changes into a container.
 type ContainerCommitOptions struct {
-	ContainerID    string
 	RepositoryName string
 	Tag            string
 	Comment        string
@@ -54,18 +52,16 @@ type ContainerListOptions struct {
 
 // ContainerLogsOptions holds parameters to filter logs with.
 type ContainerLogsOptions struct {
-	ContainerID string
-	ShowStdout  bool
-	ShowStderr  bool
-	Since       string
-	Timestamps  bool
-	Follow      bool
-	Tail        string
+	ShowStdout bool
+	ShowStderr bool
+	Since      string
+	Timestamps bool
+	Follow     bool
+	Tail       string
 }
 
 // ContainerRemoveOptions holds parameters to remove containers.
 type ContainerRemoveOptions struct {
-	ContainerID   string
 	RemoveVolumes bool
 	RemoveLinks   bool
 	Force         bool
@@ -185,40 +181,42 @@ type ImageLoadResponse struct {
 
 // ImagePullOptions holds information to pull images.
 type ImagePullOptions struct {
-	ImageID      string // ImageID is the name of the image to pull
-	Tag          string // Tag is the name of the tag to be pulled
-	RegistryAuth string // RegistryAuth is the base64 encoded credentials for the registry
+	RegistryAuth  string // RegistryAuth is the base64 encoded credentials for the registry
+	PrivilegeFunc RequestPrivilegeFunc
 }
+
+// RequestPrivilegeFunc is a function interface that
+// clients can supply to retry operations after
+// getting an authorization error.
+// This function returns the registry authentication
+// header value in base 64 format, or an error
+// if the privilege request fails.
+type RequestPrivilegeFunc func() (string, error)
 
 //ImagePushOptions holds information to push images.
 type ImagePushOptions ImagePullOptions
 
 // ImageRemoveOptions holds parameters to remove images.
 type ImageRemoveOptions struct {
-	ImageID       string
 	Force         bool
 	PruneChildren bool
 }
 
 // ImageSearchOptions holds parameters to search images with.
 type ImageSearchOptions struct {
-	Term         string
-	RegistryAuth string
+	RegistryAuth  string
+	PrivilegeFunc RequestPrivilegeFunc
 }
 
 // ImageTagOptions holds parameters to tag an image
 type ImageTagOptions struct {
-	ImageID        string
-	RepositoryName string
-	Tag            string
-	Force          bool
+	Force bool
 }
 
 // ResizeOptions holds parameters to resize a tty.
 // It can be used to resize container ttys and
 // exec process ttys too.
 type ResizeOptions struct {
-	ID     string
 	Height int
 	Width  int
 }

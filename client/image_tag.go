@@ -8,15 +8,15 @@ import (
 )
 
 // ImageTag tags an image in the docker host
-func (cli *Client) ImageTag(ctx context.Context, options types.ImageTagOptions) error {
+func (cli *Client) ImageTag(ctx context.Context, imageID, repository, tag string, options types.ImageTagOptions) error {
 	query := url.Values{}
-	query.Set("repo", options.RepositoryName)
-	query.Set("tag", options.Tag)
+	query.Set("repo", repository)
+	query.Set("tag", tag)
 	if options.Force {
 		query.Set("force", "1")
 	}
 
-	resp, err := cli.post(ctx, "/images/"+options.ImageID+"/tag", query, nil, nil)
+	resp, err := cli.post(ctx, "/images/"+imageID+"/tag", query, nil, nil)
 	ensureReaderClosed(resp)
 	return err
 }

@@ -16,9 +16,7 @@ func TestContainerCommitError(t *testing.T) {
 	client := &Client{
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
-	_, err := client.ContainerCommit(context.Background(), types.ContainerCommitOptions{
-		ContainerID: "nothing",
-	})
+	_, err := client.ContainerCommit(context.Background(), "nothing", types.ContainerCommitOptions{})
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server Error, got %v", err)
 	}
@@ -76,8 +74,7 @@ func TestContainerCommit(t *testing.T) {
 		}),
 	}
 
-	r, err := client.ContainerCommit(context.Background(), types.ContainerCommitOptions{
-		ContainerID:    expectedContainerID,
+	r, err := client.ContainerCommit(context.Background(), expectedContainerID, types.ContainerCommitOptions{
 		RepositoryName: expectedRepositoryName,
 		Tag:            expectedTag,
 		Comment:        expectedComment,

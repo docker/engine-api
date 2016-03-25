@@ -14,17 +14,17 @@ import (
 // It executes the privileged function if the operation is unauthorized
 // and it tries one more time.
 // It's up to the caller to handle the io.ReadCloser and close it properly.
-func (cli *Client) ImagePush(ctx context.Context, options types.ImagePushOptions, privilegeFunc RequestPrivilegeFunc) (io.ReadCloser, error) {
+func (cli *Client) ImagePush(ctx context.Context, ref, tag string, options types.ImagePushOptions) (io.ReadCloser, error) {
 	query := url.Values{}
-	query.Set("tag", options.Tag)
+	query.Set("tag", tag)
 
-	resp, err := cli.tryImagePush(ctx, options.ImageID, query, options.RegistryAuth)
+	resp, err := cli.tryImagePush(ctx, ref, query, options.RegistryAuth)
 	if resp.statusCode == http.StatusUnauthorized {
-		newAuthHeader, privilegeErr := privilegeFunc()
+		newAuthHeader, privilegeErr := options.PrivilegeFunc()
 		if privilegeErr != nil {
 			return nil, privilegeErr
 		}
-		resp, err = cli.tryImagePush(ctx, options.ImageID, query, newAuthHeader)
+		resp, err = cli.tryImagePush(ctx, ref, query, newAuthHeader)
 	}
 	if err != nil {
 		return nil, err

@@ -11,6 +11,7 @@ import (
 
 // ImageCreate creates a new image based in the parent options.
 // It returns the JSON content in the response body.
+// FIXME(vdemeester) handle this regarding to #137
 func (cli *Client) ImageCreate(ctx context.Context, options types.ImageCreateOptions) (io.ReadCloser, error) {
 	query := url.Values{}
 	query.Set("fromImage", options.Parent)

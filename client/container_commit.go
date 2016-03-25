@@ -9,9 +9,9 @@ import (
 )
 
 // ContainerCommit applies changes into a container and creates a new tagged image.
-func (cli *Client) ContainerCommit(ctx context.Context, options types.ContainerCommitOptions) (types.ContainerCommitResponse, error) {
+func (cli *Client) ContainerCommit(ctx context.Context, containerID string, options types.ContainerCommitOptions) (types.ContainerCommitResponse, error) {
 	query := url.Values{}
-	query.Set("container", options.ContainerID)
+	query.Set("container", containerID)
 	query.Set("repo", options.RepositoryName)
 	query.Set("tag", options.Tag)
 	query.Set("comment", options.Comment)

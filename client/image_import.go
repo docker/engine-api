@@ -11,6 +11,7 @@ import (
 
 // ImageImport creates a new image based in the source options.
 // It returns the JSON content in the response body.
+// FIXME(vdemeester) handle this regarding to #137 (source vs sourceName)
 func (cli *Client) ImageImport(ctx context.Context, options types.ImageImportOptions) (io.ReadCloser, error) {
 	query := url.Values{}
 	query.Set("fromSrc", options.SourceName)
