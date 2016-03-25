@@ -290,6 +290,18 @@ type ContainerState struct {
 	FinishedAt string
 }
 
+// NodeData stores information about the node that a container
+// is running on.  It's only available in Docker Swarm
+type ContainerNode struct {
+	ID        string
+	IPAddress string `json:"IP"`
+	Addr      string
+	Name      string
+	Cpus      int
+	Memory    int
+	Labels    map[string]string
+}
+
 // ContainerJSONBase contains response of Remote API:
 // GET "/containers/{name:.*}/json"
 type ContainerJSONBase struct {
@@ -303,6 +315,7 @@ type ContainerJSONBase struct {
 	HostnamePath    string
 	HostsPath       string
 	LogPath         string
+	Node            *ContainerNode `json:",omitempty"`
 	Name            string
 	RestartCount    int
 	Driver          string
