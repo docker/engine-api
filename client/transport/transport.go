@@ -35,10 +35,10 @@ func NewTransportWithHTTP(proto, addr string, client *http.Client) (Client, erro
 		}
 	}
 
-	if transport.TLSClientConfig != nil && transport.TLSClientConfig.ServerName == "" {
-		transport.TLSClientConfig.ServerName = hostname(addr)
-	}
-
+	// if transport.TLSClientConfig != nil && transport.TLSClientConfig.ServerName == "" {
+	// 	transport.TLSClientConfig.ServerName = hostname(addr)
+	// }
+	//
 	return &apiTransport{
 		Client:    client,
 		tlsInfo:   &tlsInfo{transport.TLSClientConfig},
