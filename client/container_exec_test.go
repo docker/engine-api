@@ -9,8 +9,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/docker/engine-api/types"
 	"golang.org/x/net/context"
+
+	"github.com/docker/engine-api/types"
 )
 
 func TestContainerExecCreateError(t *testing.T) {

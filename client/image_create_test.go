@@ -26,8 +26,8 @@ func TestImageCreateError(t *testing.T) {
 func TestImageCreate(t *testing.T) {
 	expectedURL := "/images/create"
 	expectedImage := "test:5000/my_image"
-	expectedTag := "tag@sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
-	expectedReference := fmt.Sprintf("%s:%s", expectedImage, expectedTag)
+	expectedTag := "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+	expectedReference := fmt.Sprintf("%s@%s", expectedImage, expectedTag)
 	expectedRegistryAuth := "eyJodHRwczovL2luZGV4LmRvY2tlci5pby92MS8iOnsiYXV0aCI6ImRHOTBid289IiwiZW1haWwiOiJqb2huQGRvZS5jb20ifX0="
 	client := &Client{
 		transport: newMockClient(nil, func(r *http.Request) (*http.Response, error) {

@@ -36,7 +36,7 @@ func TestImageImport(t *testing.T) {
 				return nil, fmt.Errorf("fromSrc not set in URL query properly. Expected 'image_source', got %s", fromSrc)
 			}
 			repo := query.Get("repo")
-			if repo != "repository_name" {
+			if repo != "repository_name:imported" {
 				return nil, fmt.Errorf("repo not set in URL query properly. Expected 'repository_name', got %s", repo)
 			}
 			tag := query.Get("tag")
@@ -63,6 +63,7 @@ func TestImageImport(t *testing.T) {
 		Source:     strings.NewReader("source"),
 		SourceName: "image_source",
 	}, "repository_name:imported", types.ImageImportOptions{
+		Tag:     "imported",
 		Message: "A message",
 		Changes: []string{"change1", "change2"},
 	})

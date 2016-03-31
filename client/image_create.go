@@ -7,13 +7,13 @@ import (
 	"golang.org/x/net/context"
 
 	"github.com/docker/engine-api/types"
+	"github.com/docker/engine-api/types/reference"
 )
 
 // ImageCreate creates a new image based in the parent options.
 // It returns the JSON content in the response body.
-// FIXME(vdemeester) handle this regarding to #137
 func (cli *Client) ImageCreate(ctx context.Context, parentReference string, options types.ImageCreateOptions) (io.ReadCloser, error) {
-	repository, tag, err := parseReference(parentReference)
+	repository, tag, err := reference.Parse(parentReference)
 	if err != nil {
 		return nil, err
 	}

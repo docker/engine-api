@@ -21,13 +21,12 @@ type ContainerAttachOptions struct {
 
 // ContainerCommitOptions holds parameters to commit changes into a container.
 type ContainerCommitOptions struct {
-	RepositoryName string
-	Tag            string
-	Comment        string
-	Author         string
-	Changes        []string
-	Pause          bool
-	Config         *container.Config
+	Reference string
+	Comment   string
+	Author    string
+	Changes   []string
+	Pause     bool
+	Config    *container.Config
 }
 
 // ContainerExecInspect holds information returned by exec inspect.
@@ -162,6 +161,7 @@ type ImageImportSource struct {
 
 // ImageImportOptions holds information to import images from the client host.
 type ImageImportOptions struct {
+	Tag     string   // Tag is the name to tag this image with. This attribute is deprecated.
 	Message string   // Message is the message to tag the image with
 	Changes []string // Changes are the raw changes to apply to this image
 }

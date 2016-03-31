@@ -10,7 +10,6 @@ import (
 
 	"golang.org/x/net/context"
 
-	"github.com/docker/distribution/reference"
 	"github.com/docker/engine-api/types"
 )
 
@@ -33,7 +32,7 @@ func TestImageTagInvalidReference(t *testing.T) {
 	}
 
 	err := client.ImageTag(context.Background(), "image_id", "aa/asdf$$^/aa", types.ImageTagOptions{})
-	if err == nil || err != reference.ErrReferenceInvalidFormat {
+	if err == nil || err.Error() != `Error parsing reference: "aa/asdf$$^/aa" is not a valid repository/tag` {
 		t.Fatalf("expected ErrReferenceInvalidFormat, got %v", err)
 	}
 }

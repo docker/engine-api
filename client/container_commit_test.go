@@ -24,6 +24,7 @@ func TestContainerCommitError(t *testing.T) {
 
 func TestContainerCommit(t *testing.T) {
 	expectedContainerID := "container_id"
+	specifiedReference := "repository_name:tag"
 	expectedRepositoryName := "repository_name"
 	expectedTag := "tag"
 	expectedComment := "comment"
@@ -75,12 +76,11 @@ func TestContainerCommit(t *testing.T) {
 	}
 
 	r, err := client.ContainerCommit(context.Background(), expectedContainerID, types.ContainerCommitOptions{
-		RepositoryName: expectedRepositoryName,
-		Tag:            expectedTag,
-		Comment:        expectedComment,
-		Author:         expectedAuthor,
-		Changes:        expectedChanges,
-		Pause:          false,
+		Reference: specifiedReference,
+		Comment:   expectedComment,
+		Author:    expectedAuthor,
+		Changes:   expectedChanges,
+		Pause:     false,
 	})
 	if err != nil {
 		t.Fatal(err)

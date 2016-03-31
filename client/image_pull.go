@@ -8,6 +8,7 @@ import (
 	"golang.org/x/net/context"
 
 	"github.com/docker/engine-api/types"
+	"github.com/docker/engine-api/types/reference"
 )
 
 // ImagePull requests the docker host to pull an image from a remote registry.
@@ -19,7 +20,7 @@ import (
 // - if not in trusted content, ref is used to pass the whole reference, and tag is empty
 // - if in trusted content, ref is used to pass the reference name, and tag for the digest
 func (cli *Client) ImagePull(ctx context.Context, ref string, options types.ImagePullOptions) (io.ReadCloser, error) {
-	repository, tag, err := parseReference(ref)
+	repository, tag, err := reference.Parse(ref)
 	if err != nil {
 		return nil, err
 	}
