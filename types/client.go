@@ -103,7 +103,7 @@ func (h *HijackedResponse) Close() {
 	h.Conn.Close()
 }
 
-// CloseWriter is an interface that implement structs
+// CloseWriter is an interface that implements structs
 // that close input streams to prevent from writing.
 type CloseWriter interface {
 	CloseWrite() error
@@ -229,7 +229,7 @@ type VersionResponse struct {
 	Server *Version
 }
 
-// ServerOK return true when the client could connect to the docker server
+// ServerOK returns true when the client could connect to the docker server
 // and parse the information received. It returns false otherwise.
 func (v VersionResponse) ServerOK() bool {
 	return v.Server != nil
