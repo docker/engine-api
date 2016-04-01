@@ -61,7 +61,7 @@ func (cli *Client) sendRequest(ctx context.Context, method, path string, query u
 		return nil, err
 	}
 
-	if body != nil {
+	if obj != nil {
 		if headers == nil {
 			headers = make(map[string][]string)
 		}
