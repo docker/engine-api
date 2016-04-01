@@ -290,7 +290,7 @@ type ContainerState struct {
 	FinishedAt string
 }
 
-// NodeData stores information about the node that a container
+// ContainerNode stores information about the node that a container
 // is running on.  It's only available in Docker Swarm
 type ContainerNode struct {
 	ID        string

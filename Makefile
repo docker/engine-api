@@ -1,4 +1,4 @@
-.PHONY: all deps test validate
+.PHONY: all deps test validate lint
 
 all: deps test validate
 
@@ -9,7 +9,13 @@ deps:
 test:
 	go test -race -cover ./...
 
-validate:
+validate: lint
 	go vet ./...
-	test -z "$(golint ./... | tee /dev/stderr)"
 	test -z "$(gofmt -s -l . | tee /dev/stderr)"
+
+lint:
+	out="$$(golint ./...)"; \
+	if [ -n "$$(golint ./...)" ]; then \
+		echo "$$out"; \
+		exit 1; \
+	fi
