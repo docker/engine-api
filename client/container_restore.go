@@ -3,15 +3,16 @@ package client
 import (
 	"net/url"
 
+	"github.com/docker/engine-api/types"
 	"golang.org/x/net/context"
 )
 
-// ContainerCheckpoint checkpoints a running container
-func (cli *Client) ContainerRestore(ctx context.Context, containerID string, checkpointID string) error {
+// ContainerRestore restores a running container
+func (cli *Client) ContainerRestore(ctx context.Context, options types.ContainerRestoreOptions) error {
 	query := url.Values{}
-	query.Set("id", checkpointID)
+	query.Set("id", options.CheckpointID)
 
-	_, err := cli.post(ctx, "/containers/"+containerID+"/restore", query, nil, nil)
+	_, err := cli.post(ctx, "/containers/"+options.ContainerID+"/restore", query, nil, nil)
 
 	return err
 }

@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/docker/engine-api/types"
 	"golang.org/x/net/context"
 )
 
@@ -14,7 +15,10 @@ func TestContainerRestoreError(t *testing.T) {
 	client := &Client{
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
-	err := client.ContainerRestore(context.Background(), "nothing", "nothing")
+	err := client.ContainerRestore(context.Background(), types.ContainerRestoreOptions{
+		ContainerID:  "nothing",
+		CheckpointID: "nothing",
+	})
 
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server Error, got %v", err)
@@ -38,7 +42,11 @@ func TestContainerRestore(t *testing.T) {
 		}),
 	}
 
-	err := client.ContainerRestore(context.Background(), containerID, checkpointID)
+	err := client.ContainerRestore(context.Background(), types.ContainerRestoreOptions{
+		ContainerID:  containerID,
+		CheckpointID: checkpointID,
+	})
+
 	if err != nil {
 		t.Fatal(err)
 	}
