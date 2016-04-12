@@ -20,6 +20,13 @@ type ContainerAttachOptions struct {
 	DetachKeys  string
 }
 
+// ContainerCheckpointOptions holds parameters to checkpoint a container.
+type ContainerCheckpointOptions struct {
+	ContainerID  string
+	CheckpointID string
+	Exit         bool
+}
+
 // ContainerCommitOptions holds parameters to commit changes into a container.
 type ContainerCommitOptions struct {
 	ContainerID    string
@@ -69,6 +76,12 @@ type ContainerRemoveOptions struct {
 	RemoveVolumes bool
 	RemoveLinks   bool
 	Force         bool
+}
+
+// ContainerRestoreOptions holds parameters to restore a container.
+type ContainerRestoreOptions struct {
+	ContainerID  string
+	CheckpointID string
 }
 
 // CopyToContainerOptions holds information
