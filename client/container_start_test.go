@@ -15,7 +15,7 @@ func TestContainerStartError(t *testing.T) {
 	client := &Client{
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
-	err := client.ContainerStart(context.Background(), "nothing")
+	err := client.ContainerStart(context.Background(), "nothing", "")
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server Error, got %v", err)
 	}
@@ -31,6 +31,12 @@ func TestContainerStart(t *testing.T) {
 					return nil, fmt.Errorf("Unable to parse json: %s", err)
 				}
 			}
+
+			checkpoint := req.URL.Query().Get("checkpoint")
+			if checkpoint != "checkpoint_id" {
+				return nil, fmt.Errorf("checkpoint not set in URL query properly. Expected 'checkpoint_id', got %s", checkpoint)
+			}
+
 			return &http.Response{
 				StatusCode: http.StatusOK,
 				Body:       ioutil.NopCloser(bytes.NewReader([]byte(""))),
@@ -38,7 +44,7 @@ func TestContainerStart(t *testing.T) {
 		}),
 	}
 
-	err := client.ContainerStart(context.Background(), "container_id")
+	err := client.ContainerStart(context.Background(), "container_id", "checkpoint_id")
 	if err != nil {
 		t.Fatal(err)
 	}
