@@ -89,7 +89,7 @@ func TestCopyToContainerError(t *testing.T) {
 	client := &Client{
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
-	err := client.CopyToContainer(context.Background(), types.CopyToContainerOptions{})
+	err := client.CopyToContainer(context.Background(), "container_id", "path/to/file", bytes.NewReader([]byte("")), types.CopyToContainerOptions{})
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server error, got %v", err)
 	}
@@ -99,7 +99,7 @@ func TestCopyToContainerNotStatusOKError(t *testing.T) {
 	client := &Client{
 		transport: newMockClient(nil, errorMock(http.StatusNoContent, "No content")),
 	}
-	err := client.CopyToContainer(context.Background(), types.CopyToContainerOptions{})
+	err := client.CopyToContainer(context.Background(), "container_id", "path/to/file", bytes.NewReader([]byte("")), types.CopyToContainerOptions{})
 	if err == nil || err.Error() != "unexpected status code from daemon: 204" {
 		t.Fatalf("expected a unexpected status code error, got %v", err)
 	}
@@ -143,10 +143,8 @@ func TestCopyToContainer(t *testing.T) {
 			}, nil
 		}),
 	}
-	err := client.CopyToContainer(context.Background(), types.CopyToContainerOptions{
-		ContainerID: "container_id",
-		Path:        expectedPath,
-		Content:     bytes.NewReader([]byte("content")),
+	err := client.CopyToContainer(context.Background(), "container_id", expectedPath, bytes.NewReader([]byte("content")), types.CopyToContainerOptions{
+		AllowOverwriteDirWithFile: false,
 	})
 	if err != nil {
 		t.Fatal(err)
