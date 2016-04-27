@@ -205,6 +205,7 @@ type ImageRemoveOptions struct {
 type ImageSearchOptions struct {
 	RegistryAuth  string
 	PrivilegeFunc RequestPrivilegeFunc
+	Filters       filters.Args
 }
 
 // ImageTagOptions holds parameters to tag an image
