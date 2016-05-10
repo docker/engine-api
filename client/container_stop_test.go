@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strings"
 	"testing"
 
 	"golang.org/x/net/context"
@@ -21,8 +22,12 @@ func TestContainerStopError(t *testing.T) {
 }
 
 func TestContainerStop(t *testing.T) {
+	expectedURL := "/containers/container_id/stop"
 	client := &Client{
 		transport: newMockClient(nil, func(req *http.Request) (*http.Response, error) {
+			if !strings.HasPrefix(req.URL.Path, expectedURL) {
+				return nil, fmt.Errorf("Expected URL '%s', got '%s'", expectedURL, req.URL)
+			}
 			t := req.URL.Query().Get("t")
 			if t != "100" {
 				return nil, fmt.Errorf("t (timeout) not set in URL query properly. Expected '100', got %s", t)

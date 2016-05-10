@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strings"
 	"testing"
 
 	"github.com/docker/engine-api/types"
@@ -43,8 +44,12 @@ func TestContainerCreateImageNotFound(t *testing.T) {
 }
 
 func TestContainerCreateWithName(t *testing.T) {
+	expectedURL := "/containers/create"
 	client := &Client{
 		transport: newMockClient(nil, func(req *http.Request) (*http.Response, error) {
+			if !strings.HasPrefix(req.URL.Path, expectedURL) {
+				return nil, fmt.Errorf("Expected URL '%s', got '%s'", expectedURL, req.URL)
+			}
 			name := req.URL.Query().Get("name")
 			if name != "container_name" {
 				return nil, fmt.Errorf("container name not set in URL query properly. Expected `container_name`, got %s", name)

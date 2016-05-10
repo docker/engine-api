@@ -3,33 +3,37 @@ package client
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strings"
 	"testing"
 
 	"github.com/docker/engine-api/types"
 	"golang.org/x/net/context"
 )
 
-func infoMock(req *http.Request) (*http.Response, error) {
-	info := &types.Info{
-		ID:         "daemonID",
-		Containers: 3,
-	}
-	b, err := json.Marshal(info)
-	if err != nil {
-		return nil, err
-	}
-
-	return &http.Response{
-		StatusCode: http.StatusOK,
-		Body:       ioutil.NopCloser(bytes.NewReader(b)),
-	}, nil
-}
-
 func TestInfo(t *testing.T) {
+	expectedURL := "/info"
 	client := &Client{
-		transport: newMockClient(nil, infoMock),
+		transport: newMockClient(nil, func(req *http.Request) (*http.Response, error) {
+			if !strings.HasPrefix(req.URL.Path, expectedURL) {
+				return nil, fmt.Errorf("Expected URL '%s', got '%s'", expectedURL, req.URL)
+			}
+			info := &types.Info{
+				ID:         "daemonID",
+				Containers: 3,
+			}
+			b, err := json.Marshal(info)
+			if err != nil {
+				return nil, err
+			}
+
+			return &http.Response{
+				StatusCode: http.StatusOK,
+				Body:       ioutil.NopCloser(bytes.NewReader(b)),
+			}, nil
+		}),
 	}
 
 	info, err := client.Info(context.Background())
