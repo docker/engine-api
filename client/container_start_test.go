@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strings"
 	"testing"
 
 	"golang.org/x/net/context"
@@ -22,8 +23,12 @@ func TestContainerStartError(t *testing.T) {
 }
 
 func TestContainerStart(t *testing.T) {
+	expectedURL := "/containers/container_id/start"
 	client := &Client{
 		transport: newMockClient(nil, func(req *http.Request) (*http.Response, error) {
+			if !strings.HasPrefix(req.URL.Path, expectedURL) {
+				return nil, fmt.Errorf("Expected URL '%s', got '%s'", expectedURL, req.URL)
+			}
 			// we're not expecting any payload, but if one is supplied, check it is valid.
 			if req.Header.Get("Content-Type") == "application/json" {
 				var startConfig interface{}
