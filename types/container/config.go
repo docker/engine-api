@@ -15,7 +15,7 @@ type HealthConfig struct {
 	// {"NONE"} : disable healthcheck
 	// {"CMD", args...} : exec arguments directly
 	// {"CMD-SHELL", command} : run command with system's default shell
-	Test strslice.StrSlice `json:",omitempty"`
+	Test []string `json:",omitempty"`
 
 	// Zero means to inherit. Durations are expressed as integer nanoseconds.
 	Interval time.Duration `json:",omitempty"` // Time to wait between checks.
@@ -23,7 +23,7 @@ type HealthConfig struct {
 
 	// Number of consecutive failures needed to consider a container as unhealthy.
 	// Zero means inherit.
-	Retries uint `json:",omitempty"`
+	Retries int `json:",omitempty"`
 }
 
 // Config contains the configuration data about a container.

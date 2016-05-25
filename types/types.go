@@ -277,14 +277,14 @@ type ExecStartCheck struct {
 // HealthcheckResult stores information about a single run of a healthcheck probe
 type HealthcheckResult struct {
 	Start, End time.Time
-	ExitCode   int    // 0=healthy, 1=unhealthy, 2=starting, -1=error running probe
+	ExitCode   int    // 0=healthy, 1=unhealthy, 2=starting, else=error running probe
 	Output     string // Output from last check
 }
 
 // Health stores information about the container's healthcheck results
 type Health struct {
 	Status        string               // States are: "starting", "healthy", "unhealthy"
-	FailingStreak uint64               // Number of consecutive failures
+	FailingStreak int                  // Number of consecutive failures
 	Log           []*HealthcheckResult // The last few results (oldest first)
 }
 
