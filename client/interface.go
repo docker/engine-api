@@ -61,7 +61,7 @@ type APIClient interface {
 	ImageRemove(ctx context.Context, image string, options types.ImageRemoveOptions) ([]types.ImageDelete, error)
 	ImageSearch(ctx context.Context, term string, options types.ImageSearchOptions) ([]registry.SearchResult, error)
 	ImageSave(ctx context.Context, images []string) (io.ReadCloser, error)
-	ImageTag(ctx context.Context, image, ref string, options types.ImageTagOptions) error
+	ImageTag(ctx context.Context, image, ref string) error
 	Info(ctx context.Context) (types.Info, error)
 	NetworkConnect(ctx context.Context, networkID, container string, config *network.EndpointSettings) error
 	NetworkCreate(ctx context.Context, name string, options types.NetworkCreate) (types.NetworkCreateResponse, error)
