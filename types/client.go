@@ -213,6 +213,7 @@ type ImageSearchOptions struct {
 	RegistryAuth  string
 	PrivilegeFunc RequestPrivilegeFunc
 	Filters       filters.Args
+	Limit         int
 }
 
 // ResizeOptions holds parameters to resize a tty.
