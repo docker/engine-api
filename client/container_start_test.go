@@ -10,13 +10,15 @@ import (
 	"testing"
 
 	"golang.org/x/net/context"
+
+	"github.com/docker/engine-api/types"
 )
 
 func TestContainerStartError(t *testing.T) {
 	client := &Client{
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
-	err := client.ContainerStart(context.Background(), "nothing", "")
+	err := client.ContainerStart(context.Background(), "nothing", types.ContainerStartOptions{})
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server Error, got %v", err)
 	}
@@ -49,7 +51,7 @@ func TestContainerStart(t *testing.T) {
 		}),
 	}
 
-	err := client.ContainerStart(context.Background(), "container_id", "checkpoint_id")
+	err := client.ContainerStart(context.Background(), "container_id", types.ContainerStartOptions{CheckpointID: "checkpoint_id"})
 	if err != nil {
 		t.Fatal(err)
 	}
