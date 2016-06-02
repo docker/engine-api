@@ -124,7 +124,7 @@ func TestContainerExecInspectError(t *testing.T) {
 }
 
 func TestContainerExecInspect(t *testing.T) {
-	expectedURL := "/exec/exec_id/json"
+	expectedURL := "/exec/exec_id"
 	client := &Client{
 		transport: newMockClient(nil, func(req *http.Request) (*http.Response, error) {
 			if !strings.HasPrefix(req.URL.Path, expectedURL) {

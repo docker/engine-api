@@ -29,7 +29,7 @@ func (cli *Client) ImageList(ctx context.Context, options types.ImageListOptions
 		query.Set("all", "1")
 	}
 
-	serverResp, err := cli.get(ctx, "/images/json", query, nil)
+	serverResp, err := cli.get(ctx, "/images", query, nil)
 	if err != nil {
 		return images, err
 	}
