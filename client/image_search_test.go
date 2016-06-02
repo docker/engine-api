@@ -32,7 +32,7 @@ func TestImageSearchStatusUnauthorizedError(t *testing.T) {
 	}
 	_, err := client.ImageSearch(context.Background(), "some-image", types.ImageSearchOptions{})
 	if err == nil || err.Error() != "Error response from daemon: Unauthorized error" {
-		t.Fatalf("expected a Unauthorized Error, got %v", err)
+		t.Fatalf("expected an Unauthorized Error, got %v", err)
 	}
 }
 
@@ -62,7 +62,7 @@ func TestImageSearchWithUnauthorizedErrorAndAnotherUnauthorizedError(t *testing.
 		PrivilegeFunc: privilegeFunc,
 	})
 	if err == nil || err.Error() != "Error response from daemon: Unauthorized error" {
-		t.Fatalf("expected a Unauthorized Error, got %v", err)
+		t.Fatalf("expected an Unauthorized Error, got %v", err)
 	}
 }
 

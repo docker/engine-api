@@ -39,7 +39,7 @@ func TestContainerCreateImageNotFound(t *testing.T) {
 	}
 	_, err := client.ContainerCreate(context.Background(), &container.Config{Image: "unknown_image"}, nil, nil, "unknown")
 	if err == nil || !IsErrImageNotFound(err) {
-		t.Fatalf("expected a imageNotFound error, got %v", err)
+		t.Fatalf("expected an imageNotFound error, got %v", err)
 	}
 }
 
