@@ -84,7 +84,7 @@ type ImageDelete struct {
 }
 
 // Image contains response of Remote API:
-// GET "/images"
+// GET "/images/json"
 type Image struct {
 	ID          string `json:"Id"`
 	ParentID    string `json:"ParentId"`
@@ -111,7 +111,7 @@ type RootFS struct {
 }
 
 // ImageInspect contains response of Remote API:
-// GET "/images/{name:.*}"
+// GET "/images/{name:.*}/json"
 type ImageInspect struct {
 	ID              string `json:"Id"`
 	RepoTags        []string
@@ -142,7 +142,7 @@ type Port struct {
 }
 
 // Container contains response of Remote API:
-// GET "/containers"
+// GET "/containers/json"
 type Container struct {
 	ID         string `json:"Id"`
 	Names      []string
@@ -328,7 +328,7 @@ type ContainerNode struct {
 }
 
 // ContainerJSONBase contains response of Remote API:
-// GET "/containers/{name:.*}"
+// GET "/containers/{name:.*}/json"
 type ContainerJSONBase struct {
 	ID              string `json:"Id"`
 	Created         string
@@ -370,7 +370,7 @@ type NetworkSettings struct {
 }
 
 // SummaryNetworkSettings provides a summary of container's networks
-// in /containers
+// in /containers/json
 type SummaryNetworkSettings struct {
 	Networks map[string]*network.EndpointSettings
 }

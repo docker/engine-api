@@ -44,7 +44,7 @@ func (cli *Client) ContainerList(ctx context.Context, options types.ContainerLis
 		query.Set("filters", filterJSON)
 	}
 
-	resp, err := cli.get(ctx, "/containers", query, nil)
+	resp, err := cli.get(ctx, "/containers/json", query, nil)
 	if err != nil {
 		return nil, err
 	}
