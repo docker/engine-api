@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strings"
 	"testing"
+	"time"
 
 	"golang.org/x/net/context"
 )
@@ -15,7 +16,7 @@ func TestContainerStopError(t *testing.T) {
 	client := &Client{
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
-	err := client.ContainerStop(context.Background(), "nothing", 0)
+	err := client.ContainerStop(context.Background(), "nothing", 0*time.Second)
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server Error, got %v", err)
 	}
@@ -39,7 +40,7 @@ func TestContainerStop(t *testing.T) {
 		}),
 	}
 
-	err := client.ContainerStop(context.Background(), "container_id", 100)
+	err := client.ContainerStop(context.Background(), "container_id", 100*time.Second)
 	if err != nil {
 		t.Fatal(err)
 	}
