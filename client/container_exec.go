@@ -38,7 +38,7 @@ func (cli *Client) ContainerExecAttach(ctx context.Context, execID string, confi
 // ContainerExecInspect returns information about a specific exec process on the docker host.
 func (cli *Client) ContainerExecInspect(ctx context.Context, execID string) (types.ContainerExecInspect, error) {
 	var response types.ContainerExecInspect
-	resp, err := cli.get(ctx, "/exec/"+execID+"/json", nil, nil)
+	resp, err := cli.get(ctx, "/exec/"+execID, nil, nil)
 	if err != nil {
 		return response, err
 	}

@@ -36,7 +36,7 @@ func TestContainerInspectContainerNotFound(t *testing.T) {
 }
 
 func TestContainerInspect(t *testing.T) {
-	expectedURL := "/containers/container_id/json"
+	expectedURL := "/containers/container_id"
 	client := &Client{
 		transport: newMockClient(nil, func(req *http.Request) (*http.Response, error) {
 			if !strings.HasPrefix(req.URL.Path, expectedURL) {

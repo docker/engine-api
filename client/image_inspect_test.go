@@ -37,7 +37,7 @@ func TestImageInspectImageNotFound(t *testing.T) {
 }
 
 func TestImageInspect(t *testing.T) {
-	expectedURL := "/images/image_id/json"
+	expectedURL := "/images/image_id"
 	expectedTags := []string{"tag1", "tag2"}
 	inspectCases := []struct {
 		size                bool

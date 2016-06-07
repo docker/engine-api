@@ -26,7 +26,7 @@ func TestImageListError(t *testing.T) {
 }
 
 func TestImageList(t *testing.T) {
-	expectedURL := "/images/json"
+	expectedURL := "/images"
 
 	noDanglingfilters := filters.NewArgs()
 	noDanglingfilters.Add("dangling", "false")
