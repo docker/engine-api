@@ -323,7 +323,7 @@ type ContainerNode struct {
 	Addr      string
 	Name      string
 	Cpus      int
-	Memory    int
+	Memory    int64
 	Labels    map[string]string
 }
 
