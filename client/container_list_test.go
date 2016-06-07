@@ -25,7 +25,7 @@ func TestContainerListError(t *testing.T) {
 }
 
 func TestContainerList(t *testing.T) {
-	expectedURL := "/containers"
+	expectedURL := "/containers/json"
 	expectedFilters := `{"before":{"container":true},"label":{"label1":true,"label2":true}}`
 	client := &Client{
 		transport: newMockClient(nil, func(req *http.Request) (*http.Response, error) {

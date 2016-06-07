@@ -17,7 +17,7 @@ func (cli *Client) ImageInspectWithRaw(ctx context.Context, imageID string, getS
 	if getSize {
 		query.Set("size", "1")
 	}
-	serverResp, err := cli.get(ctx, "/images/"+imageID, query, nil)
+	serverResp, err := cli.get(ctx, "/images/"+imageID+"/json", query, nil)
 	if err != nil {
 		if serverResp.statusCode == http.StatusNotFound {
 			return types.ImageInspect{}, nil, imageNotFoundError{imageID}
