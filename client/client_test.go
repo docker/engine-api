@@ -22,7 +22,7 @@ func TestNewEnvClient(t *testing.T) {
 	}{
 		{
 			envs:            map[string]string{},
-			expectedVersion: "",
+			expectedVersion: DefaultVersion,
 		},
 		{
 			envs: map[string]string{
@@ -34,7 +34,7 @@ func TestNewEnvClient(t *testing.T) {
 			envs: map[string]string{
 				"DOCKER_CERT_PATH": "testdata/",
 			},
-			expectedVersion: "",
+			expectedVersion: DefaultVersion,
 		},
 		{
 			envs: map[string]string{
@@ -46,7 +46,7 @@ func TestNewEnvClient(t *testing.T) {
 			envs: map[string]string{
 				"DOCKER_HOST": "invalid://url",
 			},
-			expectedVersion: "",
+			expectedVersion: DefaultVersion,
 		},
 		{
 			envs: map[string]string{
