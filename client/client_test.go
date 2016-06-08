@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"os"
 	"strings"
 	"testing"
 
@@ -115,5 +116,43 @@ func TestUpdateClientVersion(t *testing.T) {
 		if strings.TrimPrefix(r.APIVersion, "v") != strings.TrimPrefix(cs.v, "v") {
 			t.Fatalf("Expected %s, got %s", cs.v, r.APIVersion)
 		}
+	}
+}
+
+func TestNewEnvClientSetsDefaultVersion(t *testing.T) {
+	// Unset environment variables
+	envVarKeys := []string{
+		"DOCKER_HOST",
+		"DOCKER_API_VERSION",
+		"DOCKER_TLS_VERIFY",
+		"DOCKER_CERT_PATH",
+	}
+	envVarValues := make(map[string]string)
+	for _, key := range envVarKeys {
+		envVarValues[key] = os.Getenv(key)
+		os.Setenv(key, "")
+	}
+
+	client, err := NewEnvClient()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if client.version != DefaultVersion {
+		t.Fatalf("Expected %s, got %s", DefaultVersion, client.version)
+	}
+
+	expected := "1.22"
+	os.Setenv("DOCKER_API_VERSION", expected)
+	client, err = NewEnvClient()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if client.version != expected {
+		t.Fatalf("Expected %s, got %s", expected, client.version)
+	}
+
+	// Restore environment variables
+	for _, key := range envVarKeys {
+		os.Setenv(key, envVarValues[key])
 	}
 }
