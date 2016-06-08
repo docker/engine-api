@@ -27,7 +27,7 @@ type AcceptancePolicy struct {
 
 // Policy represents a role, autoaccept and secret.
 type Policy struct {
-	Role       string
+	Role       NodeRole
 	Autoaccept bool
 	Secret     string `json:",omitempty"`
 }
