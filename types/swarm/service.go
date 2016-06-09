@@ -13,13 +13,14 @@ type Service struct {
 // ServiceSpec represents the spec of a service.
 type ServiceSpec struct {
 	Annotations
-	TaskSpec TaskSpec    `json:",omitempty"`
-	Mode     ServiceMode `json:",omitempty"`
-	// TODO(aluzzardi): Update or UpdateConfig?
+
+	// TaskTemplate defines how the service should construct new tasks when
+	// ochestrating this service.
+	TaskTemplate TaskSpec                  `json:",omitempty"`
+	Mode         ServiceMode               `json:",omitempty"`
 	UpdateConfig *UpdateConfig             `json:",omitempty"`
 	Networks     []NetworkAttachmentConfig `json:",omitempty"`
-	// TODO(aluzzardi): Endpoint, EndpointSpec?
-	EndpointSpec *EndpointSpec `json:",omitempty"`
+	EndpointSpec *EndpointSpec             `json:",omitempty"`
 }
 
 // ServiceMode represents the mode of a service.
@@ -30,12 +31,11 @@ type ServiceMode struct {
 
 // ReplicatedService is a kind of ServiceMode.
 type ReplicatedService struct {
-	Instances *uint64 `json:",omitempty"`
+	Replicas *uint64 `json:",omitempty"`
 }
 
 // GlobalService is a kind of ServiceMode.
-type GlobalService struct {
-}
+type GlobalService struct{}
 
 // UpdateConfig represents the update configuration.
 type UpdateConfig struct {

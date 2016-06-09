@@ -9,44 +9,35 @@ type Endpoint struct {
 
 // EndpointSpec represents the spec of an endpoint.
 type EndpointSpec struct {
-	Mode         ResolutionMode `json:",omitempty"`
-	Ingress      IngressRouting `json:",omitempty"`
-	ExposedPorts []PortConfig   `json:",omitempty"`
+	Mode  ResolutionMode `json:",omitempty"`
+	Ports []PortConfig   `json:",omitempty"`
 }
-
-const (
-	// ResolutionModeVIP VIP
-	ResolutionModeVIP = "VIP"
-	// ResolutionModeDNSRR DNSRR
-	ResolutionModeDNSRR = "DNSRR"
-)
 
 // ResolutionMode represents a resolution mode.
 type ResolutionMode string
 
 const (
-	// IngressRoutingSWARMPORT SWARMPORT
-	IngressRoutingSWARMPORT = "SWARMPORT"
-	// IngressRoutingDISABLED DISABLED
-	IngressRoutingDISABLED = "DISABLED"
+	// ResolutionModeVIP VIP
+	ResolutionModeVIP ResolutionMode = "VIP"
+	// ResolutionModeDNSRR DNSRR
+	ResolutionModeDNSRR ResolutionMode = "DNSRR"
 )
-
-// IngressRouting represents an ingress routing.
-type IngressRouting string
 
 // PortConfig represents the config of a port.
 type PortConfig struct {
-	Name      string             `json:",omitempty"`
-	Protocol  PortConfigProtocol `json:",omitempty"`
-	Port      uint32             `json:",omitempty"`
-	SwarmPort uint32             `json:",omitempty"`
+	Name          string             `json:",omitempty"`
+	Protocol      PortConfigProtocol `json:",omitempty"`
+	TargetPort    uint32             `json:",omitempty"`
+	PublishedPort uint32             `json:",omitempty"`
 }
 
 const (
+	// TODO(stevvooe): These should be used generally, not just for PortConfig.
+
 	// PortConfigProtocolTCP TCP
-	PortConfigProtocolTCP = "TCP"
+	PortConfigProtocolTCP PortConfigProtocol = "TCP"
 	// PortConfigProtocolUDP UDP
-	PortConfigProtocolUDP = "UDP"
+	PortConfigProtocolUDP PortConfigProtocol = "UDP"
 )
 
 // PortConfigProtocol represents the protocol of a port.
@@ -62,9 +53,9 @@ type EndpointVirtualIP struct {
 type Network struct {
 	ID string
 	Meta
-	Spec        NetworkSpec `json:",omitempty"`
-	DriverState Driver      `json:",omitempty"`
-	IPAM        IPAMOptions `json:",omitempty"`
+	Spec        NetworkSpec  `json:",omitempty"`
+	DriverState Driver       `json:",omitempty"`
+	IPAMOptions *IPAMOptions `json:",omitempty"`
 }
 
 // NetworkSpec represents the spec of a network.
@@ -73,7 +64,7 @@ type NetworkSpec struct {
 	DriverConfiguration *Driver      `json:",omitempty"`
 	IPv6Enabled         bool         `json:",omitempty"`
 	Internal            bool         `json:",omitempty"`
-	IPAM                *IPAMOptions `json:",omitempty"`
+	IPAMOptions         *IPAMOptions `json:",omitempty"`
 }
 
 // NetworkAttachmentConfig represents the configuration of a network attachement.
@@ -95,24 +86,10 @@ type IPAMOptions struct {
 
 // IPAMConfig represents ipam configuration.
 type IPAMConfig struct {
-	Family   IPAMConfigFamily  `json:",omitempty"`
-	Subnet   string            `json:",omitempty"`
-	Range    string            `json:",omitempty"`
-	Gateway  string            `json:",omitempty"`
-	Reserved map[string]string `json:",omitempty"`
+	Subnet  string `json:",omitempty"`
+	Range   string `json:",omitempty"`
+	Gateway string `json:",omitempty"`
 }
-
-const (
-	// IPAMConfigFamilyUnknown UNKNOWN
-	IPAMConfigFamilyUnknown = "UNKNOWN"
-	// IPAMConfigFamilyIpv4 IPV4
-	IPAMConfigFamilyIpv4 = "IPV4"
-	// IPAMConfigFamilyIpv6 IPV6
-	IPAMConfigFamilyIpv6 = "IPV6"
-)
-
-// IPAMConfigFamily represents the family of a ipam configuration.
-type IPAMConfigFamily string
 
 // Driver represents a driver (network/volume).
 type Driver struct {
