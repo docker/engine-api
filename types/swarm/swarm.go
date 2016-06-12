@@ -65,26 +65,26 @@ type InitRequest struct {
 
 // JoinRequest is the request used to join a swarm.
 type JoinRequest struct {
-	ListenAddr string
-	RemoteAddr string
-	Secret     string // accept by secret
-	CACertHash string
-	Manager    bool
+	ListenAddr  string
+	RemoteAddrs []string
+	Secret      string // accept by secret
+	CACertHash  string
+	Manager     bool
 }
-
-const (
-	// LocalNodeStateInactive INACTIVE
-	LocalNodeStateInactive LocalNodeState = "INACTIVE"
-	// LocalNodeStatePending PENDING
-	LocalNodeStatePending LocalNodeState = "PENDING"
-	// LocalNodeStateActive ACTIVE
-	LocalNodeStateActive LocalNodeState = "ACTIVE"
-	// LocalNodeStateError ERROR
-	LocalNodeStateError LocalNodeState = "ERROR"
-)
 
 // LocalNodeState represents the state of the local node.
 type LocalNodeState string
+
+const (
+	// LocalNodeStateInactive INACTIVE
+	LocalNodeStateInactive LocalNodeState = "inactive"
+	// LocalNodeStatePending PENDING
+	LocalNodeStatePending LocalNodeState = "pending"
+	// LocalNodeStateActive ACTIVE
+	LocalNodeStateActive LocalNodeState = "active"
+	// LocalNodeStateError ERROR
+	LocalNodeStateError LocalNodeState = "error"
+)
 
 // Info represents generic information about swarm.
 type Info struct {
