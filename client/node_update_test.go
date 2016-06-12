@@ -18,7 +18,7 @@ func TestNodeUpdateError(t *testing.T) {
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
 
-	err := client.NodeUpdate(context.Background(), "node_id", swarm.Node{})
+	err := client.NodeUpdate(context.Background(), "node_id", swarm.Version{}, swarm.NodeSpec{})
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server Error, got %v", err)
 	}
@@ -42,9 +42,7 @@ func TestNodeUpdate(t *testing.T) {
 		}),
 	}
 
-	err := client.NodeUpdate(context.Background(), "node_id", swarm.Node{
-		ID: "node_id",
-	})
+	err := client.NodeUpdate(context.Background(), "node_id", swarm.Version{}, swarm.NodeSpec{})
 	if err != nil {
 		t.Fatal(err)
 	}
