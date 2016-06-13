@@ -4,7 +4,7 @@ all: deps test validate
 
 deps:
 	go get -t ./...
-	go get github.com/golang/lint/golint
+	go get -u github.com/golang/lint/golint
 
 test:
 	go test -race -cover ./...
