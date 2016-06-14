@@ -16,7 +16,8 @@ func TestContainerStopError(t *testing.T) {
 	client := &Client{
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
-	err := client.ContainerStop(context.Background(), "nothing", 0*time.Second)
+	timeout := 0*time.Second
+	err := client.ContainerStop(context.Background(), "nothing", &timeout)
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server Error, got %v", err)
 	}
@@ -39,8 +40,8 @@ func TestContainerStop(t *testing.T) {
 			}, nil
 		}),
 	}
-
-	err := client.ContainerStop(context.Background(), "container_id", 100*time.Second)
+	timeout := 100*time.Second
+	err := client.ContainerStop(context.Background(), "container_id", &timeout)
 	if err != nil {
 		t.Fatal(err)
 	}
