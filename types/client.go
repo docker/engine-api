@@ -147,6 +147,7 @@ type ImageBuildOptions struct {
 	AuthConfigs    map[string]AuthConfig
 	Context        io.Reader
 	Labels         map[string]string
+	CredentialSpec string
 }
 
 // ImageBuildResponse holds information
