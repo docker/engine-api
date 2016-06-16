@@ -18,7 +18,7 @@ func TestNodeInspectError(t *testing.T) {
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
 
-	_, err := client.NodeInspect(context.Background(), "nothing")
+	_, _, err := client.NodeInspectWithRaw(context.Background(), "nothing")
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server Error, got %v", err)
 	}
@@ -29,7 +29,7 @@ func TestNodeInspectNodeNotFound(t *testing.T) {
 		transport: newMockClient(nil, errorMock(http.StatusNotFound, "Server error")),
 	}
 
-	_, err := client.NodeInspect(context.Background(), "unknown")
+	_, _, err := client.NodeInspectWithRaw(context.Background(), "unknown")
 	if err == nil || !IsErrNodeNotFound(err) {
 		t.Fatalf("expected an nodeNotFoundError error, got %v", err)
 	}
@@ -55,7 +55,7 @@ func TestNodeInspect(t *testing.T) {
 		}),
 	}
 
-	nodeInspect, err := client.NodeInspect(context.Background(), "node_id")
+	nodeInspect, _, err := client.NodeInspectWithRaw(context.Background(), "node_id")
 	if err != nil {
 		t.Fatal(err)
 	}
