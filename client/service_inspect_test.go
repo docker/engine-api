@@ -18,7 +18,7 @@ func TestServiceInspectError(t *testing.T) {
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
 
-	_, err := client.ServiceInspect(context.Background(), "nothing")
+	_, _, err := client.ServiceInspectWithRaw(context.Background(), "nothing")
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server Error, got %v", err)
 	}
@@ -29,7 +29,7 @@ func TestServiceInspectServiceNotFound(t *testing.T) {
 		transport: newMockClient(nil, errorMock(http.StatusNotFound, "Server error")),
 	}
 
-	_, err := client.ServiceInspect(context.Background(), "unknown")
+	_, _, err := client.ServiceInspectWithRaw(context.Background(), "unknown")
 	if err == nil || !IsErrServiceNotFound(err) {
 		t.Fatalf("expected an serviceNotFoundError error, got %v", err)
 	}
@@ -55,7 +55,7 @@ func TestServiceInspect(t *testing.T) {
 		}),
 	}
 
-	serviceInspect, err := client.ServiceInspect(context.Background(), "service_id")
+	serviceInspect, _, err := client.ServiceInspectWithRaw(context.Background(), "service_id")
 	if err != nil {
 		t.Fatal(err)
 	}
