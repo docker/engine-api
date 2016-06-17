@@ -131,6 +131,11 @@ func (e nodeNotFoundError) Error() string {
 	return fmt.Sprintf("Error: No such node: %s", e.nodeID)
 }
 
+// NoFound indicates that this error type is of NotFound
+func (e nodeNotFoundError) NotFound() bool {
+	return true
+}
+
 // IsErrNodeNotFound returns true if the error is caused
 // when a node is not found.
 func IsErrNodeNotFound(err error) bool {
