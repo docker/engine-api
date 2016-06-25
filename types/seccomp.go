@@ -10,8 +10,8 @@ type Seccomp struct {
 // Arch used for additional architectures
 type Arch string
 
-// Additional architectures permitted to be used for system calls
-// By default only the native architecture of the kernel is permitted
+// Additional architectures permitted to be used for system calls.
+// By default only the native architecture of the kernel is permitted.
 const (
 	ArchX86         Arch = "SCMP_ARCH_X86"
 	ArchX86_64      Arch = "SCMP_ARCH_X86_64"
@@ -31,10 +31,10 @@ const (
 	ArchS390X       Arch = "SCMP_ARCH_S390X"
 )
 
-// Action taken upon Seccomp rule match
+// Action taken upon Seccomp rule match.
 type Action string
 
-// Define actions for Seccomp rules
+// Define actions for Seccomp rules.
 const (
 	ActKill  Action = "SCMP_ACT_KILL"
 	ActTrap  Action = "SCMP_ACT_TRAP"
@@ -46,7 +46,7 @@ const (
 // Operator used to match syscall arguments in Seccomp
 type Operator string
 
-// Define operators for syscall arguments in Seccomp
+// Define operators for syscall arguments in Seccomp.
 const (
 	OpNotEqual     Operator = "SCMP_CMP_NE"
 	OpLessThan     Operator = "SCMP_CMP_LT"
@@ -57,7 +57,7 @@ const (
 	OpMaskedEqual  Operator = "SCMP_CMP_MASKED_EQ"
 )
 
-// Arg used for matching specific syscall arguments in Seccomp
+// Arg used for matching specific syscall arguments in Seccomp.
 type Arg struct {
 	Index    uint     `json:"index"`
 	Value    uint64   `json:"value"`
@@ -65,7 +65,7 @@ type Arg struct {
 	Op       Operator `json:"op"`
 }
 
-// Syscall is used to match a syscall in Seccomp
+// Syscall is used to match a syscall in Seccomp.
 type Syscall struct {
 	Name   string `json:"name"`
 	Action Action `json:"action"`
