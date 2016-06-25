@@ -1,9 +1,7 @@
 package types
 
 import (
-	"bufio"
 	"io"
-	"net"
 
 	"github.com/docker/engine-api/types/container"
 	"github.com/docker/engine-api/types/filters"
@@ -94,31 +92,6 @@ type EventsOptions struct {
 // NetworkListOptions holds parameters to filter the list of networks with.
 type NetworkListOptions struct {
 	Filters filters.Args // Filter output based on these criteria
-}
-
-// HijackedResponse holds connection information for a hijacked request.
-type HijackedResponse struct {
-	Conn   net.Conn
-	Reader *bufio.Reader
-}
-
-// Close closes the hijacked connection and reader.
-func (h *HijackedResponse) Close() {
-	h.Conn.Close()
-}
-
-// CloseWriter is an interface that implements structs
-// that close input streams to prevent from writing.
-type CloseWriter interface {
-	CloseWrite() error
-}
-
-// CloseWrite closes a readWriter for writing.
-func (h *HijackedResponse) CloseWrite() error {
-	if conn, ok := h.Conn.(CloseWriter); ok {
-		return conn.CloseWrite()
-	}
-	return nil
 }
 
 // ImageBuildOptions holds the information
