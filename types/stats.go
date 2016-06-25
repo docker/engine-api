@@ -4,51 +4,36 @@ package types
 
 import "time"
 
-// ThrottlingData stores CPU throttling stats of one running container
+// ThrottlingData stores the CPU throttling stats of one running container.
 type ThrottlingData struct {
-	// Number of periods with throttling active
-	Periods uint64 `json:"periods"`
-	// Number of periods when the container hits its throttling limit.
-	ThrottledPeriods uint64 `json:"throttled_periods"`
-	// Aggregate time the container was throttled for in nanoseconds.
-	ThrottledTime uint64 `json:"throttled_time"`
+	Periods          uint64 `json:"periods"`           // Number of periods with throttling active
+	ThrottledPeriods uint64 `json:"throttled_periods"` // Number of periods where the container hit its throttling limit
+	ThrottledTime    uint64 `json:"throttled_time"`    // Aggregate time the container was throttled for in nanoseconds
 }
 
-// CPUUsage stores All CPU stats aggregated since container inception.
+// CPUUsage stores all CPU stats aggregated since the container was created.
 type CPUUsage struct {
-	// Total CPU time consumed.
-	// Units: nanoseconds.
-	TotalUsage uint64 `json:"total_usage"`
-	// Total CPU time consumed per core.
-	// Units: nanoseconds.
-	PercpuUsage []uint64 `json:"percpu_usage"`
-	// Time spent by tasks of the cgroup in kernel mode.
-	// Units: nanoseconds.
-	UsageInKernelmode uint64 `json:"usage_in_kernelmode"`
-	// Time spent by tasks of the cgroup in user mode.
-	// Units: nanoseconds.
-	UsageInUsermode uint64 `json:"usage_in_usermode"`
+	TotalUsage        uint64   `json:"total_usage"`         // Total CPU time consumed (in nanoseconds)
+	PercpuUsage       []uint64 `json:"percpu_usage"`        // Total CPU time consumed per core (in nanoseconds)
+	UsageInKernelmode uint64   `json:"usage_in_kernelmode"` // Time spent by tasks of the cgroup in kernel mode (in nanoseconds)
+	UsageInUsermode   uint64   `json:"usage_in_usermode"`   // Time spent by tasks of the cgroup in user mode (in seconds)
 }
 
-// CPUStats aggregates and wraps all CPU related info of container
+// CPUStats aggregates and wraps all CPU related info of a container.
 type CPUStats struct {
 	CPUUsage       CPUUsage       `json:"cpu_usage"`
 	SystemUsage    uint64         `json:"system_cpu_usage"`
 	ThrottlingData ThrottlingData `json:"throttling_data,omitempty"`
 }
 
-// MemoryStats aggregates All memory stats since container inception
+// MemoryStats aggregates all memory stats since the container was created.
 type MemoryStats struct {
-	// current res_counter usage for memory
-	Usage uint64 `json:"usage"`
-	// maximum usage ever recorded.
-	MaxUsage uint64 `json:"max_usage"`
+	Usage    uint64 `json:"usage"`     // Current memory usage of the container
+	MaxUsage uint64 `json:"max_usage"` // Maximum memory usage of the container since it was created
 	// TODO(vishh): Export these as stronger types.
-	// all the stats exported via memory.stat.
-	Stats map[string]uint64 `json:"stats"`
-	// number of times memory usage hits limits.
-	Failcnt uint64 `json:"failcnt"`
-	Limit   uint64 `json:"limit"`
+	Stats   map[string]uint64 `json:"stats"`   // All stats exported via memory.stat
+	Failcnt uint64            `json:"failcnt"` // Number of times when memory usage hit limits
+	Limit   uint64            `json:"limit"`   // Maximum allowed memory usage configured for the container
 }
 
 // BlkioStatEntry is one small entity to store a piece of Blkio stats
@@ -60,10 +45,10 @@ type BlkioStatEntry struct {
 	Value uint64 `json:"value"`
 }
 
-// BlkioStats stores All IO service stats for data read and write
+// BlkioStats stores all IO service stats for data read and write.
 // TODO Windows: This can be factored out
 type BlkioStats struct {
-	// number of bytes transferred to and from the block device
+	// Number of bytes transferred to and from the block device
 	IoServiceBytesRecursive []BlkioStatEntry `json:"io_service_bytes_recursive"`
 	IoServicedRecursive     []BlkioStatEntry `json:"io_serviced_recursive"`
 	IoQueuedRecursive       []BlkioStatEntry `json:"io_queue_recursive"`
@@ -74,7 +59,7 @@ type BlkioStats struct {
 	SectorsRecursive        []BlkioStatEntry `json:"sectors_recursive"`
 }
 
-// NetworkStats aggregates All network stats of one container
+// NetworkStats aggregates all network stats of a container.
 // TODO Windows: This will require refactoring
 type NetworkStats struct {
 	RxBytes   uint64 `json:"rx_bytes"`
@@ -87,16 +72,17 @@ type NetworkStats struct {
 	TxDropped uint64 `json:"tx_dropped"`
 }
 
-// PidsStats contains the stats of a container's pids
+// PidsStats contains the stats of a container's pids.
 type PidsStats struct {
-	// Current is the number of pids in the cgroup
+	// Current is the number of pids in the cgroup.
 	Current uint64 `json:"current,omitempty"`
+
 	// Limit is the hard limit on the number of pids in the cgroup.
 	// A "Limit" of 0 means that there is no limit.
 	Limit uint64 `json:"limit,omitempty"`
 }
 
-// Stats is Ultimate struct aggregating all types of stats of one container
+// Stats is the ultimate struct aggregating all types of stats of one container.
 type Stats struct {
 	Read        time.Time   `json:"read"`
 	PreCPUStats CPUStats    `json:"precpu_stats,omitempty"`
