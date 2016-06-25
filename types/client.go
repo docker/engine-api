@@ -1,9 +1,7 @@
 package types
 
 import (
-	"bufio"
 	"io"
-	"net"
 
 	"github.com/docker/engine-api/types/container"
 	"github.com/docker/engine-api/types/filters"
@@ -12,113 +10,88 @@ import (
 
 // CheckpointCreateOptions holds parameters to create a checkpoint from a container
 type CheckpointCreateOptions struct {
-	CheckpointID string
-	Exit         bool
+	CheckpointID string // ID of the created checkpoint
+	Exit         bool   // Whether to exit the container after the checkpoint was was successfully created
 }
 
 // ContainerAttachOptions holds parameters to attach to a container.
 type ContainerAttachOptions struct {
-	Stream     bool
-	Stdin      bool
-	Stdout     bool
-	Stderr     bool
-	DetachKeys string
+	Stream     bool   // If true stream log output and allow input via stdin
+	Stdin      bool   // Attach to standard input, enables user interaction
+	Stdout     bool   // Attach to standard output
+	Stderr     bool   // Attach to standard error
+	DetachKeys string // Escape keys for detach
 }
 
-// ContainerCommitOptions holds parameters to commit changes into a container.
+// ContainerCommitOptions holds parameters to commit changes of a container.
 type ContainerCommitOptions struct {
-	Reference string
-	Comment   string
-	Author    string
-	Changes   []string
-	Pause     bool
-	Config    *container.Config
+	Pause     bool              // Pause container during commit
+	Reference string            // Repository (and optionally tag) for the new image
+	Author    string            // Author of the new image
+	Comment   string            // Comment for the new image
+	Changes   []string          // Dockerfile instructions to apply while committing
+	Config    *container.Config // Container configuration for the new image
 }
 
 // ContainerExecInspect holds information returned by exec inspect.
 type ContainerExecInspect struct {
-	ExecID      string
-	ContainerID string
-	Running     bool
-	ExitCode    int
+	ExecID      string // ID of the exec instance
+	ContainerID string // ID of the container
+	Running     bool   // Whether the exec'ed process is running
+	ExitCode    int    // Exit code of the exec'ed process
 }
 
 // ContainerListOptions holds parameters to list containers with.
 type ContainerListOptions struct {
-	Quiet  bool
-	Size   bool
-	All    bool
-	Latest bool
-	Since  string
-	Before string
-	Limit  int
-	Filter filters.Args
+	Quiet  bool         // Only display numeric container IDs
+	Size   bool         // Show container sizes in the output
+	All    bool         // Also show non-running containers
+	Latest bool         // Show recently created containers (including non-running ones)
+	Since  string       // Only show containers created since ID (including non-running ones)
+	Before string       // Only show containers created before ID (including non-running ones)
+	Limit  int          // Show at most N recently created containers (including non-running ones)
+	Filter filters.Args // Filter output based on these criteria
 }
 
 // ContainerLogsOptions holds parameters to filter logs with.
 type ContainerLogsOptions struct {
-	ShowStdout bool
-	ShowStderr bool
-	Since      string
-	Timestamps bool
-	Follow     bool
-	Tail       string
-	Details    bool
+	Follow     bool   // If true stream log output
+	ShowStdout bool   // Whether or not to show stdout output in addition to log entries
+	ShowStderr bool   // Whether or not to show stderr output in addition to log entries
+	Timestamps bool   // If true include timestamps for each line of log output
+	Details    bool   // If true include extra details provided to logs
+	Tail       string // Return that many lines of log output from the end
+	Since      string // Filter logs by returning only entries after this time
 }
 
 // ContainerRemoveOptions holds parameters to remove containers.
 type ContainerRemoveOptions struct {
-	RemoveVolumes bool
-	RemoveLinks   bool
-	Force         bool
+	RemoveVolumes bool // Whether to remove the volumes associated with the container
+	RemoveLinks   bool // Whether to remove the link with the specified name, instead of removing a container with that name
+	Force         bool // Whether to kill the container if it is running, instead of not removing it
 }
 
 // ContainerStartOptions holds parameters to start containers.
 type ContainerStartOptions struct {
-	CheckpointID string
+	CheckpointID string // Checkpoint to start the container from
 }
 
 // CopyToContainerOptions holds information
 // about files to copy into a container
 type CopyToContainerOptions struct {
-	AllowOverwriteDirWithFile bool
+	AllowOverwriteDirWithFile bool // Allow overwriting an existing directory with a non-directory and vice versa
 }
 
 // EventsOptions hold parameters to filter events with.
 type EventsOptions struct {
-	Since   string
-	Until   string
-	Filters filters.Args
+	Since   string       // Only show events created since this timestamp
+	Until   string       // Stream events until this timestamp
+	Filters filters.Args // Filter output based on these criteria
 }
 
 // NetworkListOptions holds parameters to filter the list of networks with.
 type NetworkListOptions struct {
-	Filters filters.Args
-}
-
-// HijackedResponse holds connection information for a hijacked request.
-type HijackedResponse struct {
-	Conn   net.Conn
-	Reader *bufio.Reader
-}
-
-// Close closes the hijacked connection and reader.
-func (h *HijackedResponse) Close() {
-	h.Conn.Close()
-}
-
-// CloseWriter is an interface that implements structs
-// that close input streams to prevent from writing.
-type CloseWriter interface {
-	CloseWrite() error
-}
-
-// CloseWrite closes a readWriter for writing.
-func (h *HijackedResponse) CloseWrite() error {
-	if conn, ok := h.Conn.(CloseWriter); ok {
-		return conn.CloseWrite()
-	}
-	return nil
+	Filters filters.Args // Filter output based on these criteria
 }
 
 // ImageBuildOptions holds the information
@@ -149,87 +122,85 @@ type ImageBuildOptions struct {
 	Labels         map[string]string
 }
 
-// ImageBuildResponse holds information
-// returned by a server after building
-// an image.
+// ImageBuildResponse holds information returned by a server after building an image.
 type ImageBuildResponse struct {
-	Body   io.ReadCloser
-	OSType string
+	Body   io.ReadCloser // Body must be closed to avoid a resource leak
+	OSType string        // Operating system type of the Docker daemon
 }
 
 // ImageCreateOptions holds information to create images.
 type ImageCreateOptions struct {
-	RegistryAuth string // RegistryAuth is the base64 encoded credentials for the registry
+	RegistryAuth string // Registry credentials to be used (as base64 encoded JSON)
 }
 
-// ImageImportSource holds source information for ImageImport
+// ImageImportSource holds source information for ImageImport.
 type ImageImportSource struct {
-	Source     io.Reader // Source is the data to send to the server to create this image from (mutually exclusive with SourceName)
-	SourceName string    // SourceName is the name of the image to pull (mutually exclusive with Source)
+	Source     io.Reader // Data sent to the server to create the image from (mutually exclusive with SourceName)
+	SourceName string    // Name of the image to pull (mutually exclusive with Source)
 }
 
 // ImageImportOptions holds information to import images from the client host.
 type ImageImportOptions struct {
 	Tag     string   // Tag is the name to tag this image with. This attribute is deprecated.
 	Message string   // Message is the message to tag the image with
-	Changes []string // Changes are the raw changes to apply to this image
+	Changes []string // Dockerfile instructions to apply while importing
 }
 
 // ImageListOptions holds parameters to filter the list of images with.
 type ImageListOptions struct {
-	MatchName string
-	All       bool
-	Filters   filters.Args
+	MatchName string       // Only return images with matching names
+	All       bool         // Whether to include intermediate (i.e. untagged) images in the output
+	Filters   filters.Args // Filter output based on these criteria
 }
 
 // ImageLoadResponse returns information to the client about a load process.
 type ImageLoadResponse struct {
-	// Body must be closed to avoid a resource leak
-	Body io.ReadCloser
-	JSON bool
+	Body io.ReadCloser // Body must be closed to avoid a resource leak
+	JSON bool          // Whether the response body contains JSON instead of plain text
 }
 
 // ImagePullOptions holds information to pull images.
 type ImagePullOptions struct {
-	All           bool
-	RegistryAuth  string // RegistryAuth is the base64 encoded credentials for the registry
-	PrivilegeFunc RequestPrivilegeFunc
+	// Pull all tags from the specified repository,
+	// even if a repository:tag combination is specified
+	All bool
+
+	RegistryAuth  string               // Registry credentials to be used (as base64 encoded JSON)
+	PrivilegeFunc RequestPrivilegeFunc // Function to request alternative registry credentials
 }
 
-// RequestPrivilegeFunc is a function interface that
-// clients can supply to retry operations after
-// getting an authorization error.
-// This function returns the registry authentication
-// header value in base 64 format, or an error
-// if the privilege request fails.
-type RequestPrivilegeFunc func() (string, error)
-
-//ImagePushOptions holds information to push images.
+// ImagePushOptions holds information to push images.
 type ImagePushOptions ImagePullOptions
+
+// RequestPrivilegeFunc is a function interface that clients can
+// supply to retry operations after getting an authorization error.
+//
+// This function returns the new registry authentication header value
+// in Base64 format, or an error if the privilege request fails.
+type RequestPrivilegeFunc func() (string, error)
 
 // ImageRemoveOptions holds parameters to remove images.
 type ImageRemoveOptions struct {
-	Force         bool
-	PruneChildren bool
+	Force         bool // Also remove all tags referencing the image, instead of failing when such tags exist
+	PruneChildren bool // Also remove all untagged parents of the image
 }
 
 // ImageSearchOptions holds parameters to search images with.
 type ImageSearchOptions struct {
-	RegistryAuth  string
-	PrivilegeFunc RequestPrivilegeFunc
-	Filters       filters.Args
-	Limit         int
+	RegistryAuth  string               // Registry credentials to be used (as base64 encoded JSON)
+	PrivilegeFunc RequestPrivilegeFunc // Function to request alternative registry credentials
+	Limit         int                  // Maximum number of search results
+	Filters       filters.Args         // Filter output based on these criteria
 }
 
-// ResizeOptions holds parameters to resize a tty.
-// It can be used to resize container ttys and
-// exec process ttys too.
+// ResizeOptions holds parameters to resize a TTY.
+// It can be used to resize container TTYs and exec process TTYs too.
 type ResizeOptions struct {
 	Height int
 	Width  int
 }
 
-// VersionResponse holds version information for the client and the server
+// VersionResponse holds version information for the client and the server.
 type VersionResponse struct {
 	Client *Version
 	Server *Version
@@ -241,24 +212,23 @@ func (v VersionResponse) ServerOK() bool {
 	return v.Server != nil
 }
 
-// NodeListOptions holds parameters to list  nodes with.
+// NodeListOptions holds parameters to list nodes with.
 type NodeListOptions struct {
-	Filter filters.Args
+	Filter filters.Args // Filter output based on these criteria
 }
 
 // ServiceCreateResponse contains the information returned to a client
 // on the  creation of a new service.
 type ServiceCreateResponse struct {
-	// ID is the ID of the created service.
-	ID string
+	ID string // ID of the created service
 }
 
-// ServiceListOptions holds parameters to list  services with.
+// ServiceListOptions holds parameters to list services with.
 type ServiceListOptions struct {
-	Filter filters.Args
+	Filter filters.Args // Filter output based on these criteria
 }
 
-// TaskListOptions holds parameters to list  tasks with.
+// TaskListOptions holds parameters to list tasks with.
 type TaskListOptions struct {
-	Filter filters.Args
+	Filter filters.Args // Filter output based on these criteria
 }

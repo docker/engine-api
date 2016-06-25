@@ -11,32 +11,30 @@ import (
 	"github.com/docker/go-connections/nat"
 )
 
-// ContainerCreateResponse contains the information returned to a client on the
-// creation of a new container.
+// ContainerCreateResponse contains the information returned
+// to a client on the creation of a new container.
 type ContainerCreateResponse struct {
-	// ID is the ID of the created container.
-	ID string `json:"Id"`
-
-	// Warnings are any warnings encountered during the creation of the container.
-	Warnings []string `json:"Warnings"`
+	ID       string   `json:"Id"`       // ID of the created container.
+	Warnings []string `json:"Warnings"` // Warnings encountered during the creation of the container.
 }
 
-// ContainerExecCreateResponse contains response of Remote API:
-// POST "/containers/{name:.*}/exec"
+// ContainerExecCreateResponse contains the information
+// returned to a client on the creation of a new exec process.
 type ContainerExecCreateResponse struct {
-	// ID is the exec ID.
-	ID string `json:"Id"`
+	ID string `json:"Id"` // ID is the exec ID
 }
 
-// ContainerUpdateResponse contains response of Remote API:
-// POST "/containers/{name:.*}/update"
+// ContainerUpdateResponse contains the information returned to a client
+// after dynamically updating the configuration of a container.
 type ContainerUpdateResponse struct {
 	// Warnings are any warnings encountered during the updating of the container.
 	Warnings []string `json:"Warnings"`
 }
 
-// AuthResponse contains response of Remote API:
-// POST "/auth"
+// AuthResponse contains the information returned to a client
+// after validating the specified registry credentials.
+// If available, the response contains an identity token that
+// can be used for accessing the registry without password.
 type AuthResponse struct {
 	// Status is the authentication status
 	Status string `json:"Status"`
@@ -46,27 +44,27 @@ type AuthResponse struct {
 	IdentityToken string `json:"IdentityToken,omitempty"`
 }
 
-// ContainerWaitResponse contains response of Remote API:
-// POST "/containers/"+containerID+"/wait"
+// ContainerWaitResponse contains the information returned
+// to a client when the waited-on container has exited.
 type ContainerWaitResponse struct {
 	// StatusCode is the status code of the wait job
-	StatusCode int `json:"StatusCode"`
+	StatusCode int `json:"StatusCode"` // Exit code of the container's root process.
 }
 
-// ContainerCommitResponse contains response of Remote API:
+// ContainerCommitResponse contains the response of the Remote API:
 // POST "/commit?container="+containerID
 type ContainerCommitResponse struct {
 	ID string `json:"Id"`
 }
 
-// ContainerChange contains response of Remote API:
-// GET "/containers/{name:.*}/changes"
+// ContainerChange represents a single change to a container's filesystem.
 type ContainerChange struct {
-	Kind int
-	Path string
+	Kind int    // Kind of change (Modify=0, Add=1, Delete=2)
+	Path string // Path to changed file/directory
 }
 
-// ImageHistory contains response of Remote API:
+// ImageHistory represents the history of an image
+// that is returned to a client for the Remote API:
 // GET "/images/{name:.*}/history"
 type ImageHistory struct {
 	ID        string `json:"Id"`
@@ -77,14 +75,16 @@ type ImageHistory struct {
 	Comment   string
 }
 
-// ImageDelete contains response of Remote API:
+// ImageDelete represents a single image that was untagged or deleted.
+// It is used in the repsonse of the Remote API:
 // DELETE "/images/{name:.*}"
 type ImageDelete struct {
-	Untagged string `json:",omitempty"`
-	Deleted  string `json:",omitempty"`
+	Untagged string `json:",omitempty"` // ID of the image from which a named tag was removed (mutually exclusive with Deleted)
+	Deleted  string `json:",omitempty"` // ID of the image which has been deleted (mutually exclusive with Untagged)
 }
 
-// Image contains response of Remote API:
+// Image represents the image description that
+// is returned to a client for the Remote API:
 // GET "/images/json"
 type Image struct {
 	ID          string `json:"Id"`
@@ -97,21 +97,21 @@ type Image struct {
 	Labels      map[string]string
 }
 
-// GraphDriverData returns Image's graph driver config info
-// when calling inspect command
+// GraphDriverData represents an image's graph driver
+// config info when calling inspect command.
 type GraphDriverData struct {
 	Name string
 	Data map[string]string
 }
 
-// RootFS returns Image's RootFS description including the layer IDs.
+// RootFS returns an image's RootFS description including the layer IDs.
 type RootFS struct {
 	Type      string
 	Layers    []string `json:",omitempty"`
 	BaseLayer string   `json:",omitempty"`
 }
 
-// ImageInspect contains response of Remote API:
+// ImageInspect contains the response of the Remote API:
 // GET "/images/{name:.*}/json"
 type ImageInspect struct {
 	ID              string `json:"Id"`
@@ -133,8 +133,8 @@ type ImageInspect struct {
 	RootFS          RootFS
 }
 
-// Port stores open ports info of container
-// e.g. {"PrivatePort": 8080, "PublicPort": 80, "Type": "tcp"}
+// Port stores open ports info of a container,
+// e.g. {"PrivatePort": 8080, "PublicPort": 80, "Type": "tcp"}.
 type Port struct {
 	IP          string `json:",omitempty"`
 	PrivatePort int
@@ -142,7 +142,7 @@ type Port struct {
 	Type        string
 }
 
-// Container contains response of Remote API:
+// Container contains the response of the Remote API:
 // GET "/containers/json"
 type Container struct {
 	ID         string `json:"Id"`
@@ -170,25 +170,30 @@ type CopyConfig struct {
 	Resource string
 }
 
-// ContainerPathStat is used to encode the header from
-// GET "/containers/{name:.*}/archive"
+// ContainerPathStat is used to encode the X-Docker-Container-Path-Stat
+// header from GET "/containers/{name:.*}/archive".
 // "Name" is the file or directory name.
 type ContainerPathStat struct {
-	Name       string      `json:"name"`
-	Size       int64       `json:"size"`
-	Mode       os.FileMode `json:"mode"`
-	Mtime      time.Time   `json:"mtime"`
-	LinkTarget string      `json:"linkTarget"`
+	Name       string      `json:"name"`       // Name of the archived file or directory
+	Size       int64       `json:"size"`       // Size of the archived file or directory (before compression)
+	Mode       os.FileMode `json:"mode"`       // File mode of the archived file or directory.
+	Mtime      time.Time   `json:"mtime"`      // Modification time of the archived file or directory
+	LinkTarget string      `json:"linkTarget"` // The original link target if the targeted file was a symbolic link
 }
 
-// ContainerProcessList contains response of Remote API:
+// ContainerProcessList contains the response of the Remote API:
 // GET "/containers/{name:.*}/top"
 type ContainerProcessList struct {
+	// List of processes running in the container.
+	// Each process is represented by a nested array
+	// containing the columns specified by Titles.
 	Processes [][]string
-	Titles    []string
+
+	// Titles of the columns available for each process.
+	Titles []string
 }
 
-// Version contains response of Remote API:
+// Version contains the response of the Remote API:
 // GET "/version"
 type Version struct {
 	Version       string
@@ -202,7 +207,7 @@ type Version struct {
 	BuildTime     string `json:",omitempty"`
 }
 
-// Info contains response of Remote API:
+// Info contains the response of the Remote API:
 // GET "/info"
 type Info struct {
 	ID                 string
@@ -261,21 +266,16 @@ type Info struct {
 // PluginsInfo is a temp struct holding Plugins name
 // registered with docker daemon. It is used by Info struct
 type PluginsInfo struct {
-	// List of Volume plugins registered
-	Volume []string
-	// List of Network plugins registered
-	Network []string
-	// List of Authorization plugins registered
-	Authorization []string
+	Volume        []string // List of Volume plugins registered
+	Network       []string // List of Network plugins registered
+	Authorization []string // List of Authorization plugins registered
 }
 
 // ExecStartCheck is a temp struct used by execStart
 // Config fields is part of ExecConfig in runconfig package
 type ExecStartCheck struct {
-	// ExecStart will first check if it's detached
-	Detach bool
-	// Check if there's a tty
-	Tty bool
+	Detach bool // ExecStart will first check if it's detached
+	Tty    bool // Check if there's a tty
 }
 
 // HealthcheckResult stores information about a single run of a healthcheck probe
@@ -300,8 +300,8 @@ type Health struct {
 	Log           []*HealthcheckResult // Log contains the last few results (oldest first)
 }
 
-// ContainerState stores container's running state
-// it's part of ContainerJSONBase and will return by "inspect" command
+// ContainerState stores a container's running state. It is part of
+// ContainerJSONBase and will be returned by the "inspect" command.
 type ContainerState struct {
 	Status     string
 	Running    bool
@@ -317,8 +317,8 @@ type ContainerState struct {
 	Health     *Health `json:",omitempty"`
 }
 
-// ContainerNode stores information about the node that a container
-// is running on.  It's only available in Docker Swarm
+// ContainerNode stores information about the node that a
+// container is running on. It's only available in Docker Swarm.
 type ContainerNode struct {
 	ID        string
 	IPAddress string `json:"IP"`
@@ -329,7 +329,7 @@ type ContainerNode struct {
 	Labels    map[string]string
 }
 
-// ContainerJSONBase contains response of Remote API:
+// ContainerJSONBase contains the response of the Remote API:
 // GET "/containers/{name:.*}/json"
 type ContainerJSONBase struct {
 	ID              string `json:"Id"`
@@ -364,20 +364,21 @@ type ContainerJSON struct {
 	NetworkSettings *NetworkSettings
 }
 
-// NetworkSettings exposes the network settings in the api
+// NetworkSettings exposes the network settings of a container in the API.
 type NetworkSettings struct {
 	NetworkSettingsBase
 	DefaultNetworkSettings
 	Networks map[string]*network.EndpointSettings
 }
 
-// SummaryNetworkSettings provides a summary of container's networks
-// in /containers/json
+// SummaryNetworkSettings provides a summary of
+// a container's networks in /containers/json.
 type SummaryNetworkSettings struct {
 	Networks map[string]*network.EndpointSettings
 }
 
-// NetworkSettingsBase holds basic information about networks
+// NetworkSettingsBase holds basic information
+// about a container's connnection to a network.
 type NetworkSettingsBase struct {
 	Bridge                 string      // Bridge is the Bridge name the network uses(e.g. `docker0`)
 	SandboxID              string      // SandboxID uniquely represents a container's network stack
@@ -415,7 +416,8 @@ type MountPoint struct {
 	Propagation string
 }
 
-// Volume represents the configuration of a volume for the remote API
+// Volume represents the configuration of a volume for the Remote API:
+// GET "/volumes".
 type Volume struct {
 	Name       string                 // Name is the name of the volume
 	Driver     string                 // Driver is the Driver name used to create the volume
@@ -425,23 +427,23 @@ type Volume struct {
 	Scope      string                 // Scope describes the level at which the volume exists (e.g. `global` for cluster-wide or `local` for machine level)
 }
 
-// VolumesListResponse contains the response for the remote API:
-// GET "/volumes"
+// VolumesListResponse contains the response for the Remote API:
+// GET "/volumes".
 type VolumesListResponse struct {
 	Volumes  []*Volume // Volumes is the list of volumes being returned
 	Warnings []string  // Warnings is a list of warnings that occurred when getting the list from the volume drivers
 }
 
-// VolumeCreateRequest contains the response for the remote API:
+// VolumeCreateRequest contains the response for the Remote API:
 // POST "/volumes/create"
 type VolumeCreateRequest struct {
 	Name       string            // Name is the requested name of the volume
 	Driver     string            // Driver is the name of the driver that should be used to create the volume
-	DriverOpts map[string]string // DriverOpts holds the driver specific options to use for when creating the volume.
-	Labels     map[string]string // Labels holds metadata specific to the volume being created.
+	DriverOpts map[string]string // DriverOpts holds the driver specific options to use for when creating the volume
+	Labels     map[string]string // Labels holds metadata specific to the volume being created
 }
 
-// NetworkResource is the body of the "get network" http response message
+// NetworkResource represents the description of a network that is returned to a client.
 type NetworkResource struct {
 	Name       string                      // Name is the requested name of the network
 	ID         string                      `json:"Id"` // ID uniquely indentifies a network on a single machine
@@ -455,7 +457,7 @@ type NetworkResource struct {
 	Labels     map[string]string           // Labels holds metadata specific to the network being created
 }
 
-// EndpointResource contains network resources allocated and used for a container in a network
+// EndpointResource contains network resources allocated and used for a container in a network.
 type EndpointResource struct {
 	Name        string
 	EndpointID  string
@@ -464,7 +466,7 @@ type EndpointResource struct {
 	IPv6Address string
 }
 
-// NetworkCreate is the expected body of the "create network" http request message
+// NetworkCreate is the expected body of the "create network" http request message.
 type NetworkCreate struct {
 	CheckDuplicate bool
 	Driver         string
@@ -487,19 +489,19 @@ type NetworkCreateResponse struct {
 	Warning string
 }
 
-// NetworkConnect represents the data to be used to connect a container to the network
+// NetworkConnect represents the data to be used to connect a container to the network.
 type NetworkConnect struct {
 	Container      string
 	EndpointConfig *network.EndpointSettings `json:",omitempty"`
 }
 
-// NetworkDisconnect represents the data to be used to disconnect a container from the network
+// NetworkDisconnect represents the data to be used to disconnect a container from the network.
 type NetworkDisconnect struct {
 	Container string
 	Force     bool
 }
 
-// Checkpoint represents the details of a checkpoint
+// Checkpoint represents the details of a checkpoint.
 type Checkpoint struct {
 	Name string // Name is the name of the checkpoint
 }
@@ -508,7 +510,7 @@ type Checkpoint struct {
 // OCI runtime being shipped with the docker daemon package.
 var DefaultRuntimeName = "default"
 
-// Runtime describes an OCI runtime
+// Runtime describes an OCI runtime.
 type Runtime struct {
 	Path string   `json:"path"`
 	Args []string `json:"runtimeArgs,omitempty"`
