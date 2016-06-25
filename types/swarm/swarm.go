@@ -32,7 +32,7 @@ type Policy struct {
 	Secret     *string `json:",omitempty"`
 }
 
-// OrchestrationConfig represents ochestration configuration.
+// OrchestrationConfig represents orchestration configuration.
 type OrchestrationConfig struct {
 	TaskHistoryRetentionLimit int64 `json:",omitempty"`
 }
