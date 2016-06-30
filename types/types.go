@@ -254,6 +254,7 @@ type Info struct {
 	ClusterAdvertise   string
 	SecurityOptions    []string
 	Runtimes           map[string]Runtime
+	DefaultRuntime     string
 	Swarm              swarm.Info
 }
 
