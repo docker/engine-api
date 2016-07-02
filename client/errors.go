@@ -8,6 +8,10 @@ import (
 // ErrConnectionFailed is an error raised when the connection between the client and the server failed.
 var ErrConnectionFailed = errors.New("Cannot connect to the Docker daemon. Is the docker daemon running on this host?")
 
+func ErrorConnectionFailed(host string) error {
+	return fmt.Errorf("Cannot connect to the Docker daemon at socket %s. Is the docker daemon running?", host)
+}
+
 type notFound interface {
 	error
 	NotFound() bool // Is the error a NotFound error
