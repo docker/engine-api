@@ -2,6 +2,19 @@ package swarm
 
 import "time"
 
+// InspectService is returned when inspecting a service.
+type InspectService struct {
+	Service        Service
+	RecentFailures []InspectFailure `json:",omitempty"`
+}
+
+// InspectFailure represents a TaskID, NodeID and a TaskStatus.
+type InspectFailure struct {
+	TaskID string     `json:",omitempty"`
+	NodeID string     `json:",omitempty"`
+	Status TaskStatus `json:",omitempty"`
+}
+
 // Service represents a service.
 type Service struct {
 	ID string
