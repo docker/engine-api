@@ -9,7 +9,7 @@ import (
 )
 
 // ImageRemove removes an image from the docker host.
-func (cli *Client) ImageRemove(ctx context.Context, imageID string, options types.ImageRemoveOptions) ([]types.ImageDelete, error) {
+func (cli *Client) ImageRemove(ctx context.Context, imageID string, options types.ImageRemoveOptions) (dels []types.ImageDelete, err error) {
 	query := url.Values{}
 
 	if options.Force {
@@ -21,11 +21,10 @@ func (cli *Client) ImageRemove(ctx context.Context, imageID string, options type
 
 	resp, err := cli.delete(ctx, "/images/"+imageID, query, nil)
 	if err != nil {
-		return nil, err
+		return
 	}
 
-	var dels []types.ImageDelete
 	err = json.NewDecoder(resp.body).Decode(&dels)
 	ensureReaderClosed(resp)
-	return dels, err
+	return
 }
