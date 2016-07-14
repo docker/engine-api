@@ -10,14 +10,14 @@ import (
 )
 
 // ImageList returns a list of images in the docker host.
-func (cli *Client) ImageList(ctx context.Context, options types.ImageListOptions) ([]types.Image, error) {
-	var images []types.Image
+func (cli *Client) ImageList(ctx context.Context, options types.ImageListOptions) (images []types.Image, err error) {
 	query := url.Values{}
 
 	if options.Filters.Len() > 0 {
-		filterJSON, err := filters.ToParamWithVersion(cli.version, options.Filters)
-		if err != nil {
-			return images, err
+		filterJSON, err0 := filters.ToParamWithVersion(cli.version, options.Filters)
+		if err0 != nil {
+			err = err0
+			return
 		}
 		query.Set("filters", filterJSON)
 	}
@@ -31,10 +31,10 @@ func (cli *Client) ImageList(ctx context.Context, options types.ImageListOptions
 
 	serverResp, err := cli.get(ctx, "/images/json", query, nil)
 	if err != nil {
-		return images, err
+		return
 	}
 
 	err = json.NewDecoder(serverResp.body).Decode(&images)
 	ensureReaderClosed(serverResp)
-	return images, err
+	return
 }
