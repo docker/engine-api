@@ -14,9 +14,9 @@ func (cli *Client) ImageList(ctx context.Context, options types.ImageListOptions
 	query := url.Values{}
 
 	if options.Filters.Len() > 0 {
-		filterJSON, err0 := filters.ToParamWithVersion(cli.version, options.Filters)
-		if err0 != nil {
-			err = err0
+		filterJSON, errTmp := filters.ToParamWithVersion(cli.version, options.Filters)
+		if errTmp != nil {
+			err = errTmp
 			return
 		}
 		query.Set("filters", filterJSON)
