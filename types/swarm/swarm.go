@@ -120,6 +120,8 @@ type Info struct {
 	Nodes          int
 	Managers       int
 	CACertHash     string
+
+	Cluster Swarm
 }
 
 // Peer represents a peer.

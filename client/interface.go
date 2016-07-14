@@ -114,7 +114,6 @@ type SwarmAPIClient interface {
 	SwarmInit(ctx context.Context, req swarm.InitRequest) (string, error)
 	SwarmJoin(ctx context.Context, req swarm.JoinRequest) error
 	SwarmLeave(ctx context.Context, force bool) error
-	SwarmInspect(ctx context.Context) (swarm.Swarm, error)
 	SwarmUpdate(ctx context.Context, version swarm.Version, swarm swarm.Spec) error
 }
 
