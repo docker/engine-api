@@ -131,5 +131,5 @@ type VolumeAPIClient interface {
 	VolumeInspect(ctx context.Context, volumeID string) (types.Volume, error)
 	VolumeInspectWithRaw(ctx context.Context, volumeID string) (types.Volume, []byte, error)
 	VolumeList(ctx context.Context, filter filters.Args) (types.VolumesListResponse, error)
-	VolumeRemove(ctx context.Context, volumeID string) error
+	VolumeRemove(ctx context.Context, volumeID string, force bool) error
 }
