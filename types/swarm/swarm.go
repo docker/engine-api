@@ -18,14 +18,6 @@ type Spec struct {
 	Raft             RaftConfig          `json:",omitempty"`
 	Dispatcher       DispatcherConfig    `json:",omitempty"`
 	CAConfig         CAConfig            `json:",omitempty"`
-
-	// DefaultLogDriver sets the log driver to use at task creation time if
-	// unspecified by a task.
-	//
-	// Updating this value will only have an affect on new tasks. Old tasks
-	// will continue use their previously configured log driver until
-	// recreated.
-	DefaultLogDriver *Driver `json:",omitempty"`
 }
 
 // AcceptancePolicy represents the list of policies.
@@ -43,6 +35,14 @@ type Policy struct {
 // OrchestrationConfig represents orchestration configuration.
 type OrchestrationConfig struct {
 	TaskHistoryRetentionLimit int64 `json:",omitempty"`
+
+	// DefaultLogDriver selects the log driver to use for tasks created in the
+	// orchestrator if unspecified by a service.
+	//
+	// Updating this value will only have an affect on new tasks. Old tasks
+	// will continue use their previously configured log driver until
+	// recreated.
+	DefaultLogDriver *Driver `json:",omitempty"`
 }
 
 // RaftConfig represents raft configuration.
