@@ -85,17 +85,19 @@ type ExternalCA struct {
 // InitRequest is the request used to init a swarm.
 type InitRequest struct {
 	ListenAddr      string
+	AdvertiseAddr   string
 	ForceNewCluster bool
 	Spec            Spec
 }
 
 // JoinRequest is the request used to join a swarm.
 type JoinRequest struct {
-	ListenAddr  string
-	RemoteAddrs []string
-	Secret      string // accept by secret
-	CACertHash  string
-	Manager     bool
+	ListenAddr    string
+	AdvertiseAddr string
+	RemoteAddrs   []string
+	Secret        string // accept by secret
+	CACertHash    string
+	Manager       bool
 }
 
 // LocalNodeState represents the state of the local node.
@@ -114,7 +116,8 @@ const (
 
 // Info represents generic information about swarm.
 type Info struct {
-	NodeID string
+	NodeID   string
+	NodeAddr string
 
 	LocalNodeState   LocalNodeState
 	ControlAvailable bool
