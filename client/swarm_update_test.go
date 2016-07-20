@@ -18,7 +18,7 @@ func TestSwarmUpdateError(t *testing.T) {
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
 
-	err := client.SwarmUpdate(context.Background(), swarm.Version{}, swarm.Spec{})
+	err := client.SwarmUpdate(context.Background(), swarm.Version{}, swarm.Spec{}, swarm.UpdateFlags{})
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server Error, got %v", err)
 	}
@@ -42,7 +42,7 @@ func TestSwarmUpdate(t *testing.T) {
 		}),
 	}
 
-	err := client.SwarmUpdate(context.Background(), swarm.Version{}, swarm.Spec{})
+	err := client.SwarmUpdate(context.Background(), swarm.Version{}, swarm.Spec{}, swarm.UpdateFlags{})
 	if err != nil {
 		t.Fatal(err)
 	}

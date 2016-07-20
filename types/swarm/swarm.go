@@ -6,31 +6,25 @@ import "time"
 type Swarm struct {
 	ID string
 	Meta
-	Spec Spec
+	Spec       Spec
+	JoinTokens JoinTokens
+}
+
+// JoinTokens contains the tokens workers and managers need to join the swarm.
+type JoinTokens struct {
+	Worker  string
+	Manager string
 }
 
 // Spec represents the spec of a swarm.
 type Spec struct {
 	Annotations
 
-	AcceptancePolicy AcceptancePolicy    `json:",omitempty"`
-	Orchestration    OrchestrationConfig `json:",omitempty"`
-	Raft             RaftConfig          `json:",omitempty"`
-	Dispatcher       DispatcherConfig    `json:",omitempty"`
-	CAConfig         CAConfig            `json:",omitempty"`
-	TaskDefaults     TaskDefaults        `json:",omitempty"`
-}
-
-// AcceptancePolicy represents the list of policies.
-type AcceptancePolicy struct {
-	Policies []Policy `json:",omitempty"`
-}
-
-// Policy represents a role, autoaccept and secret.
-type Policy struct {
-	Role       NodeRole
-	Autoaccept bool
-	Secret     *string `json:",omitempty"`
+	Orchestration OrchestrationConfig `json:",omitempty"`
+	Raft          RaftConfig          `json:",omitempty"`
+	Dispatcher    DispatcherConfig    `json:",omitempty"`
+	CAConfig      CAConfig            `json:",omitempty"`
+	TaskDefaults  TaskDefaults        `json:",omitempty"`
 }
 
 // OrchestrationConfig represents orchestration configuration.
@@ -95,9 +89,7 @@ type JoinRequest struct {
 	ListenAddr    string
 	AdvertiseAddr string
 	RemoteAddrs   []string
-	Secret        string // accept by secret
-	CACertHash    string
-	Manager       bool
+	JoinToken     string // accept by secret
 }
 
 // LocalNodeState represents the state of the local node.
@@ -126,11 +118,16 @@ type Info struct {
 	RemoteManagers []Peer
 	Nodes          int
 	Managers       int
-	CACertHash     string
 }
 
 // Peer represents a peer.
 type Peer struct {
 	NodeID string
 	Addr   string
+}
+
+// UpdateFlags contains flags for SwarmUpdate.
+type UpdateFlags struct {
+	RotateWorkerToken  bool
+	RotateManagerToken bool
 }
