@@ -10,6 +10,14 @@ type Swarm struct {
 	JoinTokens JoinTokens
 }
 
+// ClusterInfo represents info about a the cluster for outputing in "info"
+// it contains the same information as "Swarm", but without the JoinTokens
+type ClusterInfo struct {
+	ID string
+	Meta
+	Spec Spec
+}
+
 // JoinTokens contains the tokens workers and managers need to join the swarm.
 type JoinTokens struct {
 	Worker  string
@@ -119,7 +127,7 @@ type Info struct {
 	Nodes          int
 	Managers       int
 
-	Cluster Swarm
+	Cluster ClusterInfo
 }
 
 // Peer represents a peer.
