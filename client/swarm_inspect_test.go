@@ -32,7 +32,9 @@ func TestSwarmInspect(t *testing.T) {
 				return nil, fmt.Errorf("Expected URL '%s', got '%s'", expectedURL, req.URL)
 			}
 			content, err := json.Marshal(swarm.Swarm{
-				ID: "swarm_id",
+				ClusterInfo: swarm.ClusterInfo{
+					ID: "swarm_id",
+				},
 			})
 			if err != nil {
 				return nil, err
