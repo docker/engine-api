@@ -24,47 +24,47 @@ type serverResponse struct {
 }
 
 // head sends an http request to the docker API using the method HEAD.
-func (cli *Client) head(ctx context.Context, path string, query url.Values, headers map[string][]string) (*serverResponse, error) {
+func (cli *Client) head(ctx context.Context, path string, query url.Values, headers map[string][]string) (serverResponse, error) {
 	return cli.sendRequest(ctx, "HEAD", path, query, nil, headers)
 }
 
 // getWithContext sends an http request to the docker API using the method GET with a specific go context.
-func (cli *Client) get(ctx context.Context, path string, query url.Values, headers map[string][]string) (*serverResponse, error) {
+func (cli *Client) get(ctx context.Context, path string, query url.Values, headers map[string][]string) (serverResponse, error) {
 	return cli.sendRequest(ctx, "GET", path, query, nil, headers)
 }
 
 // postWithContext sends an http request to the docker API using the method POST with a specific go context.
-func (cli *Client) post(ctx context.Context, path string, query url.Values, obj interface{}, headers map[string][]string) (*serverResponse, error) {
+func (cli *Client) post(ctx context.Context, path string, query url.Values, obj interface{}, headers map[string][]string) (serverResponse, error) {
 	return cli.sendRequest(ctx, "POST", path, query, obj, headers)
 }
 
-func (cli *Client) postRaw(ctx context.Context, path string, query url.Values, body io.Reader, headers map[string][]string) (*serverResponse, error) {
+func (cli *Client) postRaw(ctx context.Context, path string, query url.Values, body io.Reader, headers map[string][]string) (serverResponse, error) {
 	return cli.sendClientRequest(ctx, "POST", path, query, body, headers)
 }
 
 // put sends an http request to the docker API using the method PUT.
-func (cli *Client) put(ctx context.Context, path string, query url.Values, obj interface{}, headers map[string][]string) (*serverResponse, error) {
+func (cli *Client) put(ctx context.Context, path string, query url.Values, obj interface{}, headers map[string][]string) (serverResponse, error) {
 	return cli.sendRequest(ctx, "PUT", path, query, obj, headers)
 }
 
 // put sends an http request to the docker API using the method PUT.
-func (cli *Client) putRaw(ctx context.Context, path string, query url.Values, body io.Reader, headers map[string][]string) (*serverResponse, error) {
+func (cli *Client) putRaw(ctx context.Context, path string, query url.Values, body io.Reader, headers map[string][]string) (serverResponse, error) {
 	return cli.sendClientRequest(ctx, "PUT", path, query, body, headers)
 }
 
 // delete sends an http request to the docker API using the method DELETE.
-func (cli *Client) delete(ctx context.Context, path string, query url.Values, headers map[string][]string) (*serverResponse, error) {
+func (cli *Client) delete(ctx context.Context, path string, query url.Values, headers map[string][]string) (serverResponse, error) {
 	return cli.sendRequest(ctx, "DELETE", path, query, nil, headers)
 }
 
-func (cli *Client) sendRequest(ctx context.Context, method, path string, query url.Values, obj interface{}, headers map[string][]string) (*serverResponse, error) {
+func (cli *Client) sendRequest(ctx context.Context, method, path string, query url.Values, obj interface{}, headers map[string][]string) (serverResponse, error) {
 	var body io.Reader
 
 	if obj != nil {
 		var err error
 		body, err = encodeData(obj)
 		if err != nil {
-			return nil, err
+			return serverResponse{}, err
 		}
 		if headers == nil {
 			headers = make(map[string][]string)
@@ -75,8 +75,8 @@ func (cli *Client) sendRequest(ctx context.Context, method, path string, query u
 	return cli.sendClientRequest(ctx, method, path, query, body, headers)
 }
 
-func (cli *Client) sendClientRequest(ctx context.Context, method, path string, query url.Values, body io.Reader, headers map[string][]string) (*serverResponse, error) {
-	serverResp := &serverResponse{
+func (cli *Client) sendClientRequest(ctx context.Context, method, path string, query url.Values, body io.Reader, headers map[string][]string) (serverResponse, error) {
+	serverResp := serverResponse{
 		body:       nil,
 		statusCode: -1,
 	}
@@ -185,10 +185,10 @@ func encodeData(data interface{}) (*bytes.Buffer, error) {
 	return params, nil
 }
 
-func ensureReaderClosed(response *serverResponse) {
-	if response != nil && response.body != nil {
+func ensureReaderClosed(response serverResponse) {
+	if body := response.body; body != nil {
 		// Drain up to 512 bytes and close the body to let the Transport reuse the connection
-		io.CopyN(ioutil.Discard, response.body, 512)
+		io.CopyN(ioutil.Discard, body, 512)
 		response.body.Close()
 	}
 }
