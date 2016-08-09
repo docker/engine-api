@@ -109,6 +109,13 @@ func (cli *Client) sendClientRequest(ctx context.Context, method, path string, q
 			return serverResp, ErrConnectionFailed
 		}
 
+		// Don't decorate context sentinel errors; users may be comparing to
+		// them directly.
+		switch err {
+		case context.Canceled, context.DeadlineExceeded:
+			return serverResp, err
+		}
+
 		if !cli.transport.Secure() && strings.Contains(err.Error(), "malformed HTTP response") {
 			return serverResp, fmt.Errorf("%v.\n* Are you trying to connect to a TLS-enabled daemon without TLS?", err)
 		}
