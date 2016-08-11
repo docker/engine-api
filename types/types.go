@@ -231,7 +231,6 @@ type Info struct {
 	OomKillDisable     bool
 	NGoroutines        int
 	SystemTime         string
-	ExecutionDriver    string
 	LoggingDriver      string
 	CgroupDriver       string
 	NEventsListener    int
