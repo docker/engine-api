@@ -2,7 +2,6 @@ package client
 
 import (
 	"crypto/tls"
-	"errors"
 	"fmt"
 	"net"
 	"net/http/httputil"
@@ -10,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/docker/engine-api/client/transport"
 	"github.com/docker/engine-api/types"
 	"github.com/docker/go-connections/sockets"
 	"golang.org/x/net/context"
@@ -46,7 +46,7 @@ func (cli *Client) postHijacked(ctx context.Context, path string, query url.Valu
 	req.Header.Set("Connection", "Upgrade")
 	req.Header.Set("Upgrade", "tcp")
 
-	conn, err := dial(cli.proto, cli.addr, cli.transport.TLSConfig())
+	conn, err := dialWithDialer(cli.transport, cli.proto, cli.addr, cli.transport.TLSConfig())
 	if err != nil {
 		if strings.Contains(err.Error(), "connection refused") {
 			return types.HijackedResponse{}, fmt.Errorf("Cannot connect to the Docker daemon. Is 'docker daemon' running on this host?")
@@ -75,43 +75,16 @@ func (cli *Client) postHijacked(ctx context.Context, path string, query url.Valu
 	return types.HijackedResponse{Conn: rwc, Reader: br}, err
 }
 
-func tlsDial(network, addr string, config *tls.Config) (net.Conn, error) {
-	return tlsDialWithDialer(new(net.Dialer), network, addr, config)
-}
-
 // We need to copy Go's implementation of tls.Dial (pkg/cryptor/tls/tls.go) in
 // order to return our custom tlsClientCon struct which holds both the tls.Conn
 // object _and_ its underlying raw connection. The rationale for this is that
 // we need to be able to close the write end of the connection when attaching,
 // which tls.Conn does not provide.
-func tlsDialWithDialer(dialer *net.Dialer, network, addr string, config *tls.Config) (net.Conn, error) {
+func tlsDialWithDialer(dialer transport.Dialer, network, addr string, config *tls.Config) (net.Conn, error) {
 	// We want the Timeout and Deadline values from dialer to cover the
 	// whole process: TCP connection and TLS handshake. This means that we
 	// also need to start our own timers now.
-	timeout := dialer.Timeout
-
-	if !dialer.Deadline.IsZero() {
-		deadlineTimeout := dialer.Deadline.Sub(time.Now())
-		if timeout == 0 || deadlineTimeout < timeout {
-			timeout = deadlineTimeout
-		}
-	}
-
-	var errChannel chan error
-
-	if timeout != 0 {
-		errChannel = make(chan error, 2)
-		time.AfterFunc(timeout, func() {
-			errChannel <- errors.New("")
-		})
-	}
-
-	proxyDialer, err := sockets.DialerFromEnvironment(dialer)
-	if err != nil {
-		return nil, err
-	}
-
-	rawConn, err := proxyDialer.Dial(network, addr)
+	rawConn, err := dialer.Dial(network, addr)
 	if err != nil {
 		return nil, err
 	}
@@ -142,15 +115,7 @@ func tlsDialWithDialer(dialer *net.Dialer, network, addr string, config *tls.Con
 
 	conn := tls.Client(rawConn, config)
 
-	if timeout == 0 {
-		err = conn.Handshake()
-	} else {
-		go func() {
-			errChannel <- conn.Handshake()
-		}()
-
-		err = <-errChannel
-	}
+	err = conn.Handshake()
 
 	if err != nil {
 		rawConn.Close()
@@ -162,13 +127,13 @@ func tlsDialWithDialer(dialer *net.Dialer, network, addr string, config *tls.Con
 	return &tlsClientCon{conn, rawConn}, nil
 }
 
-func dial(proto, addr string, tlsConfig *tls.Config) (net.Conn, error) {
+func dialWithDialer(dialer transport.Dialer, proto, addr string, tlsConfig *tls.Config) (net.Conn, error) {
 	if tlsConfig != nil && proto != "unix" && proto != "npipe" {
 		// Notice this isn't Go standard's tls.Dial function
-		return tlsDial(proto, addr, tlsConfig)
+		return tlsDialWithDialer(dialer, proto, addr, tlsConfig)
 	}
 	if proto == "npipe" {
 		return sockets.DialPipe(addr, 32*time.Second)
 	}
-	return net.Dial(proto, addr)
+	return dialer.Dial(proto, addr)
 }

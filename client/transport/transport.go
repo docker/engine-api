@@ -3,6 +3,7 @@ package transport
 
 import (
 	"fmt"
+	"net"
 	"net/http"
 
 	"github.com/docker/go-connections/sockets"
@@ -44,6 +45,10 @@ func NewTransportWithHTTP(proto, addr string, client *http.Client) (Client, erro
 // CancelRequest stops a request execution.
 func (a *apiTransport) CancelRequest(req *http.Request) {
 	a.transport.CancelRequest(req)
+}
+
+func (a *apiTransport) Dial(network, addr string) (net.Conn, error) {
+	return a.transport.Dial(network, addr)
 }
 
 // defaultTransport creates a new http.Transport with Docker's
