@@ -106,8 +106,12 @@ func (cli *Client) sendClientRequest(ctx context.Context, method, path string, q
 
 	resp, err := cancellable.Do(ctx, cli.transport, req)
 	if err != nil {
-		if err, ok := err.(net.Error); ok && !err.Temporary() {
-			return serverResp, ErrConnectionFailed
+		if !cli.transport.Secure() && strings.Contains(err.Error(), "malformed HTTP response") {
+			return serverResp, fmt.Errorf("%v.\n* Are you trying to connect to a TLS-enabled daemon without TLS?", err)
+		}
+
+		if cli.transport.Secure() && strings.Contains(err.Error(), "bad certificate") {
+			return serverResp, fmt.Errorf("The server probably has client authentication (--tlsverify) enabled. Please check your TLS client certification settings: %v", err)
 		}
 
 		// Don't decorate context sentinel errors; users may be comparing to
@@ -117,14 +121,11 @@ func (cli *Client) sendClientRequest(ctx context.Context, method, path string, q
 			return serverResp, err
 		}
 
-		if !cli.transport.Secure() && strings.Contains(err.Error(), "malformed HTTP response") {
-			return serverResp, fmt.Errorf("%v.\n* Are you trying to connect to a TLS-enabled daemon without TLS?", err)
+		if err, ok := err.(net.Error); ok && !err.Temporary() {
+			if !strings.Contains(err.Error(), "HTTP response to HTTPS client") {
+				return serverResp, ErrConnectionFailed
+			}
 		}
-
-		if cli.transport.Secure() && strings.Contains(err.Error(), "bad certificate") {
-			return serverResp, fmt.Errorf("The server probably has client authentication (--tlsverify) enabled. Please check your TLS client certification settings: %v", err)
-		}
-
 		return serverResp, fmt.Errorf("An error occurred trying to connect: %v", err)
 	}
 
