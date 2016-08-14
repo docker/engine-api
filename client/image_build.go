@@ -88,6 +88,7 @@ func imageBuildOptionsToQuery(options types.ImageBuildOptions) (url.Values, erro
 	query.Set("cgroupparent", options.CgroupParent)
 	query.Set("shmsize", strconv.FormatInt(options.ShmSize, 10))
 	query.Set("dockerfile", options.Dockerfile)
+	query.Set("credentialspec", options.CredentialSpec)
 
 	ulimitsJSON, err := json.Marshal(options.Ulimits)
 	if err != nil {

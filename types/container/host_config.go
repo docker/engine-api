@@ -313,8 +313,9 @@ type HostConfig struct {
 	Runtime         string            `json:",omitempty"` // Runtime to use with this container
 
 	// Applicable to Windows
-	ConsoleSize [2]int    // Initial console size
-	Isolation   Isolation // Isolation technology of the container (eg default, hyperv)
+	ConsoleSize    [2]int    // Initial console size
+	CredentialSpec string    // Credential spec for managed service account
+	Isolation      Isolation // Isolation technology of the container (eg default, hyperv)
 
 	// Contains container's resources (cgroups, ulimits)
 	Resources
