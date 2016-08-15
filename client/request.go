@@ -121,9 +121,14 @@ func (cli *Client) sendClientRequest(ctx context.Context, method, path string, q
 			return serverResp, err
 		}
 
-		if err, ok := err.(net.Error); ok && !err.Temporary() {
-			if !strings.Contains(err.Error(), "HTTP response to HTTPS client") {
+		if err, ok := err.(net.Error); ok {
+			if err.Timeout() {
 				return serverResp, ErrConnectionFailed
+			}
+			if !err.Temporary() {
+				if strings.Contains(err.Error(), "connection refused") || strings.Contains(err.Error(), "dial unix") {
+					return serverResp, ErrConnectionFailed
+				}
 			}
 		}
 		return serverResp, fmt.Errorf("An error occurred trying to connect: %v", err)
