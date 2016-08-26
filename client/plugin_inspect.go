@@ -11,7 +11,7 @@ import (
 	"golang.org/x/net/context"
 )
 
-// PluginInspect inspects an existing plugin
+// PluginInspectWithRaw inspects an existing plugin
 func (cli *Client) PluginInspectWithRaw(ctx context.Context, name string) (*types.Plugin, []byte, error) {
 	resp, err := cli.get(ctx, "/plugins/"+name, nil, nil)
 	if err != nil {
