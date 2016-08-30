@@ -17,11 +17,10 @@ type ServiceSpec struct {
 
 	// TaskTemplate defines how the service should construct new tasks when
 	// orchestrating this service.
-	TaskTemplate TaskSpec                  `json:",omitempty"`
-	Mode         ServiceMode               `json:",omitempty"`
-	UpdateConfig *UpdateConfig             `json:",omitempty"`
-	Networks     []NetworkAttachmentConfig `json:",omitempty"`
-	EndpointSpec *EndpointSpec             `json:",omitempty"`
+	TaskTemplate TaskSpec      `json:",omitempty"`
+	Mode         ServiceMode   `json:",omitempty"`
+	UpdateConfig *UpdateConfig `json:",omitempty"`
+	EndpointSpec *EndpointSpec `json:",omitempty"`
 }
 
 // ServiceMode represents the mode of a service.
