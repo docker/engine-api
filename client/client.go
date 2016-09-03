@@ -102,6 +102,14 @@ func NewClient(host string, version string, client *http.Client, httpHeaders map
 	}, nil
 }
 
+// ensure transport.Client be closed
+// especially needed while using NewClient with *http.Client = nil
+// for example
+// client.NewClient("unix:///var/run/docker.sock", nil, "v1.18", map[string]string{"User-Agent": "engine-api-cli-1.0"})
+func (cli *Client) Close()  {
+	cli.transport.Close()
+}
+
 // getAPIPath returns the versioned request path to call the api.
 // It appends the query parameters to the path if they are not empty.
 func (cli *Client) getAPIPath(p string, query url.Values) string {

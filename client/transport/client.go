@@ -21,6 +21,8 @@ type Client interface {
 	Scheme() string
 	// TLSConfig returns any TLS configuration the client uses.
 	TLSConfig() *tls.Config
+
+	Close()
 }
 
 // tlsInfo returns information about the TLS configuration.

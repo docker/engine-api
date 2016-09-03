@@ -129,6 +129,8 @@ func TestGetAPIPath(t *testing.T) {
 		if g != cs.e {
 			t.Fatalf("Expected %s, got %s", cs.e, g)
 		}
+
+		c.Close()
 	}
 }
 
