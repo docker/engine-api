@@ -106,7 +106,7 @@ func NewClient(host string, version string, client *http.Client, httpHeaders map
 // especially needed while using NewClient with *http.Client = nil
 // for example
 // client.NewClient("unix:///var/run/docker.sock", nil, "v1.18", map[string]string{"User-Agent": "engine-api-cli-1.0"})
-func (cli *Client) Close()  {
+func (cli *Client) Close() {
 	cli.transport.Close()
 }
 
