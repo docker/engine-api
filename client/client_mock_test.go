@@ -46,6 +46,10 @@ func (m mockClient) Do(req *http.Request) (*http.Response, error) {
 	return m.do(req)
 }
 
+func (m mockClient) Close() {
+	// do nothing
+}
+
 func errorMock(statusCode int, message string) func(req *http.Request) (*http.Response, error) {
 	return func(req *http.Request) (*http.Response, error) {
 		header := http.Header{}

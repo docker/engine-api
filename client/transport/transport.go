@@ -46,6 +46,11 @@ func (a *apiTransport) CancelRequest(req *http.Request) {
 	a.transport.CancelRequest(req)
 }
 
+// ensure transport be closed
+func (a *apiTransport) Close() {
+	a.transport.CloseIdleConnections();
+}
+
 // defaultTransport creates a new http.Transport with Docker's
 // default transport configuration.
 func defaultTransport(proto, addr string) *http.Transport {
