@@ -1,0 +1,108 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "Command": {
+                "type": "string"
+            },
+            "Created": {
+                "type": "integer"
+            },
+            "HostConfig": {
+                "type": "object",
+                "properties": {
+                    "NetworkMode": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Id": {
+                "type": "string"
+            },
+            "Image": {
+                "type": "string"
+            },
+            "ImageID": {
+                "type": "string"
+            },
+            "Labels": {
+                "type": "object",
+                "properties": {
+                    ".*": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Names": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                }
+            },
+            "NetworkSettings": {
+                "type": "object",
+                "properties": {
+                    "Networks": {
+                        "type": "object",
+                        "additionalProperties": true
+                    }
+                },
+                "required": [
+                    "Networks"
+                ]
+            },
+            "Ports": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "IP": {
+                            "type": "string"
+                        },
+                        "PrivatePort": {
+                            "type": "integer"
+                        },
+                        "PublicPort": {
+                            "type": "integer"
+                        },
+                        "Type": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "PrivatePort",
+                        "Type"
+                    ]
+                }
+            },
+            "SizeRootFs": {
+                "type": "integer"
+            },
+            "SizeRw": {
+                "type": "integer"
+            },
+            "State": {
+                "type": "string"
+            },
+            "Status": {
+                "type": "string"
+            }
+        },
+        "required": [
+            "Id",
+            "Names",
+            "Image",
+            "ImageID",
+            "Command",
+            "Created",
+            "Ports",
+            "Labels",
+            "State",
+            "Status",
+            "HostConfig",
+            "NetworkSettings"
+        ]
+    }
+}

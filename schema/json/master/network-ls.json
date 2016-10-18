@@ -1,0 +1,100 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "Containers": {
+                "type": "object",
+                "properties": {
+                    ".*": {
+                        "type": "object"
+                    }
+                }
+            },
+            "Driver": {
+                "type": "string"
+            },
+            "EnableIPv6": {
+                "type": "bool"
+            },
+            "IPAM": {
+                "type": "object",
+                "properties": {
+                    "Config": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "AuxiliaryAddresses": {
+                                    "type": "object",
+                                    "properties": {
+                                        ".*": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "Gateway": {
+                                    "type": "string"
+                                },
+                                "IPRange": {
+                                    "type": "string"
+                                },
+                                "Subnet": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "Driver": {
+                        "type": "string"
+                    },
+                    "Options": {
+                        "type": "object",
+                        "properties": {
+                            ".*": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "required": [
+                    "Driver",
+                    "Options",
+                    "Config"
+                ]
+            },
+            "Id": {
+                "type": "string"
+            },
+            "Internal": {
+                "type": "bool"
+            },
+            "Name": {
+                "type": "string"
+            },
+            "Options": {
+                "type": "object",
+                "properties": {
+                    ".*": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Scope": {
+                "type": "string"
+            }
+        },
+        "required": [
+            "Name",
+            "Id",
+            "Scope",
+            "Driver",
+            "EnableIPv6",
+            "IPAM",
+            "Internal",
+            "Containers",
+            "Options"
+        ]
+    }
+}

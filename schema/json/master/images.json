@@ -1,0 +1,54 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "Created": {
+                "type": "integer"
+            },
+            "Id": {
+                "type": "string"
+            },
+            "Labels": {
+                "type": "object",
+                "properties": {
+                    ".*": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ParentId": {
+                "type": "string"
+            },
+            "RepoDigests": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                }
+            },
+            "RepoTags": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                }
+            },
+            "Size": {
+                "type": "integer"
+            },
+            "VirtualSize": {
+                "type": "integer"
+            }
+        },
+        "required": [
+            "Id",
+            "ParentId",
+            "RepoTags",
+            "RepoDigests",
+            "Created",
+            "Size",
+            "VirtualSize",
+            "Labels"
+        ]
+    }
+}

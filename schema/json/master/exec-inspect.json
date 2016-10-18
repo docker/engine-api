@@ -1,0 +1,24 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "properties": {
+        "ContainerID": {
+            "type": "string"
+        },
+        "ExecID": {
+            "type": "string"
+        },
+        "ExitCode": {
+            "type": "integer"
+        },
+        "Running": {
+            "type": "bool"
+        }
+    },
+    "required": [
+        "ExecID",
+        "ContainerID",
+        "Running",
+        "ExitCode"
+    ]
+}

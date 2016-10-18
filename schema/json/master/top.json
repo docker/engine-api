@@ -1,0 +1,22 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "properties": {
+        "Processes": {
+            "type": "array",
+            "items": {
+                "type": "array"
+            }
+        },
+        "Titles": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        }
+    },
+    "required": [
+        "Processes",
+        "Titles"
+    ]
+}

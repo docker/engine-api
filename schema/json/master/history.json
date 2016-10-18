@@ -1,0 +1,38 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "Comment": {
+                "type": "string"
+            },
+            "Created": {
+                "type": "integer"
+            },
+            "CreatedBy": {
+                "type": "string"
+            },
+            "Id": {
+                "type": "string"
+            },
+            "Size": {
+                "type": "integer"
+            },
+            "Tags": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                }
+            }
+        },
+        "required": [
+            "Id",
+            "Created",
+            "CreatedBy",
+            "Tags",
+            "Size",
+            "Comment"
+        ]
+    }
+}

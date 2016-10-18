@@ -1,0 +1,787 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "properties": {
+        "Config": {
+            "type": "object",
+            "properties": {
+                "ArgsEscaped": {
+                    "type": "bool"
+                },
+                "AttachStderr": {
+                    "type": "bool"
+                },
+                "AttachStdin": {
+                    "type": "bool"
+                },
+                "AttachStdout": {
+                    "type": "bool"
+                },
+                "Cmd": {
+                    "type": "object",
+                    "properties": {
+                        "parts": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "required": [
+                        "parts"
+                    ]
+                },
+                "Domainname": {
+                    "type": "string"
+                },
+                "Entrypoint": {
+                    "type": "object",
+                    "properties": {
+                        "parts": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "required": [
+                        "parts"
+                    ]
+                },
+                "Env": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "ExposedPorts": {
+                    "type": "object",
+                    "properties": {
+                        ".*": {
+                            "type": "object"
+                        }
+                    }
+                },
+                "Hostname": {
+                    "type": "string"
+                },
+                "Image": {
+                    "type": "string"
+                },
+                "Labels": {
+                    "type": "object",
+                    "properties": {
+                        ".*": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "MacAddress": {
+                    "type": "string"
+                },
+                "NetworkDisabled": {
+                    "type": "bool"
+                },
+                "OnBuild": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "OpenStdin": {
+                    "type": "bool"
+                },
+                "PublishService": {
+                    "type": "string"
+                },
+                "StdinOnce": {
+                    "type": "bool"
+                },
+                "StopSignal": {
+                    "type": "string"
+                },
+                "Tty": {
+                    "type": "bool"
+                },
+                "User": {
+                    "type": "string"
+                },
+                "Volumes": {
+                    "type": "object",
+                    "properties": {
+                        ".*": {
+                            "type": "object"
+                        }
+                    }
+                },
+                "WorkingDir": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "Hostname",
+                "Domainname",
+                "User",
+                "AttachStdin",
+                "AttachStdout",
+                "AttachStderr",
+                "Tty",
+                "OpenStdin",
+                "StdinOnce",
+                "Env",
+                "Cmd",
+                "Image",
+                "Volumes",
+                "WorkingDir",
+                "Entrypoint",
+                "OnBuild",
+                "Labels"
+            ]
+        },
+        "ContainerJSONBase": {
+            "type": "object",
+            "properties": {
+                "AppArmorProfile": {
+                    "type": "string"
+                },
+                "Args": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "Created": {
+                    "type": "string"
+                },
+                "Driver": {
+                    "type": "string"
+                },
+                "ExecIDs": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "GraphDriver": {
+                    "type": "object",
+                    "properties": {
+                        "Data": {
+                            "type": "object",
+                            "properties": {
+                                ".*": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "Name": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "Name",
+                        "Data"
+                    ]
+                },
+                "HostConfig": {
+                    "type": "object",
+                    "properties": {
+                        "Binds": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "CapAdd": {
+                            "type": "object",
+                            "properties": {
+                                "parts": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "required": [
+                                "parts"
+                            ]
+                        },
+                        "CapDrop": {
+                            "type": "object",
+                            "properties": {
+                                "parts": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "required": [
+                                "parts"
+                            ]
+                        },
+                        "ConsoleSize": {},
+                        "ContainerIDFile": {
+                            "type": "string"
+                        },
+                        "Dns": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "DnsOptions": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "DnsSearch": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "ExtraHosts": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "GroupAdd": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "IpcMode": {
+                            "type": "string"
+                        },
+                        "Isolation": {
+                            "type": "string"
+                        },
+                        "Links": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "LogConfig": {
+                            "type": "object",
+                            "properties": {
+                                "Config": {
+                                    "type": "object",
+                                    "properties": {
+                                        ".*": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "Type": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "Type",
+                                "Config"
+                            ]
+                        },
+                        "NetworkMode": {
+                            "type": "string"
+                        },
+                        "OomScoreAdj": {
+                            "type": "integer"
+                        },
+                        "PidMode": {
+                            "type": "string"
+                        },
+                        "PortBindings": {
+                            "type": "object",
+                            "properties": {
+                                ".*": {
+                                    "type": "array"
+                                }
+                            }
+                        },
+                        "Privileged": {
+                            "type": "bool"
+                        },
+                        "PublishAllPorts": {
+                            "type": "bool"
+                        },
+                        "ReadonlyRootfs": {
+                            "type": "bool"
+                        },
+                        "Resources": {
+                            "type": "object",
+                            "properties": {
+                                "BlkioDeviceReadBps": {
+                                    "type": "array"
+                                },
+                                "BlkioDeviceReadIOps": {
+                                    "type": "array"
+                                },
+                                "BlkioDeviceWriteBps": {
+                                    "type": "array"
+                                },
+                                "BlkioDeviceWriteIOps": {
+                                    "type": "array"
+                                },
+                                "BlkioWeight": {
+                                    "type": "integer"
+                                },
+                                "BlkioWeightDevice": {
+                                    "type": "array"
+                                },
+                                "CgroupParent": {
+                                    "type": "string"
+                                },
+                                "CpuPeriod": {
+                                    "type": "integer"
+                                },
+                                "CpuQuota": {
+                                    "type": "integer"
+                                },
+                                "CpuShares": {
+                                    "type": "integer"
+                                },
+                                "CpusetCpus": {
+                                    "type": "string"
+                                },
+                                "CpusetMems": {
+                                    "type": "string"
+                                },
+                                "Devices": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "CgroupPermissions": {
+                                                "type": "string"
+                                            },
+                                            "PathInContainer": {
+                                                "type": "string"
+                                            },
+                                            "PathOnHost": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "PathOnHost",
+                                            "PathInContainer",
+                                            "CgroupPermissions"
+                                        ]
+                                    }
+                                },
+                                "KernelMemory": {
+                                    "type": "integer"
+                                },
+                                "Memory": {
+                                    "type": "integer"
+                                },
+                                "MemoryReservation": {
+                                    "type": "integer"
+                                },
+                                "MemorySwap": {
+                                    "type": "integer"
+                                },
+                                "MemorySwappiness": {
+                                    "type": "integer"
+                                },
+                                "OomKillDisable": {
+                                    "type": "bool"
+                                },
+                                "PidsLimit": {
+                                    "type": "integer"
+                                },
+                                "Ulimits": {
+                                    "type": "array"
+                                }
+                            },
+                            "required": [
+                                "CpuShares",
+                                "CgroupParent",
+                                "BlkioWeight",
+                                "BlkioWeightDevice",
+                                "BlkioDeviceReadBps",
+                                "BlkioDeviceWriteBps",
+                                "BlkioDeviceReadIOps",
+                                "BlkioDeviceWriteIOps",
+                                "CpuPeriod",
+                                "CpuQuota",
+                                "CpusetCpus",
+                                "CpusetMems",
+                                "Devices",
+                                "KernelMemory",
+                                "Memory",
+                                "MemoryReservation",
+                                "MemorySwap",
+                                "MemorySwappiness",
+                                "OomKillDisable",
+                                "PidsLimit",
+                                "Ulimits"
+                            ]
+                        },
+                        "RestartPolicy": {
+                            "type": "object",
+                            "properties": {
+                                "MaximumRetryCount": {
+                                    "type": "integer"
+                                },
+                                "Name": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "Name",
+                                "MaximumRetryCount"
+                            ]
+                        },
+                        "SecurityOpt": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "ShmSize": {
+                            "type": "integer"
+                        },
+                        "Tmpfs": {
+                            "type": "object",
+                            "properties": {
+                                ".*": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "UTSMode": {
+                            "type": "string"
+                        },
+                        "VolumeDriver": {
+                            "type": "string"
+                        },
+                        "VolumesFrom": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "required": [
+                        "Binds",
+                        "ContainerIDFile",
+                        "LogConfig",
+                        "NetworkMode",
+                        "PortBindings",
+                        "RestartPolicy",
+                        "VolumeDriver",
+                        "VolumesFrom",
+                        "CapAdd",
+                        "CapDrop",
+                        "Dns",
+                        "DnsOptions",
+                        "DnsSearch",
+                        "ExtraHosts",
+                        "GroupAdd",
+                        "IpcMode",
+                        "Links",
+                        "OomScoreAdj",
+                        "PidMode",
+                        "Privileged",
+                        "PublishAllPorts",
+                        "ReadonlyRootfs",
+                        "SecurityOpt",
+                        "UTSMode",
+                        "ShmSize",
+                        "ConsoleSize",
+                        "Isolation",
+                        "Resources"
+                    ]
+                },
+                "HostnamePath": {
+                    "type": "string"
+                },
+                "HostsPath": {
+                    "type": "string"
+                },
+                "Id": {
+                    "type": "string"
+                },
+                "Image": {
+                    "type": "string"
+                },
+                "LogPath": {
+                    "type": "string"
+                },
+                "MountLabel": {
+                    "type": "string"
+                },
+                "Name": {
+                    "type": "string"
+                },
+                "Path": {
+                    "type": "string"
+                },
+                "ProcessLabel": {
+                    "type": "string"
+                },
+                "ResolvConfPath": {
+                    "type": "string"
+                },
+                "RestartCount": {
+                    "type": "integer"
+                },
+                "SizeRootFs": {
+                    "type": "integer"
+                },
+                "SizeRw": {
+                    "type": "integer"
+                },
+                "State": {
+                    "type": "object",
+                    "properties": {
+                        "Dead": {
+                            "type": "bool"
+                        },
+                        "Error": {
+                            "type": "string"
+                        },
+                        "ExitCode": {
+                            "type": "integer"
+                        },
+                        "FinishedAt": {
+                            "type": "string"
+                        },
+                        "OOMKilled": {
+                            "type": "bool"
+                        },
+                        "Paused": {
+                            "type": "bool"
+                        },
+                        "Pid": {
+                            "type": "integer"
+                        },
+                        "Restarting": {
+                            "type": "bool"
+                        },
+                        "Running": {
+                            "type": "bool"
+                        },
+                        "StartedAt": {
+                            "type": "string"
+                        },
+                        "Status": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "Status",
+                        "Running",
+                        "Paused",
+                        "Restarting",
+                        "OOMKilled",
+                        "Dead",
+                        "Pid",
+                        "ExitCode",
+                        "Error",
+                        "StartedAt",
+                        "FinishedAt"
+                    ]
+                }
+            },
+            "required": [
+                "Id",
+                "Created",
+                "Path",
+                "Args",
+                "State",
+                "Image",
+                "ResolvConfPath",
+                "HostnamePath",
+                "HostsPath",
+                "LogPath",
+                "Name",
+                "RestartCount",
+                "Driver",
+                "MountLabel",
+                "ProcessLabel",
+                "AppArmorProfile",
+                "ExecIDs",
+                "HostConfig",
+                "GraphDriver"
+            ]
+        },
+        "Mounts": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "Destination": {
+                        "type": "string"
+                    },
+                    "Driver": {
+                        "type": "string"
+                    },
+                    "Mode": {
+                        "type": "string"
+                    },
+                    "Name": {
+                        "type": "string"
+                    },
+                    "Propagation": {
+                        "type": "string"
+                    },
+                    "RW": {
+                        "type": "bool"
+                    },
+                    "Source": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "Source",
+                    "Destination",
+                    "Mode",
+                    "RW",
+                    "Propagation"
+                ]
+            }
+        },
+        "NetworkSettings": {
+            "type": "object",
+            "properties": {
+                "DefaultNetworkSettings": {
+                    "type": "object",
+                    "properties": {
+                        "EndpointID": {
+                            "type": "string"
+                        },
+                        "Gateway": {
+                            "type": "string"
+                        },
+                        "GlobalIPv6Address": {
+                            "type": "string"
+                        },
+                        "GlobalIPv6PrefixLen": {
+                            "type": "integer"
+                        },
+                        "IPAddress": {
+                            "type": "string"
+                        },
+                        "IPPrefixLen": {
+                            "type": "integer"
+                        },
+                        "IPv6Gateway": {
+                            "type": "string"
+                        },
+                        "MacAddress": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "EndpointID",
+                        "Gateway",
+                        "GlobalIPv6Address",
+                        "GlobalIPv6PrefixLen",
+                        "IPAddress",
+                        "IPPrefixLen",
+                        "IPv6Gateway",
+                        "MacAddress"
+                    ]
+                },
+                "NetworkSettingsBase": {
+                    "type": "object",
+                    "properties": {
+                        "Bridge": {
+                            "type": "string"
+                        },
+                        "HairpinMode": {
+                            "type": "bool"
+                        },
+                        "LinkLocalIPv6Address": {
+                            "type": "string"
+                        },
+                        "LinkLocalIPv6PrefixLen": {
+                            "type": "integer"
+                        },
+                        "Ports": {
+                            "type": "object",
+                            "properties": {
+                                ".*": {
+                                    "type": "array"
+                                }
+                            }
+                        },
+                        "SandboxID": {
+                            "type": "string"
+                        },
+                        "SandboxKey": {
+                            "type": "string"
+                        },
+                        "SecondaryIPAddresses": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "Addr": {
+                                        "type": "string"
+                                    },
+                                    "PrefixLen": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "required": [
+                                    "Addr",
+                                    "PrefixLen"
+                                ]
+                            }
+                        },
+                        "SecondaryIPv6Addresses": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "Addr": {
+                                        "type": "string"
+                                    },
+                                    "PrefixLen": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "required": [
+                                    "Addr",
+                                    "PrefixLen"
+                                ]
+                            }
+                        }
+                    },
+                    "required": [
+                        "Bridge",
+                        "SandboxID",
+                        "HairpinMode",
+                        "LinkLocalIPv6Address",
+                        "LinkLocalIPv6PrefixLen",
+                        "Ports",
+                        "SandboxKey",
+                        "SecondaryIPAddresses",
+                        "SecondaryIPv6Addresses"
+                    ]
+                },
+                "Networks": {
+                    "type": "object",
+                    "additionalProperties": true
+                }
+            },
+            "required": [
+                "NetworkSettingsBase",
+                "DefaultNetworkSettings",
+                "Networks"
+            ]
+        }
+    },
+    "required": [
+        "ContainerJSONBase",
+        "Mounts",
+        "Config",
+        "NetworkSettings"
+    ]
+}

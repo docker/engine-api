@@ -1,0 +1,236 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "properties": {
+        "Architecture": {
+            "type": "string"
+        },
+        "BridgeNfIp6tables": {
+            "type": "bool"
+        },
+        "BridgeNfIptables": {
+            "type": "bool"
+        },
+        "CPUSet": {
+            "type": "bool"
+        },
+        "CPUShares": {
+            "type": "bool"
+        },
+        "ClusterAdvertise": {
+            "type": "string"
+        },
+        "ClusterStore": {
+            "type": "string"
+        },
+        "Containers": {
+            "type": "integer"
+        },
+        "ContainersPaused": {
+            "type": "integer"
+        },
+        "ContainersRunning": {
+            "type": "integer"
+        },
+        "ContainersStopped": {
+            "type": "integer"
+        },
+        "CpuCfsPeriod": {
+            "type": "bool"
+        },
+        "CpuCfsQuota": {
+            "type": "bool"
+        },
+        "Debug": {
+            "type": "bool"
+        },
+        "DockerRootDir": {
+            "type": "string"
+        },
+        "Driver": {
+            "type": "string"
+        },
+        "DriverStatus": {
+            "type": "array"
+        },
+        "ExecutionDriver": {
+            "type": "string"
+        },
+        "ExperimentalBuild": {
+            "type": "bool"
+        },
+        "HttpProxy": {
+            "type": "string"
+        },
+        "HttpsProxy": {
+            "type": "string"
+        },
+        "ID": {
+            "type": "string"
+        },
+        "IPv4Forwarding": {
+            "type": "bool"
+        },
+        "Images": {
+            "type": "integer"
+        },
+        "IndexServerAddress": {
+            "type": "string"
+        },
+        "KernelVersion": {
+            "type": "string"
+        },
+        "Labels": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "LoggingDriver": {
+            "type": "string"
+        },
+        "MemTotal": {
+            "type": "integer"
+        },
+        "MemoryLimit": {
+            "type": "bool"
+        },
+        "NCPU": {
+            "type": "integer"
+        },
+        "NEventsListener": {
+            "type": "integer"
+        },
+        "NFd": {
+            "type": "integer"
+        },
+        "NGoroutines": {
+            "type": "integer"
+        },
+        "Name": {
+            "type": "string"
+        },
+        "NoProxy": {
+            "type": "string"
+        },
+        "OSType": {
+            "type": "string"
+        },
+        "OomKillDisable": {
+            "type": "bool"
+        },
+        "OperatingSystem": {
+            "type": "string"
+        },
+        "Plugins": {
+            "type": "object",
+            "properties": {
+                "Authorization": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "Network": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "Volume": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "required": [
+                "Volume",
+                "Network",
+                "Authorization"
+            ]
+        },
+        "RegistryConfig": {
+            "type": "object",
+            "properties": {
+                "IndexConfigs": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "InsecureRegistryCIDRs": {
+                    "type": "array"
+                },
+                "Mirrors": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "required": [
+                "InsecureRegistryCIDRs",
+                "IndexConfigs",
+                "Mirrors"
+            ]
+        },
+        "ServerVersion": {
+            "type": "string"
+        },
+        "SwapLimit": {
+            "type": "bool"
+        },
+        "SystemStatus": {
+            "type": "array"
+        },
+        "SystemTime": {
+            "type": "string"
+        }
+    },
+    "required": [
+        "ID",
+        "Containers",
+        "ContainersRunning",
+        "ContainersPaused",
+        "ContainersStopped",
+        "Images",
+        "Driver",
+        "DriverStatus",
+        "SystemStatus",
+        "Plugins",
+        "MemoryLimit",
+        "SwapLimit",
+        "CpuCfsPeriod",
+        "CpuCfsQuota",
+        "CPUShares",
+        "CPUSet",
+        "IPv4Forwarding",
+        "BridgeNfIptables",
+        "BridgeNfIp6tables",
+        "Debug",
+        "NFd",
+        "OomKillDisable",
+        "NGoroutines",
+        "SystemTime",
+        "ExecutionDriver",
+        "LoggingDriver",
+        "NEventsListener",
+        "KernelVersion",
+        "OperatingSystem",
+        "OSType",
+        "Architecture",
+        "IndexServerAddress",
+        "RegistryConfig",
+        "NCPU",
+        "MemTotal",
+        "DockerRootDir",
+        "HttpProxy",
+        "HttpsProxy",
+        "NoProxy",
+        "Name",
+        "Labels",
+        "ExperimentalBuild",
+        "ServerVersion",
+        "ClusterStore",
+        "ClusterAdvertise"
+    ]
+}

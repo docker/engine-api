@@ -1,0 +1,130 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "properties": {
+        "linkTarget": {
+            "type": "string"
+        },
+        "mode": {
+            "type": "integer"
+        },
+        "mtime": {
+            "type": "object",
+            "properties": {
+                "loc": {
+                    "type": "object",
+                    "properties": {
+                        "cacheEnd": {
+                            "type": "integer"
+                        },
+                        "cacheStart": {
+                            "type": "integer"
+                        },
+                        "cacheZone": {
+                            "type": "object",
+                            "properties": {
+                                "isDST": {
+                                    "type": "bool"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "offset": {
+                                    "type": "integer"
+                                }
+                            },
+                            "required": [
+                                "name",
+                                "offset",
+                                "isDST"
+                            ]
+                        },
+                        "name": {
+                            "type": "string"
+                        },
+                        "tx": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "index": {
+                                        "type": "integer"
+                                    },
+                                    "isstd": {
+                                        "type": "bool"
+                                    },
+                                    "isutc": {
+                                        "type": "bool"
+                                    },
+                                    "when": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "required": [
+                                    "when",
+                                    "index",
+                                    "isstd",
+                                    "isutc"
+                                ]
+                            }
+                        },
+                        "zone": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "isDST": {
+                                        "type": "bool"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "offset": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "required": [
+                                    "name",
+                                    "offset",
+                                    "isDST"
+                                ]
+                            }
+                        }
+                    },
+                    "required": [
+                        "name",
+                        "zone",
+                        "tx",
+                        "cacheStart",
+                        "cacheEnd",
+                        "cacheZone"
+                    ]
+                },
+                "nsec": {
+                    "type": "integer"
+                },
+                "sec": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "sec",
+                "nsec",
+                "loc"
+            ]
+        },
+        "name": {
+            "type": "string"
+        },
+        "size": {
+            "type": "integer"
+        }
+    },
+    "required": [
+        "name",
+        "size",
+        "mode",
+        "mtime",
+        "linkTarget"
+    ]
+}

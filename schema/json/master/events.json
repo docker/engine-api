@@ -1,0 +1,55 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "Action": {
+                "type": "string"
+            },
+            "Actor": {
+                "type": "object",
+                "properties": {
+                    "Attributes": {
+                        "type": "object",
+                        "properties": {
+                            ".*": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "ID": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "ID",
+                    "Attributes"
+                ]
+            },
+            "Type": {
+                "type": "string"
+            },
+            "from": {
+                "type": "string"
+            },
+            "id": {
+                "type": "string"
+            },
+            "status": {
+                "type": "string"
+            },
+            "time": {
+                "type": "integer"
+            },
+            "timeNano": {
+                "type": "integer"
+            }
+        },
+        "required": [
+            "Type",
+            "Action",
+            "Actor"
+        ]
+    }
+}

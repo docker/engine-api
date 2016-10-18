@@ -1,0 +1,20 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "properties": {
+        "Driver": {
+            "type": "string"
+        },
+        "Mountpoint": {
+            "type": "string"
+        },
+        "Name": {
+            "type": "string"
+        }
+    },
+    "required": [
+        "Name",
+        "Driver",
+        "Mountpoint"
+    ]
+}
