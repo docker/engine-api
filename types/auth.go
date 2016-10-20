@@ -9,7 +9,7 @@ type AuthConfig struct {
 	// Email is an optional value associated with the username.
 	// This field is deprecated and will be removed in a later
 	// version of docker.
-	Email string `json:"email,omitempty"`
+	Email string `json:"email"`
 
 	ServerAddress string `json:"serveraddress,omitempty"`
 
