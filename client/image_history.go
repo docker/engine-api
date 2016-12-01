@@ -9,14 +9,13 @@ import (
 )
 
 // ImageHistory returns the changes in an image in history format.
-func (cli *Client) ImageHistory(ctx context.Context, imageID string) ([]types.ImageHistory, error) {
-	var history []types.ImageHistory
+func (cli *Client) ImageHistory(ctx context.Context, imageID string) (history []types.ImageHistory, err error) {
 	serverResp, err := cli.get(ctx, "/images/"+imageID+"/history", url.Values{}, nil)
 	if err != nil {
-		return history, err
+		return
 	}
 
 	err = json.NewDecoder(serverResp.body).Decode(&history)
 	ensureReaderClosed(serverResp)
-	return history, err
+	return
 }
