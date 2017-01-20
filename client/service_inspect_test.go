@@ -42,8 +42,10 @@ func TestServiceInspect(t *testing.T) {
 			if !strings.HasPrefix(req.URL.Path, expectedURL) {
 				return nil, fmt.Errorf("Expected URL '%s', got '%s'", expectedURL, req.URL)
 			}
-			content, err := json.Marshal(swarm.Service{
-				ID: "service_id",
+			content, err := json.Marshal(swarm.InspectService{
+				Service: swarm.Service{
+					ID: "service_id",
+				},
 			})
 			if err != nil {
 				return nil, err
@@ -59,7 +61,7 @@ func TestServiceInspect(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if serviceInspect.ID != "service_id" {
-		t.Fatalf("expected `service_id`, got %s", serviceInspect.ID)
+	if serviceInspect.Service.ID != "service_id" {
+		t.Fatalf("expected `service_id`, got %s", serviceInspect.Service.ID)
 	}
 }
