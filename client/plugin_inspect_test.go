@@ -20,7 +20,7 @@ func TestPluginInspectError(t *testing.T) {
 		transport: newMockClient(nil, errorMock(http.StatusInternalServerError, "Server error")),
 	}
 
-	_, err := client.PluginInspect(context.Background(), "nothing")
+	_, _, err := client.PluginInspectWithRaw(context.Background(), "nothing")
 	if err == nil || err.Error() != "Error response from daemon: Server error" {
 		t.Fatalf("expected a Server Error, got %v", err)
 	}
@@ -46,7 +46,7 @@ func TestPluginInspect(t *testing.T) {
 		}),
 	}
 
-	pluginInspect, err := client.PluginInspect(context.Background(), "plugin_name")
+	pluginInspect, _, err := client.PluginInspectWithRaw(context.Background(), "plugin_name")
 	if err != nil {
 		t.Fatal(err)
 	}
