@@ -5,6 +5,7 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"io/ioutil"
+	"net"
 	"net/http"
 
 	"github.com/docker/engine-api/client/transport"
@@ -44,6 +45,10 @@ func newMockClient(tlsConfig *tls.Config, doer func(*http.Request) (*http.Respon
 // Do executes the supplied function for the mock.
 func (m mockClient) Do(req *http.Request) (*http.Response, error) {
 	return m.do(req)
+}
+
+func (m mockClient) Dial(network, addr string) (net.Conn, error) {
+	return new(net.Dialer).Dial(network, addr)
 }
 
 func errorMock(statusCode int, message string) func(req *http.Request) (*http.Response, error) {

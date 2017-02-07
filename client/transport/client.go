@@ -2,8 +2,15 @@ package transport
 
 import (
 	"crypto/tls"
+	"net"
 	"net/http"
 )
+
+// Dialer is an interface thet clients must implement
+// to be able to set up hijacked connections.
+type Dialer interface {
+	Dial(string, string) (net.Conn, error)
+}
 
 // Sender is an interface that clients must implement
 // to be able to send requests to a remote connection.
@@ -14,6 +21,7 @@ type Sender interface {
 
 // Client is an interface that abstracts all remote connections.
 type Client interface {
+	Dialer
 	Sender
 	// Secure tells whether the connection is secure or not.
 	Secure() bool
