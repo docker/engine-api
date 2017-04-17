@@ -2,7 +2,6 @@ package client
 
 import (
 	"io"
-	"net/http"
 	"net/url"
 
 	"github.com/docker/engine-api/types"
@@ -20,7 +19,7 @@ func (cli *Client) ImagePull(options types.ImagePullOptions, privilegeFunc Reque
 	}
 
 	resp, err := cli.tryImageCreate(query, options.RegistryAuth)
-	if resp.statusCode == http.StatusUnauthorized {
+	if isUnauthorized(resp, err) {
 		newAuthHeader, privilegeErr := privilegeFunc()
 		if privilegeErr != nil {
 			return nil, privilegeErr
