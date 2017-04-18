@@ -111,5 +111,5 @@ type StatsJSON struct {
 	Stats
 
 	// Networks request version >=1.21
-	Networks map[string]NetworkStats `json:"networks,omitempty"`
+	Networks map[string]NetworkStats `json:"networks_stats,omitempty"`
 }
