@@ -137,6 +137,8 @@ type ImageBuildOptions struct {
 	CPUShares      int64
 	CPUQuota       int64
 	CPUPeriod      int64
+	CPURtPeriod    int64
+	CPURtRuntime   int64
 	Memory         int64
 	MemorySwap     int64
 	CgroupParent   string
