@@ -10,7 +10,6 @@ import (
 type ContainerSpec struct {
 	Image           string            `json:",omitempty"`
 	Labels          map[string]string `json:",omitempty"`
-	Command         []string          `json:",omitempty"`
 	Args            []string          `json:",omitempty"`
 	Env             []string          `json:",omitempty"`
 	Dir             string            `json:",omitempty"`
