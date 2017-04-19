@@ -2,6 +2,7 @@ package client
 
 import (
 	"net/url"
+	"net/http"
 
 	"github.com/docker/engine-api/types"
 	"golang.org/x/net/context"
@@ -22,6 +23,11 @@ func (cli *Client) ContainerRemove(ctx context.Context, containerID string, opti
 	}
 
 	resp, err := cli.delete(ctx, "/containers/"+containerID, query, nil)
+	if err != nil {
+		if resp.statusCode == http.StatusNotFound {
+			err = containerNotFoundError{containerID}
+		}
+	}
 	ensureReaderClosed(resp)
 	return err
 }
