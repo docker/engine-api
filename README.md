@@ -1,16 +1,54 @@
-[![GoDoc](https://godoc.org/github.com/docker/engine-api?status.svg)](https://godoc.org/github.com/docker/engine-api)
+# Go client for the Hyper.sh API
 
-# Deprecated
+The `hyper` command uses this package to communicate with the Hyper.sh server. It can also be used by your own Go applications to do anything the command-line interface does – running containers, pulling images, managing volumes, etc.
 
-For new projects please do not use this project anymore.  The Docker API client and types have been moved
-to the main docker repo under the following import paths:
+For example, to list running containers (the equivalent of `hyper ps`):
 
-* https://github.com/docker/docker/tree/master/client
-* https://github.com/docker/docker/tree/master/api/types
+```go
+package main
 
-All pull requests and issues should be filed under the docker/docker repository.
-This repo will not receive any future updates and you should update your existing import 
-paths to the new package paths.
+import (
+	"context"
+	"crypto/tls"
+	"fmt"
+	"net/http"
+
+	"github.com/hyperhq/engine-api/client"
+	"github.com/hyperhq/engine-api/types"
+)
+
+func main() {
+	var (
+		host          = "tcp://us-west-1.hyper.sh:443"
+		customHeaders = map[string]string{}
+		verStr        = "v1.23"
+		accessKey     = "xx"
+		secretKey     = "xxx"
+	)
+
+	httpClient := &http.Client{
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		},
+	}
+
+	client, err := client.NewClient(host, verStr, httpClient, customHeaders, accessKey, secretKey)
+	if err != nil {
+		panic(err)
+	}
+	containers, err := client.ContainerList(context.Background(), types.ContainerListOptions{})
+	if err != nil {
+		panic(err)
+	}
+
+	for _, container := range containers {
+		fmt.Printf("%s\t%s\n", container.ID[:10], container.Image)
+	}
+}
+```
+
+Full documentation is available on [document](https://docs.hyper.sh).
+
 
 ## License
 
