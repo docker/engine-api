@@ -9,7 +9,7 @@ import (
 	"golang.org/x/net/context"
 
 	distreference "github.com/docker/distribution/reference"
-	"github.com/hyperhq/engine-api/types"
+	"github.com/hyperhq/hyper-api/types"
 )
 
 // ImagePush requests the docker host to push an image to a remote registry.

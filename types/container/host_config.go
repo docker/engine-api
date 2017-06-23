@@ -5,8 +5,8 @@ import (
 
 	"github.com/docker/go-connections/nat"
 	"github.com/docker/go-units"
-	"github.com/hyperhq/engine-api/types/blkiodev"
-	"github.com/hyperhq/engine-api/types/strslice"
+	"github.com/hyperhq/hyper-api/types/blkiodev"
+	"github.com/hyperhq/hyper-api/types/strslice"
 )
 
 // NetworkMode represents the container network stack.

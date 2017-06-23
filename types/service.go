@@ -1,8 +1,8 @@
 package types
 
 import (
-	"github.com/hyperhq/engine-api/types/filters"
-	"github.com/hyperhq/engine-api/types/strslice"
+	"github.com/hyperhq/hyper-api/types/filters"
+	"github.com/hyperhq/hyper-api/types/strslice"
 )
 
 const (

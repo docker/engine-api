@@ -7,7 +7,7 @@ import (
 	"golang.org/x/net/context"
 
 	"github.com/docker/distribution/reference"
-	"github.com/hyperhq/engine-api/types"
+	"github.com/hyperhq/hyper-api/types"
 )
 
 // ImageImport creates a new image based in the source options.

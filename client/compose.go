@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/hyperhq/engine-api/types"
+	"github.com/hyperhq/hyper-api/types"
 	"github.com/hyperhq/libcompose/config"
 	"golang.org/x/net/context"
 )

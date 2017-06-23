@@ -7,8 +7,8 @@ import (
 
 	"golang.org/x/net/context"
 
-	"github.com/hyperhq/engine-api/types"
-	"github.com/hyperhq/engine-api/types/reference"
+	"github.com/hyperhq/hyper-api/types"
+	"github.com/hyperhq/hyper-api/types/reference"
 )
 
 // ImagePull requests the docker host to pull an image from a remote registry.

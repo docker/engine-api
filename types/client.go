@@ -7,8 +7,8 @@ import (
 	"net/http"
 
 	"github.com/docker/go-units"
-	"github.com/hyperhq/engine-api/types/container"
-	"github.com/hyperhq/engine-api/types/filters"
+	"github.com/hyperhq/hyper-api/types/container"
+	"github.com/hyperhq/hyper-api/types/filters"
 )
 
 // CheckpointCreateOptions holds parameters to create a checkpoint from a container

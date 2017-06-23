@@ -5,9 +5,9 @@ import (
 	"time"
 
 	"github.com/docker/go-connections/nat"
-	"github.com/hyperhq/engine-api/types/container"
-	"github.com/hyperhq/engine-api/types/network"
-	"github.com/hyperhq/engine-api/types/registry"
+	"github.com/hyperhq/hyper-api/types/container"
+	"github.com/hyperhq/hyper-api/types/network"
+	"github.com/hyperhq/hyper-api/types/registry"
 )
 
 // ContainerCreateResponse contains the information returned to a client on the

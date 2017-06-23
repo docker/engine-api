@@ -13,8 +13,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/hyperhq/engine-api/client"
-	"github.com/hyperhq/engine-api/types"
+	"github.com/hyperhq/hyper-api/client"
+	"github.com/hyperhq/hyper-api/types"
 )
 
 func main() {

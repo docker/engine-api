@@ -10,7 +10,7 @@ import (
 
 	"golang.org/x/net/context"
 
-	"github.com/hyperhq/engine-api/types"
+	"github.com/hyperhq/hyper-api/types"
 )
 
 func TestImagePullReferenceParseError(t *testing.T) {

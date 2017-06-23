@@ -9,7 +9,7 @@ package cancellable
 import (
 	"net/http"
 
-	"github.com/hyperhq/engine-api/client/transport"
+	"github.com/hyperhq/hyper-api/client/transport"
 )
 
 func canceler(client transport.Sender, req *http.Request) func() {

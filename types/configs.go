@@ -1,8 +1,8 @@
 package types
 
 import (
-	"github.com/hyperhq/engine-api/types/container"
-	"github.com/hyperhq/engine-api/types/network"
+	"github.com/hyperhq/hyper-api/types/container"
+	"github.com/hyperhq/hyper-api/types/network"
 )
 
 // configs holds structs used for internal communication between the

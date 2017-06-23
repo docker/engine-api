@@ -3,11 +3,11 @@ package client
 import (
 	"io"
 
-	"github.com/hyperhq/engine-api/types"
-	"github.com/hyperhq/engine-api/types/container"
-	"github.com/hyperhq/engine-api/types/filters"
-	"github.com/hyperhq/engine-api/types/network"
-	"github.com/hyperhq/engine-api/types/registry"
+	"github.com/hyperhq/hyper-api/types"
+	"github.com/hyperhq/hyper-api/types/container"
+	"github.com/hyperhq/hyper-api/types/filters"
+	"github.com/hyperhq/hyper-api/types/network"
+	"github.com/hyperhq/hyper-api/types/registry"
 	"github.com/hyperhq/libcompose/config"
 	"golang.org/x/net/context"
 )

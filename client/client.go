@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/hyperhq/engine-api/client/transport"
+	"github.com/hyperhq/hyper-api/client/transport"
 
 	"github.com/docker/go-connections/tlsconfig"
 )

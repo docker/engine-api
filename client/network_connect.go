@@ -1,8 +1,8 @@
 package client
 
 import (
-	"github.com/hyperhq/engine-api/types"
-	"github.com/hyperhq/engine-api/types/network"
+	"github.com/hyperhq/hyper-api/types"
+	"github.com/hyperhq/hyper-api/types/network"
 	"golang.org/x/net/context"
 )
 

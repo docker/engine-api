@@ -9,7 +9,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/hyperhq/engine-api/client/transport"
+	"github.com/hyperhq/hyper-api/client/transport"
 
 	"golang.org/x/net/context"
 )

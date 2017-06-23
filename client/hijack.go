@@ -10,8 +10,8 @@ import (
 	"time"
 
 	"github.com/docker/go-connections/sockets"
-	"github.com/hyperhq/engine-api/signature"
-	"github.com/hyperhq/engine-api/types"
+	"github.com/hyperhq/hyper-api/signature"
+	"github.com/hyperhq/hyper-api/types"
 	"golang.org/x/net/context"
 )
 

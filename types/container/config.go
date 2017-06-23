@@ -2,7 +2,7 @@ package container
 
 import (
 	"github.com/docker/go-connections/nat"
-	"github.com/hyperhq/engine-api/types/strslice"
+	"github.com/hyperhq/hyper-api/types/strslice"
 )
 
 // Config contains the configuration data about a container.

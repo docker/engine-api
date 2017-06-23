@@ -3,9 +3,9 @@ package types
 import (
 	"time"
 
-	"github.com/hyperhq/engine-api/types/container"
-	"github.com/hyperhq/engine-api/types/filters"
-	"github.com/hyperhq/engine-api/types/network"
+	"github.com/hyperhq/hyper-api/types/container"
+	"github.com/hyperhq/hyper-api/types/filters"
+	"github.com/hyperhq/hyper-api/types/network"
 )
 
 type Cron struct {

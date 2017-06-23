@@ -8,7 +8,7 @@ import (
 
 	"golang.org/x/net/context"
 
-	"github.com/hyperhq/engine-api/types"
+	"github.com/hyperhq/hyper-api/types"
 )
 
 // VolumeInitialize initializes a volume in the docker host.

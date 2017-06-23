@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/url"
 
-	"github.com/hyperhq/engine-api/types"
+	"github.com/hyperhq/hyper-api/types"
 	"golang.org/x/net/context"
 )
 

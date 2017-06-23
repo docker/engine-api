@@ -10,8 +10,8 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/hyperhq/engine-api/client/transport/cancellable"
-	"github.com/hyperhq/engine-api/signature"
+	"github.com/hyperhq/hyper-api/client/transport/cancellable"
+	"github.com/hyperhq/hyper-api/signature"
 	"golang.org/x/net/context"
 )
 

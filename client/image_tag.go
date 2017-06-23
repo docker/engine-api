@@ -8,8 +8,8 @@ import (
 	"golang.org/x/net/context"
 
 	distreference "github.com/docker/distribution/reference"
-	"github.com/hyperhq/engine-api/types"
-	"github.com/hyperhq/engine-api/types/reference"
+	"github.com/hyperhq/hyper-api/types"
+	"github.com/hyperhq/hyper-api/types/reference"
 )
 
 // ImageTag tags an image in the docker host

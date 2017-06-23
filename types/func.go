@@ -4,10 +4,10 @@ import (
 	"time"
 
 	"github.com/docker/go-connections/nat"
-	"github.com/hyperhq/engine-api/types/container"
-	"github.com/hyperhq/engine-api/types/filters"
-	"github.com/hyperhq/engine-api/types/network"
-	"github.com/hyperhq/engine-api/types/strslice"
+	"github.com/hyperhq/hyper-api/types/container"
+	"github.com/hyperhq/hyper-api/types/filters"
+	"github.com/hyperhq/hyper-api/types/network"
+	"github.com/hyperhq/hyper-api/types/strslice"
 )
 
 type FuncConfig struct {

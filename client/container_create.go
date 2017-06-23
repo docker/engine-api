@@ -5,9 +5,9 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/hyperhq/engine-api/types"
-	"github.com/hyperhq/engine-api/types/container"
-	"github.com/hyperhq/engine-api/types/network"
+	"github.com/hyperhq/hyper-api/types"
+	"github.com/hyperhq/hyper-api/types/container"
+	"github.com/hyperhq/hyper-api/types/network"
 	"golang.org/x/net/context"
 )
 
