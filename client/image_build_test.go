@@ -11,9 +11,9 @@ import (
 
 	"golang.org/x/net/context"
 
-	"github.com/docker/engine-api/types"
-	"github.com/docker/engine-api/types/container"
 	"github.com/docker/go-units"
+	"github.com/hyperhq/engine-api/types"
+	"github.com/hyperhq/engine-api/types/container"
 )
 
 func TestImageBuildError(t *testing.T) {

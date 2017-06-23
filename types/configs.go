@@ -1,8 +1,8 @@
 package types
 
 import (
-	"github.com/docker/engine-api/types/container"
-	"github.com/docker/engine-api/types/network"
+	"github.com/hyperhq/engine-api/types/container"
+	"github.com/hyperhq/engine-api/types/network"
 )
 
 // configs holds structs used for internal communication between the
@@ -45,17 +45,9 @@ type ExecConfig struct {
 	Privileged   bool     // Is the container in privileged mode
 	Tty          bool     // Attach standard streams to a tty.
 	AttachStdin  bool     // Attach the standard input, makes possible user interaction
-	AttachStderr bool     // Attach the standard error
-	AttachStdout bool     // Attach the standard output
+	AttachStderr bool     // Attach the standard output
+	AttachStdout bool     // Attach the standard error
 	Detach       bool     // Execute in detach mode
 	DetachKeys   string   // Escape keys for detach
-	Env          []string // Environment variables
 	Cmd          []string // Execution commands and args
-}
-
-// PluginRmConfig holds arguments for the plugin remove
-// operation. This struct is used to tell the backend what operations
-// to perform.
-type PluginRmConfig struct {
-	ForceRemove bool
 }

@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/docker/engine-api/types"
-	"github.com/docker/engine-api/types/container"
+	"github.com/hyperhq/engine-api/types"
+	"github.com/hyperhq/engine-api/types/container"
 	"golang.org/x/net/context"
 )
 

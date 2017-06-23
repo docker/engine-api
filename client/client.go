@@ -8,18 +8,14 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/docker/engine-api/client/transport"
+	"github.com/hyperhq/engine-api/client/transport"
+
 	"github.com/docker/go-connections/tlsconfig"
 )
-
-// DefaultVersion is the version of the current stable API
-const DefaultVersion string = "1.23"
 
 // Client is the API client that performs all operations
 // against a docker server.
 type Client struct {
-	// host holds the server address to connect to
-	host string
 	// proto holds the client protocol i.e. unix.
 	proto string
 	// addr holds the client address.
@@ -28,6 +24,9 @@ type Client struct {
 	basePath string
 	// transport is the interface to send request with, it implements transport.Client.
 	transport transport.Client
+	// Cloud's Config
+	accessKey string
+	secretKey string
 	// version of the server to talk to.
 	version string
 	// custom http headers configured by users.
@@ -64,23 +63,16 @@ func NewEnvClient() (*Client, error) {
 	if host == "" {
 		host = DefaultDockerHost
 	}
-
-	version := os.Getenv("DOCKER_API_VERSION")
-	if version == "" {
-		version = DefaultVersion
-	}
-
-	return NewClient(host, version, client, nil)
+	accessKey := os.Getenv("ACCESSKEY")
+	secretKey := os.Getenv("SECRETKEY")
+	return NewClient(host, os.Getenv("DOCKER_API_VERSION"), client, nil, accessKey, secretKey)
 }
 
 // NewClient initializes a new API client for the given host and API version.
+// It won't send any version information if the version number is empty.
 // It uses the given http client as transport.
 // It also initializes the custom http headers to add to each request.
-//
-// It won't send any version information if the version number is empty. It is
-// highly recommended that you set a version or your client may break if the
-// server is upgraded.
-func NewClient(host string, version string, client *http.Client, httpHeaders map[string]string) (*Client, error) {
+func NewClient(host string, version string, client *http.Client, httpHeaders map[string]string, ak, sk string) (*Client, error) {
 	proto, addr, basePath, err := ParseHost(host)
 	if err != nil {
 		return nil, err
@@ -92,11 +84,12 @@ func NewClient(host string, version string, client *http.Client, httpHeaders map
 	}
 
 	return &Client{
-		host:              host,
 		proto:             proto,
 		addr:              addr,
 		basePath:          basePath,
 		transport:         transport,
+		accessKey:         ak,
+		secretKey:         sk,
 		version:           version,
 		customHTTPHeaders: httpHeaders,
 	}, nil

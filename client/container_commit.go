@@ -6,8 +6,8 @@ import (
 	"net/url"
 
 	distreference "github.com/docker/distribution/reference"
-	"github.com/docker/engine-api/types"
-	"github.com/docker/engine-api/types/reference"
+	"github.com/hyperhq/engine-api/types"
+	"github.com/hyperhq/engine-api/types/reference"
 	"golang.org/x/net/context"
 )
 

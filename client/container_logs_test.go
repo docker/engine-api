@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/docker/engine-api/types"
+	"github.com/hyperhq/engine-api/types"
 
 	"golang.org/x/net/context"
 )

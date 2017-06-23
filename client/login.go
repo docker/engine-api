@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/docker/engine-api/types"
+	"github.com/hyperhq/engine-api/types"
 	"golang.org/x/net/context"
 )
 
@@ -14,7 +14,7 @@ import (
 func (cli *Client) RegistryLogin(ctx context.Context, auth types.AuthConfig) (types.AuthResponse, error) {
 	resp, err := cli.post(ctx, "/auth", url.Values{}, auth, nil)
 
-	if resp.statusCode == http.StatusUnauthorized {
+	if resp != nil && resp.statusCode == http.StatusUnauthorized {
 		return types.AuthResponse{}, unauthorizedError{err}
 	}
 	if err != nil {

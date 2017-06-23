@@ -10,7 +10,7 @@ import (
 
 	"golang.org/x/net/context"
 
-	"github.com/docker/engine-api/types/swarm"
+	"github.com/hyperhq/engine-api/types/swarm"
 )
 
 func TestSwarmUpdateError(t *testing.T) {

@@ -11,8 +11,8 @@ import (
 
 	"golang.org/x/net/context"
 
-	"github.com/docker/engine-api/types"
-	"github.com/docker/engine-api/types/network"
+	"github.com/hyperhq/engine-api/types"
+	"github.com/hyperhq/engine-api/types/network"
 )
 
 func TestNetworkConnectError(t *testing.T) {

@@ -5,7 +5,7 @@ package client
 import (
 	"encoding/json"
 
-	"github.com/docker/engine-api/types"
+	"github.com/hyperhq/engine-api/types"
 	"golang.org/x/net/context"
 )
 

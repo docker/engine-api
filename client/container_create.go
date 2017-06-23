@@ -5,9 +5,9 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/docker/engine-api/types"
-	"github.com/docker/engine-api/types/container"
-	"github.com/docker/engine-api/types/network"
+	"github.com/hyperhq/engine-api/types"
+	"github.com/hyperhq/engine-api/types/container"
+	"github.com/hyperhq/engine-api/types/network"
 	"golang.org/x/net/context"
 )
 
@@ -34,7 +34,7 @@ func (cli *Client) ContainerCreate(ctx context.Context, config *container.Config
 
 	serverResp, err := cli.post(ctx, "/containers/create", query, body, nil)
 	if err != nil {
-		if serverResp.statusCode == 404 && strings.Contains(err.Error(), "No such image") {
+		if serverResp != nil && serverResp.statusCode == 404 && strings.Contains(err.Error(), "No such image") {
 			return response, imageNotFoundError{config.Image}
 		}
 		return response, err

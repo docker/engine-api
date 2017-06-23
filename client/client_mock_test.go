@@ -7,8 +7,8 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/docker/engine-api/client/transport"
-	"github.com/docker/engine-api/types"
+	"github.com/hyperhq/engine-api/client/transport"
+	"github.com/hyperhq/engine-api/types"
 )
 
 type mockClient struct {

@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/docker/engine-api/types"
+	"github.com/hyperhq/engine-api/types"
 	"golang.org/x/net/context"
 )
 
@@ -16,7 +16,7 @@ func (cli *Client) NetworkInspect(ctx context.Context, networkID string) (types.
 	return networkResource, err
 }
 
-// NetworkInspectWithRaw returns the information for a specific network configured in the docker host and its raw representation.
+// NetworkInspectWithRaw returns the information for a specific network configured in the docker host and it's raw representation.
 func (cli *Client) NetworkInspectWithRaw(ctx context.Context, networkID string) (types.NetworkResource, []byte, error) {
 	var networkResource types.NetworkResource
 	resp, err := cli.get(ctx, "/networks/"+networkID, nil, nil)

@@ -5,7 +5,7 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/docker/engine-api/types/swarm"
+	"github.com/hyperhq/engine-api/types/swarm"
 	"golang.org/x/net/context"
 )
 

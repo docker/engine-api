@@ -11,7 +11,7 @@ import (
 
 	"golang.org/x/net/context"
 
-	"github.com/docker/engine-api/types"
+	"github.com/hyperhq/engine-api/types"
 )
 
 func TestContainerExecCreateError(t *testing.T) {
