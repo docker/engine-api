@@ -31,6 +31,9 @@ type Client struct {
 	version string
 	// custom http headers configured by users.
 	customHTTPHeaders map[string]string
+
+	// region
+	region string
 }
 
 // NewEnvClient initializes a new API client based on environment variables.
@@ -65,14 +68,15 @@ func NewEnvClient() (*Client, error) {
 	}
 	accessKey := os.Getenv("ACCESSKEY")
 	secretKey := os.Getenv("SECRETKEY")
-	return NewClient(host, os.Getenv("DOCKER_API_VERSION"), client, nil, accessKey, secretKey)
+	region := os.Getenv("HYPER_REGION")
+	return NewClient(host, os.Getenv("DOCKER_API_VERSION"), client, nil, accessKey, secretKey, region)
 }
 
 // NewClient initializes a new API client for the given host and API version.
 // It won't send any version information if the version number is empty.
 // It uses the given http client as transport.
 // It also initializes the custom http headers to add to each request.
-func NewClient(host string, version string, client *http.Client, httpHeaders map[string]string, ak, sk string) (*Client, error) {
+func NewClient(host string, version string, client *http.Client, httpHeaders map[string]string, ak, sk, region string) (*Client, error) {
 	proto, addr, basePath, err := ParseHost(host)
 	if err != nil {
 		return nil, err
@@ -92,6 +96,7 @@ func NewClient(host string, version string, client *http.Client, httpHeaders map
 		secretKey:         sk,
 		version:           version,
 		customHTTPHeaders: httpHeaders,
+		region:            region,
 	}, nil
 }
 

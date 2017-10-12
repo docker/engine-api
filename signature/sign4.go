@@ -48,13 +48,13 @@ type AuthnHeader struct {
 	Date         string
 }
 
-func Signiture4(secretKey string, req *http.Request, header *AuthnHeader) (bool, error) {
+func Signiture4(secretKey string, req *http.Request, header *AuthnHeader, region string) (bool, error) {
 	meta := &metadata{
 		algorithm:       header.Algorithm,
 		credentialScope: header.Scope,
 		signedHeaders:   header.SignedHeader,
 		date:            header.Date,
-		region:          "us-west-1",
+		region:          region,
 		service:         "hyper",
 	}
 
@@ -70,7 +70,7 @@ func Signiture4(secretKey string, req *http.Request, header *AuthnHeader) (bool,
 	return signature == header.Signature, nil
 }
 
-func Sign4(accessKey, secretKey string, req *http.Request) *http.Request {
+func Sign4(accessKey, secretKey string, req *http.Request, region string) *http.Request {
 
 	prepareRequestV4(req)
 	meta := &metadata{}
@@ -79,7 +79,7 @@ func Sign4(accessKey, secretKey string, req *http.Request) *http.Request {
 	hashedCanonReq := hashedCanonicalRequestV4(req, meta)
 
 	// Task 2
-	stringToSign := stringToSignV4(req, hashedCanonReq, meta)
+	stringToSign := stringToSignV4(req, hashedCanonReq, meta, region)
 
 	// Task 3
 	signingKey := signingKeyV4(secretKey, meta.date, meta.region, meta.service)
@@ -179,13 +179,13 @@ func canonicalRequestV4FromMeta(request *http.Request, meta *metadata) (string, 
 	return canonicalRequest, true
 }
 
-func stringToSignV4(request *http.Request, hashedCanonReq string, meta *metadata) string {
+func stringToSignV4(request *http.Request, hashedCanonReq string, meta *metadata, region string) string {
 	// TASK 2. http://docs.aws.amazon.com/general/latest/gr/sigv4-create-string-to-sign.html
 
 	requestTs := request.Header.Get(headerDate)
 
 	meta.algorithm = metaAlgorithm
-	meta.service, meta.region = serviceAndRegion(request.Host)
+	meta.service, meta.region = serviceAndRegion(request.Host, region)
 	meta.date = tsDateV4(requestTs)
 	meta.credentialScope = concat("/", meta.date, meta.region, meta.service, keyPartsRequest)
 
@@ -343,9 +343,9 @@ func normquery(v url.Values) string {
 }
 
 // serviceAndRegion parsers a hostname to find out which ones it is.
-func serviceAndRegion(host string) (service string, region string) {
+func serviceAndRegion(host, r string) (service string, region string) {
 	// These are the defaults if the hostname doesn't suggest something else
-	region = "us-west-1"
+	region = r
 	service = "hyper"
 
 	// region.hyper.sh
