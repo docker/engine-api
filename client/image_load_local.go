@@ -10,8 +10,8 @@ import (
 	"net/url"
 	"strconv"
 
+	"context"
 	"github.com/hyperhq/hyper-api/types"
-	"golang.org/x/net/context"
 )
 
 func (cli *Client) ImageSaveTarFromDaemon(ctx context.Context, imageIDs []string) (io.ReadCloser, error) {

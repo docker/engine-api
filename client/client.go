@@ -8,9 +8,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/hyperhq/hyper-api/client/transport"
-
 	"github.com/docker/go-connections/tlsconfig"
+	"github.com/hyperhq/hyper-api/client/transport"
 )
 
 // Client is the API client that performs all operations

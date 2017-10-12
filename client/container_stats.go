@@ -4,7 +4,7 @@ import (
 	"io"
 	"net/url"
 
-	"golang.org/x/net/context"
+	"context"
 )
 
 // ContainerStats returns near realtime stats for a given container.

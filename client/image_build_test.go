@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"golang.org/x/net/context"
+	"context"
 
 	"github.com/docker/go-units"
 	"github.com/hyperhq/hyper-api/types"

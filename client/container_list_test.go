@@ -9,9 +9,9 @@ import (
 	"strings"
 	"testing"
 
+	"context"
 	"github.com/hyperhq/hyper-api/types"
 	"github.com/hyperhq/hyper-api/types/filters"
-	"golang.org/x/net/context"
 )
 
 func TestContainerListError(t *testing.T) {

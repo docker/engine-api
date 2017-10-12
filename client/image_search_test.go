@@ -2,15 +2,14 @@ package client
 
 import (
 	"bytes"
+	"context"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strings"
 	"testing"
 
-	"golang.org/x/net/context"
-
-	"encoding/json"
 	"github.com/hyperhq/hyper-api/types"
 	"github.com/hyperhq/hyper-api/types/filters"
 	"github.com/hyperhq/hyper-api/types/registry"

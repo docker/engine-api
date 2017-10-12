@@ -2,6 +2,7 @@ package client
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -12,7 +13,6 @@ import (
 
 	"github.com/hyperhq/hyper-api/client/transport/cancellable"
 	"github.com/hyperhq/hyper-api/signature"
-	"golang.org/x/net/context"
 )
 
 // serverResponse is a wrapper for http API responses.

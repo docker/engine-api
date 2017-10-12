@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
+	"context"
 	"github.com/hyperhq/hyper-api/types"
-	"golang.org/x/net/context"
 )
 
 func TestContainerRemoveError(t *testing.T) {

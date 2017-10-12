@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"golang.org/x/net/context"
+	"context"
 
 	distreference "github.com/docker/distribution/reference"
 	"github.com/hyperhq/hyper-api/types"

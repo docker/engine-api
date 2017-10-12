@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"golang.org/x/net/context"
+	"context"
 )
 
 func TestContainerStopError(t *testing.T) {

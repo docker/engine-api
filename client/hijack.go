@@ -1,6 +1,7 @@
 package client
 
 import (
+	"context"
 	"crypto/tls"
 	"errors"
 	"net"
@@ -12,7 +13,6 @@ import (
 	"github.com/docker/go-connections/sockets"
 	"github.com/hyperhq/hyper-api/signature"
 	"github.com/hyperhq/hyper-api/types"
-	"golang.org/x/net/context"
 )
 
 // tlsClientCon holds tls information and a dialed connection.

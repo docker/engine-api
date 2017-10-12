@@ -1,6 +1,7 @@
 package client
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"net/url"
@@ -8,7 +9,6 @@ import (
 	distreference "github.com/docker/distribution/reference"
 	"github.com/hyperhq/hyper-api/types"
 	"github.com/hyperhq/hyper-api/types/reference"
-	"golang.org/x/net/context"
 )
 
 // ContainerCommit applies changes into a container and creates a new tagged image.

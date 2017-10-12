@@ -2,6 +2,7 @@ package client
 
 import (
 	"bytes"
+	"context"
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
@@ -17,13 +18,12 @@ import (
 
 	"github.com/hyperhq/hyper-api/types"
 	"github.com/hyperhq/hyper-api/types/filters"
-	"golang.org/x/net/context"
 )
 
-func newFuncEndpointRequest(method, subpath string, query url.Values, body io.Reader) (*http.Request, error) {
+func newFuncEndpointRequest(region, method, subpath string, query url.Values, body io.Reader) (*http.Request, error) {
 	endpoint := os.Getenv("HYPER_FUNC_ENDPOINT")
 	if endpoint == "" {
-		endpoint = "us-west-1.hyperfunc.io"
+		endpoint = region + ".hyperfunc.io"
 	}
 	apiURL, err := url.Parse(endpoint)
 	if err != nil {
@@ -182,7 +182,7 @@ func (cli *Client) FuncInspectWithCallId(ctx context.Context, id string) (*types
 	return &fn, err
 }
 
-func (cli *Client) FuncCall(ctx context.Context, name string, stdin io.Reader, sync bool) (io.ReadCloser, error) {
+func (cli *Client) FuncCall(ctx context.Context, region, name string, stdin io.Reader, sync bool) (io.ReadCloser, error) {
 	fn, _, err := cli.FuncInspectWithRaw(ctx, name)
 	if err != nil {
 		return nil, err
@@ -191,7 +191,7 @@ func (cli *Client) FuncCall(ctx context.Context, name string, stdin io.Reader, s
 	if sync {
 		subpath += "/sync"
 	}
-	req, err := newFuncEndpointRequest("POST", path.Join("call", name, fn.UUID, subpath), nil, stdin)
+	req, err := newFuncEndpointRequest(region, "POST", path.Join("call", name, fn.UUID, subpath), nil, stdin)
 	if err != nil {
 		return nil, err
 	}
@@ -202,7 +202,7 @@ func (cli *Client) FuncCall(ctx context.Context, name string, stdin io.Reader, s
 	return resp.Body, nil
 }
 
-func (cli *Client) FuncGet(ctx context.Context, callId string, wait bool) (io.ReadCloser, error) {
+func (cli *Client) FuncGet(ctx context.Context, region, callId string, wait bool) (io.ReadCloser, error) {
 	fn, err := cli.FuncInspectWithCallId(ctx, callId)
 	if err != nil {
 		return nil, err
@@ -211,7 +211,7 @@ func (cli *Client) FuncGet(ctx context.Context, callId string, wait bool) (io.Re
 	if wait {
 		subpath += "/wait"
 	}
-	req, err := newFuncEndpointRequest("GET", path.Join("output", fn.Name, fn.UUID, subpath), nil, nil)
+	req, err := newFuncEndpointRequest(region, "GET", path.Join("output", fn.Name, fn.UUID, subpath), nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -222,7 +222,7 @@ func (cli *Client) FuncGet(ctx context.Context, callId string, wait bool) (io.Re
 	return resp.Body, nil
 }
 
-func (cli *Client) FuncLogs(ctx context.Context, name, callId string, follow bool, tail string) (io.ReadCloser, error) {
+func (cli *Client) FuncLogs(ctx context.Context, region, name, callId string, follow bool, tail string) (io.ReadCloser, error) {
 	fn, _, err := cli.FuncInspectWithRaw(ctx, name)
 	if err != nil {
 		return nil, err
@@ -237,7 +237,7 @@ func (cli *Client) FuncLogs(ctx context.Context, name, callId string, follow boo
 	if tail != "" {
 		query.Add("tail", tail)
 	}
-	req, err := newFuncEndpointRequest("GET", path.Join("logs", name, fn.UUID, ""), query, nil)
+	req, err := newFuncEndpointRequest(region, "GET", path.Join("logs", name, fn.UUID, ""), query, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -255,7 +255,7 @@ func (cli *Client) FuncLogs(ctx context.Context, name, callId string, follow boo
 	return resp.Body, nil
 }
 
-func (cli *Client) FuncStatus(ctx context.Context, name string) (*types.FuncStatusResponse, error) {
+func (cli *Client) FuncStatus(ctx context.Context, region, name string) (*types.FuncStatusResponse, error) {
 	fn, _, err := cli.FuncInspectWithRaw(ctx, name)
 	if err != nil {
 		return nil, err
@@ -263,7 +263,7 @@ func (cli *Client) FuncStatus(ctx context.Context, name string) (*types.FuncStat
 
 	query := url.Values{}
 	query.Set("list", strconv.FormatBool(false))
-	req, err := newFuncEndpointRequest("GET", path.Join("status", name, fn.UUID), query, nil)
+	req, err := newFuncEndpointRequest(region, "GET", path.Join("status", name, fn.UUID), query, nil)
 	if err != nil {
 		return nil, err
 	}

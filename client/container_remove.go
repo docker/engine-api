@@ -1,11 +1,11 @@
 package client
 
 import (
+	"context"
 	"encoding/json"
 	"net/url"
 
 	"github.com/hyperhq/hyper-api/types"
-	"golang.org/x/net/context"
 )
 
 // ContainerRemove kills and removes a container from the docker host.

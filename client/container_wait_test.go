@@ -13,7 +13,7 @@ import (
 
 	"github.com/hyperhq/hyper-api/types"
 
-	"golang.org/x/net/context"
+	"context"
 )
 
 func TestContainerWaitError(t *testing.T) {

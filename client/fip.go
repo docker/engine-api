@@ -1,12 +1,12 @@
 package client
 
 import (
+	"context"
 	"encoding/json"
 	"net/url"
 
 	"github.com/hyperhq/hyper-api/types"
 	"github.com/hyperhq/hyper-api/types/filters"
-	"golang.org/x/net/context"
 )
 
 func (cli *Client) FipAllocate(ctx context.Context, count string) ([]string, error) {

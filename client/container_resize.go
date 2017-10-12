@@ -4,8 +4,8 @@ import (
 	"net/url"
 	"strconv"
 
+	"context"
 	"github.com/hyperhq/hyper-api/types"
-	"golang.org/x/net/context"
 )
 
 // ContainerResize changes the size of the tty for a container.

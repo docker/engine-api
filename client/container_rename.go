@@ -3,7 +3,7 @@ package client
 import (
 	"net/url"
 
-	"golang.org/x/net/context"
+	"context"
 )
 
 // ContainerRename changes the name of a given container.

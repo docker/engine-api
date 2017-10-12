@@ -1,8 +1,6 @@
 package client
 
-import (
-	"golang.org/x/net/context"
-)
+import "context"
 
 // CheckpointDelete deletes the checkpoint with the given name from the given container
 func (cli *Client) CheckpointDelete(ctx context.Context, containerID string, checkpointID string) error {

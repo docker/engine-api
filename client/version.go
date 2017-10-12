@@ -1,10 +1,10 @@
 package client
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/hyperhq/hyper-api/types"
-	"golang.org/x/net/context"
 )
 
 // ServerVersion returns information of the docker client and server host.

@@ -3,7 +3,7 @@ package client
 import (
 	"net/url"
 
-	"golang.org/x/net/context"
+	"context"
 )
 
 // ContainerStart sends a request to the docker daemon to start a container.

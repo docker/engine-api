@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"net/url"
 
+	"context"
 	"github.com/hyperhq/hyper-api/types"
 	"github.com/hyperhq/hyper-api/types/filters"
-	"golang.org/x/net/context"
 )
 
 // NetworkList returns the list of networks configured in the docker host.

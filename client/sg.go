@@ -1,12 +1,12 @@
 package client
 
 import (
+	"context"
 	"encoding/json"
 	"io"
 	"net/url"
 
 	"github.com/hyperhq/hyper-api/types"
-	"golang.org/x/net/context"
 )
 
 func (cli *Client) SgCreate(ctx context.Context, name string, data io.Reader) error {

@@ -1,10 +1,10 @@
 package client
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/hyperhq/hyper-api/types"
-	"golang.org/x/net/context"
 )
 
 // VolumeCreate creates a volume in the docker host.

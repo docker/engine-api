@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/url"
 
+	"context"
 	"github.com/hyperhq/hyper-api/types"
-	"golang.org/x/net/context"
 )
 
 // ContainerDiff shows differences in a container filesystem since it was started.

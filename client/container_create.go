@@ -5,10 +5,10 @@ import (
 	"net/url"
 	"strings"
 
+	"context"
 	"github.com/hyperhq/hyper-api/types"
 	"github.com/hyperhq/hyper-api/types/container"
 	"github.com/hyperhq/hyper-api/types/network"
-	"golang.org/x/net/context"
 )
 
 type configWrapper struct {

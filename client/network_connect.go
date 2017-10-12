@@ -1,9 +1,9 @@
 package client
 
 import (
+	"context"
 	"github.com/hyperhq/hyper-api/types"
 	"github.com/hyperhq/hyper-api/types/network"
-	"golang.org/x/net/context"
 )
 
 // NetworkConnect connects a container to an existent network in the docker host.
