@@ -1,6 +1,7 @@
 package client
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/url"
@@ -8,7 +9,6 @@ import (
 	"github.com/hyperhq/hyper-api/types"
 	"github.com/hyperhq/hyper-api/types/filters"
 	"github.com/hyperhq/hyper-api/types/registry"
-	"golang.org/x/net/context"
 )
 
 // ImageSearch makes the docker host to search by a term in a remote registry.

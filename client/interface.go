@@ -1,6 +1,7 @@
 package client
 
 import (
+	"context"
 	"io"
 
 	"github.com/hyperhq/hyper-api/types"
@@ -9,7 +10,6 @@ import (
 	"github.com/hyperhq/hyper-api/types/network"
 	"github.com/hyperhq/hyper-api/types/registry"
 	"github.com/hyperhq/libcompose/config"
-	"golang.org/x/net/context"
 )
 
 // APIClient is an interface that clients that talk with a docker server must implement.
@@ -129,10 +129,10 @@ type APIClient interface {
 	FuncList(ctx context.Context, opts types.FuncListOptions) ([]types.Func, error)
 	FuncInspect(ctx context.Context, name string) (types.Func, error)
 	FuncInspectWithRaw(ctx context.Context, name string) (types.Func, []byte, error)
-	FuncCall(ctx context.Context, name string, stdin io.Reader, sync bool) (io.ReadCloser, error)
-	FuncGet(ctx context.Context, callId string, wait bool) (io.ReadCloser, error)
-	FuncLogs(ctx context.Context, name, callId string, follow bool, tail string) (io.ReadCloser, error)
-	FuncStatus(ctx context.Context, name string) (*types.FuncStatusResponse, error)
+	FuncCall(ctx context.Context, region, name string, stdin io.Reader, sync bool) (io.ReadCloser, error)
+	FuncGet(ctx context.Context, region, callID string, wait bool) (io.ReadCloser, error)
+	FuncLogs(ctx context.Context, region, name, callID string, follow bool, tail string) (io.ReadCloser, error)
+	FuncStatus(ctx context.Context, region, name string) (*types.FuncStatusResponse, error)
 }
 
 // Ensure that Client always implements APIClient.

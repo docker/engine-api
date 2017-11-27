@@ -3,7 +3,7 @@ package client
 import (
 	"encoding/json"
 
-	"golang.org/x/net/context"
+	"context"
 
 	"github.com/hyperhq/hyper-api/types"
 )

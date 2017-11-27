@@ -9,9 +9,9 @@ import (
 	"strings"
 	"testing"
 
+	"context"
 	"github.com/hyperhq/hyper-api/types"
 	"github.com/hyperhq/hyper-api/types/container"
-	"golang.org/x/net/context"
 )
 
 func TestContainerCreateError(t *testing.T) {

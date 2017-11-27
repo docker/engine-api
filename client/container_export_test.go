@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"golang.org/x/net/context"
+	"context"
 )
 
 func TestContainerExportError(t *testing.T) {

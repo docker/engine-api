@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"golang.org/x/net/context"
+	"context"
 
 	"github.com/hyperhq/hyper-api/types"
 	"github.com/hyperhq/hyper-api/types/network"

@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"net/url"
 
+	"context"
 	"github.com/hyperhq/hyper-api/types"
 	"github.com/hyperhq/hyper-api/types/filters"
-	"golang.org/x/net/context"
 )
 
 // CronCreate creates a cron in the Hyper_.

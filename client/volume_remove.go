@@ -1,6 +1,6 @@
 package client
 
-import "golang.org/x/net/context"
+import "context"
 
 // VolumeRemove removes a volume from the docker host.
 func (cli *Client) VolumeRemove(ctx context.Context, volumeID string) error {

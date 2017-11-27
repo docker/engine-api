@@ -5,7 +5,7 @@ import (
 	"net/url"
 	"time"
 
-	"golang.org/x/net/context"
+	"context"
 
 	"github.com/hyperhq/hyper-api/types"
 	"github.com/hyperhq/hyper-api/types/filters"

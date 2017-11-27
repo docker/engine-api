@@ -1,6 +1,6 @@
 package client
 
-import "golang.org/x/net/context"
+import "context"
 
 // ContainerUpdate updates resources of a container
 func (cli *Client) ContainerUpdate(ctx context.Context, containerID string, updateConfig interface{}) error {

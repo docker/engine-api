@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
+	"context"
 	"github.com/hyperhq/hyper-api/types"
-	"golang.org/x/net/context"
 )
 
 // TestSetHostHeader should set fake host for local communications, set real host

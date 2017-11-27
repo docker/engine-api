@@ -6,8 +6,8 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	"context"
 	"github.com/hyperhq/hyper-api/types"
-	"golang.org/x/net/context"
 )
 
 // NetworkInspect returns the information for a specific network configured in the docker host.

@@ -1,8 +1,8 @@
 package client
 
 import (
+	"context"
 	"github.com/hyperhq/hyper-api/types"
-	"golang.org/x/net/context"
 )
 
 // NetworkDisconnect disconnects a container from an existent network in the docker host.

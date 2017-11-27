@@ -3,8 +3,8 @@ package client
 import (
 	"encoding/json"
 
+	"context"
 	"github.com/hyperhq/hyper-api/types"
-	"golang.org/x/net/context"
 )
 
 // NetworkCreate creates a new network in the docker host.

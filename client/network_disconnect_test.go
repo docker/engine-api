@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
+	"context"
 	"github.com/hyperhq/hyper-api/types"
-	"golang.org/x/net/context"
 )
 
 func TestNetworkDisconnectError(t *testing.T) {

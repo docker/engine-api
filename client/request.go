@@ -2,6 +2,7 @@ package client
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -12,7 +13,6 @@ import (
 
 	"github.com/hyperhq/hyper-api/client/transport/cancellable"
 	"github.com/hyperhq/hyper-api/signature"
-	"golang.org/x/net/context"
 )
 
 // serverResponse is a wrapper for http API responses.
@@ -102,7 +102,7 @@ func (cli *Client) sendClientRequest(ctx context.Context, method, path string, q
 		req.Header.Set("Content-Type", "text/plain")
 	}
 
-	req = signature.Sign4(cli.accessKey, cli.secretKey, req)
+	req = signature.Sign4(cli.accessKey, cli.secretKey, req, cli.region)
 	resp, err := cancellable.Do(ctx, cli.transport, req)
 
 	if err != nil {

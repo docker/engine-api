@@ -9,7 +9,7 @@ import (
 	"regexp"
 	"strconv"
 
-	"golang.org/x/net/context"
+	"context"
 
 	"github.com/hyperhq/hyper-api/types"
 	"github.com/hyperhq/hyper-api/types/container"

@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"net/url"
 
+	"context"
 	"github.com/hyperhq/hyper-api/types"
 	"github.com/hyperhq/hyper-api/types/filters"
-	"golang.org/x/net/context"
 )
 
 // ImageList returns a list of images in the docker host.

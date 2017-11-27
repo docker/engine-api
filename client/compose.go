@@ -1,6 +1,7 @@
 package client
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"net/url"
@@ -8,7 +9,6 @@ import (
 
 	"github.com/hyperhq/hyper-api/types"
 	"github.com/hyperhq/libcompose/config"
-	"golang.org/x/net/context"
 )
 
 type composeConfigWrapper struct {

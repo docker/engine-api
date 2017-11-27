@@ -1,11 +1,10 @@
 package client
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"net/url"
-
-	"golang.org/x/net/context"
 
 	distreference "github.com/docker/distribution/reference"
 	"github.com/hyperhq/hyper-api/types"

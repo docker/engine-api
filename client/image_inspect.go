@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"net/url"
 
+	"context"
 	"github.com/hyperhq/hyper-api/types"
-	"golang.org/x/net/context"
 )
 
 // ImageInspectWithRaw returns the image information and its raw representation.

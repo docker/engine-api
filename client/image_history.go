@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/url"
 
+	"context"
 	"github.com/hyperhq/hyper-api/types"
-	"golang.org/x/net/context"
 )
 
 // ImageHistory returns the changes in an image in history format.

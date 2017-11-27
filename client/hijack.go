@@ -1,6 +1,7 @@
 package client
 
 import (
+	"context"
 	"crypto/tls"
 	"errors"
 	"net"
@@ -12,7 +13,6 @@ import (
 	"github.com/docker/go-connections/sockets"
 	"github.com/hyperhq/hyper-api/signature"
 	"github.com/hyperhq/hyper-api/types"
-	"golang.org/x/net/context"
 )
 
 // tlsClientCon holds tls information and a dialed connection.
@@ -46,7 +46,7 @@ func (cli *Client) postHijacked(ctx context.Context, path string, query url.Valu
 	req.Header.Set("Connection", "Upgrade")
 	req.Header.Set("Upgrade", "tcp")
 
-	req = signature.Sign4(cli.accessKey, cli.secretKey, req)
+	req = signature.Sign4(cli.accessKey, cli.secretKey, req, cli.region)
 	conn, err := dial(cli.proto, cli.addr, cli.transport.TLSConfig())
 
 	if err != nil {

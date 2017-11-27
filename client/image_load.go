@@ -3,8 +3,8 @@ package client
 import (
 	"net/url"
 
+	"context"
 	"github.com/hyperhq/hyper-api/types"
-	"golang.org/x/net/context"
 )
 
 // ImageLoad loads an image in the docker host from the client host.

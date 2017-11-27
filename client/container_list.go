@@ -5,9 +5,9 @@ import (
 	"net/url"
 	"strconv"
 
+	"context"
 	"github.com/hyperhq/hyper-api/types"
 	"github.com/hyperhq/hyper-api/types/filters"
-	"golang.org/x/net/context"
 )
 
 // ContainerList returns the list of containers in the docker host.

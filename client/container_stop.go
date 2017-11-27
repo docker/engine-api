@@ -4,7 +4,7 @@ import (
 	"net/url"
 	"strconv"
 
-	"golang.org/x/net/context"
+	"context"
 )
 
 // ContainerStop stops a container without terminating the process.

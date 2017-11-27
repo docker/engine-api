@@ -4,7 +4,7 @@ import (
 	"io"
 	"net/url"
 
-	"golang.org/x/net/context"
+	"context"
 )
 
 // ContainerExport retrieves the raw contents of a container

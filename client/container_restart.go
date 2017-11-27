@@ -4,7 +4,7 @@ import (
 	"net/url"
 	"strconv"
 
-	"golang.org/x/net/context"
+	"context"
 )
 
 // ContainerRestart stops and starts a container again.
