@@ -560,3 +560,29 @@ type SecurityGroup struct {
 	// The rules which determine how this security group operates.
 	Rules []Rule `json:"rules" yaml:"rules"`
 }
+
+// PodCreateResponse contains the information returned to a client on the
+// creation of a new container.
+type PodCreateResponse struct {
+	// ID is the ID of the created container.
+	PodName string `json:"pod"`
+	ID      string `json:"Id"`
+
+	// Warnings are any warnings encountered during the creation of the container.
+	Warnings []string `json:"Warnings"`
+}
+
+// PodExecCreateResponse contains response of Remote API:
+type PodExecCreateResponse struct {
+	// ID is the exec ID.
+	ID string `json:"Id"`
+}
+
+// ContainerExecInspect holds information returned by exec inspect.
+type PodExecInspect struct {
+	ExecID      string
+	PodName     string
+	ContainerID string
+	Running     bool
+	ExitCode    int
+}

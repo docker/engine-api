@@ -13,6 +13,8 @@ import (
 
 	"github.com/hyperhq/hyper-api/client/transport/cancellable"
 	"github.com/hyperhq/hyper-api/signature"
+
+	"github.com/golang/glog"
 )
 
 // serverResponse is a wrapper for http API responses.
@@ -80,9 +82,14 @@ func (cli *Client) sendClientRequest(ctx context.Context, method, path string, q
 		statusCode: -1,
 	}
 
+	bodyBytes := []byte{}
 	expectedPayload := (method == "POST" || method == "PUT")
 	if expectedPayload && body == nil {
 		body = bytes.NewReader([]byte{})
+	}
+	if body != nil {
+		bodyBytes, _ = ioutil.ReadAll(body)
+		body = ioutil.NopCloser(bytes.NewBuffer(bodyBytes))
 	}
 
 	req, err := cli.newRequest(method, path, query, body, headers)
@@ -103,6 +110,12 @@ func (cli *Client) sendClientRequest(ctx context.Context, method, path string, q
 	}
 
 	req = signature.Sign4(cli.accessKey, cli.secretKey, req, cli.region)
+
+	if glog.V(7) {
+		curlStr := cli.generateCURL(req, method, string(bodyBytes))
+		fmt.Println(strings.Join(curlStr, "\\\n"))
+	}
+
 	resp, err := cancellable.Do(ctx, cli.transport, req)
 
 	if err != nil {
@@ -139,6 +152,20 @@ func (cli *Client) sendClientRequest(ctx context.Context, method, path string, q
 	serverResp.body = resp.Body
 	serverResp.header = resp.Header
 	return serverResp, nil
+}
+
+func (cli *Client) generateCURL(req *http.Request, method string, postData string) []string {
+	var curlStr []string
+	curlStr = append(curlStr, fmt.Sprint("[REQUEST]: \ncurl -v -k "))
+	curlStr = append(curlStr, fmt.Sprintf("  -X %v ", method))
+	for k, v := range req.Header {
+		curlStr = append(curlStr, fmt.Sprintf("  -H \"%v: %v\" ", k, v[0]))
+	}
+	if req.Body != nil {
+		curlStr = append(curlStr, fmt.Sprintf("  -d '%v' ", postData))
+	}
+	curlStr = append(curlStr, fmt.Sprintf("  https://%v%v", req.URL.Host, req.URL.RequestURI()))
+	return curlStr
 }
 
 func (cli *Client) newRequest(method, path string, query url.Values, body io.Reader, headers map[string][]string) (*http.Request, error) {

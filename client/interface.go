@@ -9,7 +9,6 @@ import (
 	"github.com/hyperhq/hyper-api/types/filters"
 	"github.com/hyperhq/hyper-api/types/network"
 	"github.com/hyperhq/hyper-api/types/registry"
-	"github.com/hyperhq/libcompose/config"
 )
 
 // APIClient is an interface that clients that talk with a docker server must implement.
@@ -101,14 +100,6 @@ type APIClient interface {
 	SgInspect(ctx context.Context, name string) (*types.SecurityGroup, error)
 	SgLs(ctx context.Context) ([]types.SecurityGroup, error)
 
-	ComposeUp(project string, services []string, c *config.ServiceConfigs, vc map[string]*config.VolumeConfig, nc map[string]*config.NetworkConfig, au map[string]types.AuthConfig, forcerecreate, norecreate bool) (io.ReadCloser, error)
-	ComposeDown(p string, services []string, rmi string, vol, rmorphans bool) (io.ReadCloser, error)
-	ComposeCreate(project string, services []string, c *config.ServiceConfigs, vc map[string]*config.VolumeConfig, nc map[string]*config.NetworkConfig, au map[string]types.AuthConfig, forcerecreate, norecreate bool) (io.ReadCloser, error)
-	ComposeRm(p string, services []string, rmVol bool) (io.ReadCloser, error)
-	ComposeStart(p string, services []string) (io.ReadCloser, error)
-	ComposeStop(p string, services []string, timeout int) (io.ReadCloser, error)
-	ComposeKill(p string, services []string, signal string) (io.ReadCloser, error)
-
 	ServiceCreate(ctx context.Context, sv types.Service) (types.Service, error)
 	ServiceUpdate(ctx context.Context, name string, sv types.ServiceUpdate) (types.Service, error)
 	ServiceDelete(ctx context.Context, id string, keep bool) error
@@ -133,6 +124,12 @@ type APIClient interface {
 	FuncGet(ctx context.Context, region, callID string, wait bool) (io.ReadCloser, error)
 	FuncLogs(ctx context.Context, region, name, callID string, follow bool, tail string) (io.ReadCloser, error)
 	FuncStatus(ctx context.Context, region, name string) (*types.FuncStatusResponse, error)
+
+	PodExecCreate(ctx context.Context, pod, container string, config types.ExecConfig) (types.PodExecCreateResponse, error)
+	PodExecAttach(ctx context.Context, execID string, config types.ExecConfig) (types.HijackedResponse, error)
+	PodExecInspect(ctx context.Context, execID string) (types.PodExecInspect, error)
+	PodExecResize(ctx context.Context, execID string, options types.ResizeOptions) error
+	PodExecStart(ctx context.Context, execID string, config types.ExecStartCheck) error
 }
 
 // Ensure that Client always implements APIClient.

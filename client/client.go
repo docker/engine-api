@@ -8,8 +8,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/docker/go-connections/tlsconfig"
 	"github.com/hyperhq/hyper-api/client/transport"
+
+	"github.com/docker/go-connections/tlsconfig"
 )
 
 // Client is the API client that performs all operations
@@ -104,8 +105,7 @@ func NewClient(host string, version string, client *http.Client, httpHeaders map
 func (cli *Client) getAPIPath(p string, query url.Values) string {
 	var apiPath string
 	if cli.version != "" {
-		v := strings.TrimPrefix(cli.version, "v")
-		apiPath = fmt.Sprintf("%s/v%s%s", cli.basePath, v, p)
+		apiPath = fmt.Sprintf("%s/%s%s", cli.basePath, cli.version, p)
 	} else {
 		apiPath = fmt.Sprintf("%s%s", cli.basePath, p)
 	}

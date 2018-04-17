@@ -3,16 +3,20 @@ package client
 import (
 	"context"
 	"crypto/tls"
+	"encoding/json"
 	"errors"
+	"fmt"
 	"net"
 	"net/http/httputil"
 	"net/url"
 	"strings"
 	"time"
 
-	"github.com/docker/go-connections/sockets"
 	"github.com/hyperhq/hyper-api/signature"
 	"github.com/hyperhq/hyper-api/types"
+
+	"github.com/docker/go-connections/sockets"
+	"github.com/golang/glog"
 )
 
 // tlsClientCon holds tls information and a dialed connection.
@@ -47,6 +51,21 @@ func (cli *Client) postHijacked(ctx context.Context, path string, query url.Valu
 	req.Header.Set("Upgrade", "tcp")
 
 	req = signature.Sign4(cli.accessKey, cli.secretKey, req, cli.region)
+
+	if glog.V(7) {
+		bodyBytes, err := json.Marshal(body)
+		if err != nil {
+			return types.HijackedResponse{}, err
+		}
+		curlStr := cli.generateCURL(req, "POST", string(bodyBytes))
+		fmt.Println(strings.Join(curlStr, "\\\n"))
+	}
+
+	//patch
+	if cli.proto == "https" || cli.proto == "http" {
+		cli.proto = "tcp"
+	}
+
 	conn, err := dial(cli.proto, cli.addr, cli.transport.TLSConfig())
 
 	if err != nil {
