@@ -4,10 +4,10 @@ import (
 	"io"
 	"net/url"
 
-	"golang.org/x/net/context"
+	"context"
 
-	"github.com/docker/engine-api/types"
-	"github.com/docker/engine-api/types/reference"
+	"github.com/hyperhq/hyper-api/types"
+	"github.com/hyperhq/hyper-api/types/reference"
 )
 
 // ImageCreate creates a new image based in the parent options.
@@ -28,7 +28,7 @@ func (cli *Client) ImageCreate(ctx context.Context, parentReference string, opti
 	return resp.body, nil
 }
 
-func (cli *Client) tryImageCreate(ctx context.Context, query url.Values, registryAuth string) (serverResponse, error) {
+func (cli *Client) tryImageCreate(ctx context.Context, query url.Values, registryAuth string) (*serverResponse, error) {
 	headers := map[string][]string{"X-Registry-Auth": {registryAuth}}
 	return cli.post(ctx, "/images/create", query, nil, headers)
 }

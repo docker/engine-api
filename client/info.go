@@ -1,12 +1,12 @@
 package client
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/url"
 
-	"github.com/docker/engine-api/types"
-	"golang.org/x/net/context"
+	"github.com/hyperhq/hyper-api/types"
 )
 
 // Info returns information about the docker server.

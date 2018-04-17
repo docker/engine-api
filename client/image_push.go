@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"net/url"
 
-	"golang.org/x/net/context"
+	"context"
 
 	distreference "github.com/docker/distribution/reference"
-	"github.com/docker/engine-api/types"
+	"github.com/hyperhq/hyper-api/types"
 )
 
 // ImagePush requests the docker host to push an image to a remote registry.
@@ -48,7 +48,7 @@ func (cli *Client) ImagePush(ctx context.Context, ref string, options types.Imag
 	return resp.body, nil
 }
 
-func (cli *Client) tryImagePush(ctx context.Context, imageID string, query url.Values, registryAuth string) (serverResponse, error) {
+func (cli *Client) tryImagePush(ctx context.Context, imageID string, query url.Values, registryAuth string) (*serverResponse, error) {
 	headers := map[string][]string{"X-Registry-Auth": {registryAuth}}
 	return cli.post(ctx, "/images/"+imageID+"/push", query, nil, headers)
 }

@@ -9,10 +9,10 @@ import (
 	"strings"
 	"testing"
 
-	"golang.org/x/net/context"
+	"context"
 
-	"github.com/docker/engine-api/types"
-	"github.com/docker/engine-api/types/network"
+	"github.com/hyperhq/hyper-api/types"
+	"github.com/hyperhq/hyper-api/types/network"
 )
 
 func TestNetworkConnectError(t *testing.T) {

@@ -5,11 +5,11 @@ import (
 	"net/url"
 	"time"
 
-	"golang.org/x/net/context"
+	"context"
 
-	"github.com/docker/engine-api/types"
-	"github.com/docker/engine-api/types/filters"
-	timetypes "github.com/docker/engine-api/types/time"
+	"github.com/hyperhq/hyper-api/types"
+	"github.com/hyperhq/hyper-api/types/filters"
+	timetypes "github.com/hyperhq/hyper-api/types/time"
 )
 
 // Events returns a stream of events in the daemon in a ReadCloser.

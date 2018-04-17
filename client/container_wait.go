@@ -3,9 +3,9 @@ package client
 import (
 	"encoding/json"
 
-	"golang.org/x/net/context"
+	"context"
 
-	"github.com/docker/engine-api/types"
+	"github.com/hyperhq/hyper-api/types"
 )
 
 // ContainerWait pauses execution until a container exits.

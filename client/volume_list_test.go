@@ -2,6 +2,7 @@ package client
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -9,9 +10,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/docker/engine-api/types"
-	"github.com/docker/engine-api/types/filters"
-	"golang.org/x/net/context"
+	"github.com/hyperhq/hyper-api/types"
+	"github.com/hyperhq/hyper-api/types/filters"
 )
 
 func TestVolumeListError(t *testing.T) {

@@ -3,8 +3,8 @@ package client
 import (
 	"encoding/json"
 
-	"github.com/docker/engine-api/types"
-	"golang.org/x/net/context"
+	"context"
+	"github.com/hyperhq/hyper-api/types"
 )
 
 // CheckpointList returns the volumes configured in the docker host.

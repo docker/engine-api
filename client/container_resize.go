@@ -4,8 +4,8 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/docker/engine-api/types"
-	"golang.org/x/net/context"
+	"context"
+	"github.com/hyperhq/hyper-api/types"
 )
 
 // ContainerResize changes the size of the tty for a container.

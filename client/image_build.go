@@ -9,10 +9,10 @@ import (
 	"regexp"
 	"strconv"
 
-	"golang.org/x/net/context"
+	"context"
 
-	"github.com/docker/engine-api/types"
-	"github.com/docker/engine-api/types/container"
+	"github.com/hyperhq/hyper-api/types"
+	"github.com/hyperhq/hyper-api/types/container"
 )
 
 var headerRegexp = regexp.MustCompile(`\ADocker/.+\s\((.+)\)\z`)
@@ -72,10 +72,6 @@ func imageBuildOptionsToQuery(options types.ImageBuildOptions) (url.Values, erro
 
 	if options.PullParent {
 		query.Set("pull", "1")
-	}
-
-	if options.Squash {
-		query.Set("squash", "1")
 	}
 
 	if !container.Isolation.IsDefault(options.Isolation) {

@@ -1,15 +1,14 @@
 package client
 
 import (
+	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/url"
 
-	"github.com/docker/engine-api/types"
-	"github.com/docker/engine-api/types/filters"
-	"github.com/docker/engine-api/types/registry"
-	"golang.org/x/net/context"
+	"github.com/hyperhq/hyper-api/types"
+	"github.com/hyperhq/hyper-api/types/filters"
+	"github.com/hyperhq/hyper-api/types/registry"
 )
 
 // ImageSearch makes the docker host to search by a term in a remote registry.
@@ -18,7 +17,6 @@ func (cli *Client) ImageSearch(ctx context.Context, term string, options types.I
 	var results []registry.SearchResult
 	query := url.Values{}
 	query.Set("term", term)
-	query.Set("limit", fmt.Sprintf("%d", options.Limit))
 
 	if options.Filters.Len() > 0 {
 		filterJSON, err := filters.ToParam(options.Filters)
@@ -45,7 +43,7 @@ func (cli *Client) ImageSearch(ctx context.Context, term string, options types.I
 	return results, err
 }
 
-func (cli *Client) tryImageSearch(ctx context.Context, query url.Values, registryAuth string) (serverResponse, error) {
+func (cli *Client) tryImageSearch(ctx context.Context, query url.Values, registryAuth string) (*serverResponse, error) {
 	headers := map[string][]string{"X-Registry-Auth": {registryAuth}}
 	return cli.get(ctx, "/images/search", query, headers)
 }

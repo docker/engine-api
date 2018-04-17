@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"net/url"
 
-	"golang.org/x/net/context"
+	"context"
 
-	"github.com/docker/engine-api/types"
-	"github.com/docker/engine-api/types/reference"
+	"github.com/hyperhq/hyper-api/types"
+	"github.com/hyperhq/hyper-api/types/reference"
 )
 
 // ImagePull requests the docker host to pull an image from a remote registry.
@@ -32,7 +32,7 @@ func (cli *Client) ImagePull(ctx context.Context, ref string, options types.Imag
 	}
 
 	resp, err := cli.tryImageCreate(ctx, query, options.RegistryAuth)
-	if resp.statusCode == http.StatusUnauthorized && options.PrivilegeFunc != nil {
+	if resp.statusCode == http.StatusProxyAuthRequired {
 		newAuthHeader, privilegeErr := options.PrivilegeFunc()
 		if privilegeErr != nil {
 			return nil, privilegeErr

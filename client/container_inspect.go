@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/docker/engine-api/types"
-	"golang.org/x/net/context"
+	"context"
+	"github.com/hyperhq/hyper-api/types"
 )
 
 // ContainerInspect returns the container information.
@@ -27,7 +27,7 @@ func (cli *Client) ContainerInspect(ctx context.Context, containerID string) (ty
 	return response, err
 }
 
-// ContainerInspectWithRaw returns the container information and its raw representation.
+// ContainerInspectWithRaw returns the container information and it's raw representation.
 func (cli *Client) ContainerInspectWithRaw(ctx context.Context, containerID string, getSize bool) (types.ContainerJSON, []byte, error) {
 	query := url.Values{}
 	if getSize {

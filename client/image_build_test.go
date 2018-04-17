@@ -9,11 +9,11 @@ import (
 	"strings"
 	"testing"
 
-	"golang.org/x/net/context"
+	"context"
 
-	"github.com/docker/engine-api/types"
-	"github.com/docker/engine-api/types/container"
 	"github.com/docker/go-units"
+	"github.com/hyperhq/hyper-api/types"
+	"github.com/hyperhq/hyper-api/types/container"
 )
 
 func TestImageBuildError(t *testing.T) {

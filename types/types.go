@@ -4,12 +4,10 @@ import (
 	"os"
 	"time"
 
-	"github.com/docker/engine-api/types/container"
-	"github.com/docker/engine-api/types/mount"
-	"github.com/docker/engine-api/types/network"
-	"github.com/docker/engine-api/types/registry"
-	"github.com/docker/engine-api/types/swarm"
 	"github.com/docker/go-connections/nat"
+	"github.com/hyperhq/hyper-api/types/container"
+	"github.com/hyperhq/hyper-api/types/network"
+	"github.com/hyperhq/hyper-api/types/registry"
 )
 
 // ContainerCreateResponse contains the information returned to a client on the
@@ -231,6 +229,7 @@ type Info struct {
 	OomKillDisable     bool
 	NGoroutines        int
 	SystemTime         string
+	ExecutionDriver    string
 	LoggingDriver      string
 	CgroupDriver       string
 	NEventsListener    int
@@ -253,13 +252,6 @@ type Info struct {
 	ClusterStore       string
 	ClusterAdvertise   string
 	SecurityOptions    []string
-	Runtimes           map[string]Runtime
-	DefaultRuntime     string
-	Swarm              swarm.Info
-	// LiveRestoreEnabled determines whether containers should be kept
-	// running when the daemon is shutdown or upon daemon start if
-	// running containers are detected
-	LiveRestoreEnabled bool
 }
 
 // PluginsInfo is a temp struct holding Plugins name
@@ -282,28 +274,6 @@ type ExecStartCheck struct {
 	Tty bool
 }
 
-// HealthcheckResult stores information about a single run of a healthcheck probe
-type HealthcheckResult struct {
-	Start    time.Time // Start is the time this check started
-	End      time.Time // End is the time this check ended
-	ExitCode int       // ExitCode meanings: 0=healthy, 1=unhealthy, 2=reserved (considered unhealthy), else=error running probe
-	Output   string    // Output from last check
-}
-
-// Health states
-const (
-	Starting  = "starting"  // Starting indicates that the container is not yet ready
-	Healthy   = "healthy"   // Healthy indicates that the container is running correctly
-	Unhealthy = "unhealthy" // Unhealthy indicates that the container has a problem
-)
-
-// Health stores information about the container's healthcheck results
-type Health struct {
-	Status        string               // Status is one of Starting, Healthy or Unhealthy
-	FailingStreak int                  // FailingStreak is the number of consecutive failures
-	Log           []*HealthcheckResult // Log contains the last few results (oldest first)
-}
-
 // ContainerState stores container's running state
 // it's part of ContainerJSONBase and will return by "inspect" command
 type ContainerState struct {
@@ -318,7 +288,6 @@ type ContainerState struct {
 	Error      string
 	StartedAt  string
 	FinishedAt string
-	Health     *Health `json:",omitempty"`
 }
 
 // ContainerNode stores information about the node that a container
@@ -329,7 +298,7 @@ type ContainerNode struct {
 	Addr      string
 	Name      string
 	Cpus      int
-	Memory    int64
+	Memory    int
 	Labels    map[string]string
 }
 
@@ -409,16 +378,32 @@ type DefaultNetworkSettings struct {
 }
 
 // MountPoint represents a mount point configuration inside the container.
-// This is used for reporting the mountpoints in use by a container.
 type MountPoint struct {
-	Type        mount.Type `json:",omitempty"`
-	Name        string     `json:",omitempty"`
+	Name        string `json:",omitempty"`
 	Source      string
 	Destination string
 	Driver      string `json:",omitempty"`
 	Mode        string
 	RW          bool
-	Propagation mount.Propagation
+	Propagation string
+}
+
+type Snapshot struct {
+	ID     string
+	Name   string
+	Volume string
+	Size   int
+}
+
+type SnapshotsListResponse struct {
+	Snapshots []*Snapshot // Snapshots is the list of snapshots being returned
+	Warnings  []string
+}
+
+type SnapshotCreateRequest struct {
+	Name   string // Name is the requested name of the snapshot
+	Volume string // Volume is the based volume which snapshot need
+	Force  bool
 }
 
 // Volume represents the configuration of a volume for the remote API
@@ -429,6 +414,8 @@ type Volume struct {
 	Status     map[string]interface{} `json:",omitempty"` // Status provides low-level status information about the volume
 	Labels     map[string]string      // Labels is metadata specific to the volume
 	Scope      string                 // Scope describes the level at which the volume exists (e.g. `global` for cluster-wide or `local` for machine level)
+
+	CreatedAt time.Time
 }
 
 // VolumesListResponse contains the response for the remote API:
@@ -444,19 +431,38 @@ type VolumeCreateRequest struct {
 	Name       string            // Name is the requested name of the volume
 	Driver     string            // Driver is the name of the driver that should be used to create the volume
 	DriverOpts map[string]string // DriverOpts holds the driver specific options to use for when creating the volume.
-	Labels     map[string]string // Labels holds metadata specific to the volume being created.
+	Labels     map[string]string // Labels holds meta data specific to the volume being created.
+}
+
+// VolumesInitializeResponse contains the response for the remote API:
+// POST "/volumes/initialize"
+type VolumesInitializeResponse struct {
+	Session   string            // Session identifies the current upload session. If empty, no session is established
+	Cookie    string            // Cookie is the cookie to use when uploading volume data
+	Uploaders map[string]string // Uploaders holds mappings from volume name to volume upload IDs
+}
+
+type VolumeInitDesc struct {
+	Name   string // Name of the volume to be initialized
+	Source string // Source of the volume
+}
+
+// VolumesInitializeRequest contains the request for the remote API:
+// POST "/volumes/initialize"
+type VolumesInitializeRequest struct {
+	Reload bool             // Reload original source set in previouse volume initialize operation
+	Volume []VolumeInitDesc // Volume init description
 }
 
 // NetworkResource is the body of the "get network" http response message
 type NetworkResource struct {
-	Name       string                      // Name is the requested name of the network
-	ID         string                      `json:"Id"` // ID uniquely identifies a network on a single machine
+	Name       string                      // Name is the requested name of the volume
+	ID         string                      `json:"Id"` // ID uniquely indentifies a network on a single machine
 	Scope      string                      // Scope describes the level at which the network exists (e.g. `global` for cluster-wide or `local` for machine level)
-	Driver     string                      // Driver is the Driver name used to create the network (e.g. `bridge`, `overlay`)
+	Driver     string                      // Driver is the Driver name used to create the volume (e.g. `bridge`, `overlay`)
 	EnableIPv6 bool                        // EnableIPv6 represents whether to enable IPv6
 	IPAM       network.IPAM                // IPAM is the network's IP Address Management
-	Internal   bool                        // Internal represents if the network is used internal only
-	Attachable bool                        // Attachable represents if the global scope is manually attachable by regular containers from workers in swarm mode.
+	Internal   bool                        // Internal respresents if the network is used internal only
 	Containers map[string]EndpointResource // Containers contains endpoints belonging to the network
 	Options    map[string]string           // Options holds the network specific options to use for when creating the network
 	Labels     map[string]string           // Labels holds metadata specific to the network being created
@@ -476,9 +482,8 @@ type NetworkCreate struct {
 	CheckDuplicate bool
 	Driver         string
 	EnableIPv6     bool
-	IPAM           *network.IPAM
+	IPAM           network.IPAM
 	Internal       bool
-	Attachable     bool
 	Options        map[string]string
 	Labels         map[string]string
 }
@@ -512,8 +517,72 @@ type Checkpoint struct {
 	Name string // Name is the name of the checkpoint
 }
 
-// Runtime describes an OCI runtime
-type Runtime struct {
-	Path string   `json:"path"`
-	Args []string `json:"runtimeArgs,omitempty"`
+type Rule struct {
+	// The direction in which the security group rule is applied. The only values
+	// allowed are "ingress" or "egress". For a compute instance, an ingress
+	// security group rule is applied to incoming (ingress) traffic for that
+	// instance. An egress rule is applied to traffic leaving the instance.
+	Direction string `json:"direction" yaml:"direction"`
+
+	// Must be IPv4 or IPv6, and addresses represented in CIDR must match the
+	// ingress or egress rules.
+	EtherType string `json:"-" yaml:",omitempty"`
+
+	// The minimum port number in the range that is matched by the security group
+	// rule. If the protocol is TCP or UDP, this value must be less than or equal
+	// to the value of the PortRangeMax attribute. If the protocol is ICMP, this
+	// value must be an ICMP type.
+	PortRangeMin int `json:"port_range_min" yaml:"port_range_min"`
+
+	// The maximum port number in the range that is matched by the security group
+	// rule. The PortRangeMin attribute constrains the PortRangeMax attribute. If
+	// the protocol is ICMP, this value must be an ICMP type.
+	PortRangeMax int `json:"port_range_max" yaml:"port_range_max"`
+
+	// The protocol that is matched by the security group rule. Valid values are
+	// "tcp", "udp", "icmp" or an empty string.
+	Protocol string `json:"protocol" yaml:"protocol"`
+
+	// The remote IP prefix to be associated with this security group rule. You
+	// can specify either RemoteGroupID or RemoteIPPrefix . This attribute
+	// matches the specified IP prefix as the source IP address of the IP packet.
+	RemoteIPPrefix string `json:"remote_ip_prefix" yaml:"remote_ip_prefix"`
+
+	// Optional. The remote group ID to be associated with this security group
+	// rule. You can specify either RemoteGroupID or RemoteIPPrefix.
+	RemoteGroupName string `json:"remote_group_name" yaml:"remote_group_name"`
+}
+
+type SecurityGroup struct {
+	GroupName string `json:"name" yaml:"name"`
+	// The human-readable description of the group
+	Description string `json:"description" yaml:"description"`
+	// The rules which determine how this security group operates.
+	Rules []Rule `json:"rules" yaml:"rules"`
+}
+
+// PodCreateResponse contains the information returned to a client on the
+// creation of a new container.
+type PodCreateResponse struct {
+	// ID is the ID of the created container.
+	PodName string `json:"pod"`
+	ID      string `json:"Id"`
+
+	// Warnings are any warnings encountered during the creation of the container.
+	Warnings []string `json:"Warnings"`
+}
+
+// PodExecCreateResponse contains response of Remote API:
+type PodExecCreateResponse struct {
+	// ID is the exec ID.
+	ID string `json:"Id"`
+}
+
+// ContainerExecInspect holds information returned by exec inspect.
+type PodExecInspect struct {
+	ExecID      string
+	PodName     string
+	ContainerID string
+	Running     bool
+	ExitCode    int
 }

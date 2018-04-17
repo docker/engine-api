@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/docker/engine-api/types"
-	"golang.org/x/net/context"
+	"context"
+	"github.com/hyperhq/hyper-api/types"
 )
 
 func TestVolumeCreateError(t *testing.T) {

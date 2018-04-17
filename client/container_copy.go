@@ -1,6 +1,7 @@
 package client
 
 import (
+	"context"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
@@ -10,9 +11,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"golang.org/x/net/context"
-
-	"github.com/docker/engine-api/types"
+	"github.com/hyperhq/hyper-api/types"
 )
 
 // ContainerStatPath returns Stat information about a path inside the container filesystem.

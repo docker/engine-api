@@ -1,11 +1,11 @@
 package client
 
 import (
+	"context"
 	"encoding/json"
 	"net/url"
 
-	"github.com/docker/engine-api/types"
-	"golang.org/x/net/context"
+	"github.com/hyperhq/hyper-api/types"
 )
 
 // ImageRemove removes an image from the docker host.

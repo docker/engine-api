@@ -9,7 +9,7 @@ package cancellable
 import (
 	"net/http"
 
-	"github.com/docker/engine-api/client/transport"
+	"github.com/hyperhq/hyper-api/client/transport"
 )
 
 type requestCanceler interface {

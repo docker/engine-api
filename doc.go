@@ -1,7 +1,7 @@
 /*
 Package engineapi provides libraries to implement client and server components compatible with the Docker engine.
 
-The client package in github.com/docker/engine-api/client implements all necessary requests to implement the official Docker engine cli.
+The client package in github.com/hyperhq/hyper-api/client implements all necessary requests to implement the official Docker engine cli.
 
 Create a new client, then use it to send and receive messages to the Docker engine API:
 

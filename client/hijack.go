@@ -1,7 +1,9 @@
 package client
 
 import (
+	"context"
 	"crypto/tls"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net"
@@ -10,10 +12,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/docker/engine-api/client/transport"
-	"github.com/docker/engine-api/types"
+	"github.com/hyperhq/hyper-api/signature"
+	"github.com/hyperhq/hyper-api/types"
+
 	"github.com/docker/go-connections/sockets"
-	"golang.org/x/net/context"
+	"github.com/golang/glog"
 )
 
 // tlsClientCon holds tls information and a dialed connection.
@@ -42,15 +45,32 @@ func (cli *Client) postHijacked(ctx context.Context, path string, query url.Valu
 	if err != nil {
 		return types.HijackedResponse{}, err
 	}
-	req.Host = cli.addr
+	req.URL.Host = cli.addr
 
 	req.Header.Set("Connection", "Upgrade")
 	req.Header.Set("Upgrade", "tcp")
 
+	req = signature.Sign4(cli.accessKey, cli.secretKey, req, cli.region)
+
+	if glog.V(7) {
+		bodyBytes, err := json.Marshal(body)
+		if err != nil {
+			return types.HijackedResponse{}, err
+		}
+		curlStr := cli.generateCURL(req, "POST", string(bodyBytes))
+		fmt.Println(strings.Join(curlStr, "\\\n"))
+	}
+
+	//patch
+	if cli.proto == "https" || cli.proto == "http" {
+		cli.proto = "tcp"
+	}
+
 	conn, err := dial(cli.proto, cli.addr, cli.transport.TLSConfig())
+
 	if err != nil {
 		if strings.Contains(err.Error(), "connection refused") {
-			return types.HijackedResponse{}, fmt.Errorf("Cannot connect to the Docker daemon. Is 'docker daemon' running on this host?")
+			return types.HijackedResponse{}, ErrConnectionFailed
 		}
 		return types.HijackedResponse{}, err
 	}
@@ -69,11 +89,11 @@ func (cli *Client) postHijacked(ctx context.Context, path string, query url.Valu
 	defer clientconn.Close()
 
 	// Server hijacks the connection, error 'connection closed' expected
-	_, err = clientconn.Do(req)
+	resp, err := clientconn.Do(req)
 
 	rwc, br := clientconn.Hijack()
 
-	return types.HijackedResponse{Conn: rwc, Reader: br}, err
+	return types.HijackedResponse{Conn: rwc, Reader: br, Resp: resp}, err
 }
 
 func tlsDial(network, addr string, config *tls.Config) (net.Conn, error) {
@@ -136,8 +156,9 @@ func tlsDialWithDialer(dialer *net.Dialer, network, addr string, config *tls.Con
 	// from the hostname we're connecting to.
 	if config.ServerName == "" {
 		// Make a copy to avoid polluting argument or default.
-		config = transport.TLSConfigClone(config)
-		config.ServerName = hostname
+		c := *config
+		c.ServerName = hostname
+		config = &c
 	}
 
 	conn := tls.Client(rawConn, config)

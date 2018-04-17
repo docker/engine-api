@@ -8,9 +8,9 @@ import (
 	"strings"
 	"testing"
 
-	"golang.org/x/net/context"
+	"context"
 
-	"github.com/docker/engine-api/types"
+	"github.com/hyperhq/hyper-api/types"
 )
 
 func TestImagePushReferenceError(t *testing.T) {

@@ -1,8 +1,9 @@
 package client
 
 import (
-	"github.com/docker/engine-api/types"
-	"golang.org/x/net/context"
+	"context"
+
+	"github.com/hyperhq/hyper-api/types"
 )
 
 // CheckpointCreate creates a checkpoint from the given container with the given name

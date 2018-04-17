@@ -2,10 +2,10 @@
 package v1p19
 
 import (
-	"github.com/docker/engine-api/types"
-	"github.com/docker/engine-api/types/container"
-	"github.com/docker/engine-api/types/versions/v1p20"
 	"github.com/docker/go-connections/nat"
+	"github.com/hyperhq/hyper-api/types"
+	"github.com/hyperhq/hyper-api/types/container"
+	"github.com/hyperhq/hyper-api/types/versions/v1p20"
 )
 
 // ContainerJSON is a backcompatibility struct for APIs prior to 1.20.

@@ -4,10 +4,10 @@ import (
 	"io"
 	"net/url"
 
-	"golang.org/x/net/context"
+	"context"
 
 	"github.com/docker/distribution/reference"
-	"github.com/docker/engine-api/types"
+	"github.com/hyperhq/hyper-api/types"
 )
 
 // ImageImport creates a new image based in the source options.

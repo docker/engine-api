@@ -8,10 +8,10 @@ import (
 	"strings"
 	"testing"
 
-	"golang.org/x/net/context"
+	"context"
 
-	"github.com/docker/engine-api/types"
-	"github.com/docker/engine-api/types/filters"
+	"github.com/hyperhq/hyper-api/types"
+	"github.com/hyperhq/hyper-api/types/filters"
 )
 
 func TestEventsErrorInOptions(t *testing.T) {

@@ -2,12 +2,12 @@ package client
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
 
-	"github.com/docker/engine-api/types"
-	"golang.org/x/net/context"
+	"github.com/hyperhq/hyper-api/types"
 )
 
 // VolumeInspect returns the information about a specific volume in the docker host.
@@ -16,7 +16,7 @@ func (cli *Client) VolumeInspect(ctx context.Context, volumeID string) (types.Vo
 	return volume, err
 }
 
-// VolumeInspectWithRaw returns the information about a specific volume in the docker host and its raw representation
+// VolumeInspectWithRaw returns the information about a specific volume in the docker host and it's raw representation
 func (cli *Client) VolumeInspectWithRaw(ctx context.Context, volumeID string) (types.Volume, []byte, error) {
 	var volume types.Volume
 	resp, err := cli.get(ctx, "/volumes/"+volumeID, nil, nil)

@@ -4,10 +4,11 @@ import (
 	"bufio"
 	"io"
 	"net"
+	"net/http"
 
-	"github.com/docker/engine-api/types/container"
-	"github.com/docker/engine-api/types/filters"
 	"github.com/docker/go-units"
+	"github.com/hyperhq/hyper-api/types/container"
+	"github.com/hyperhq/hyper-api/types/filters"
 )
 
 // CheckpointCreateOptions holds parameters to create a checkpoint from a container
@@ -73,11 +74,6 @@ type ContainerRemoveOptions struct {
 	Force         bool
 }
 
-// ContainerStartOptions holds parameters to start containers.
-type ContainerStartOptions struct {
-	CheckpointID string
-}
-
 // CopyToContainerOptions holds information
 // about files to copy into a container
 type CopyToContainerOptions struct {
@@ -100,6 +96,7 @@ type NetworkListOptions struct {
 type HijackedResponse struct {
 	Conn   net.Conn
 	Reader *bufio.Reader
+	Resp   *http.Response
 }
 
 // Close closes the hijacked connection and reader.
@@ -147,10 +144,6 @@ type ImageBuildOptions struct {
 	AuthConfigs    map[string]AuthConfig
 	Context        io.Reader
 	Labels         map[string]string
-	// squash the resulting image's layers to the parent
-	// preserves the original image and creates a new one from the parent with all
-	// the changes applied to a single layer
-	Squash bool
 }
 
 // ImageBuildResponse holds information
@@ -193,6 +186,12 @@ type ImageLoadResponse struct {
 	JSON bool
 }
 
+// ImageDiffResponse returns information to the client about image diff.
+type ImageDiffResponse struct {
+	// Body must be closed to avoid a resource leak
+	ExistLayers []string `json:"existLayers"`
+}
+
 // ImagePullOptions holds information to pull images.
 type ImagePullOptions struct {
 	All           bool
@@ -222,7 +221,11 @@ type ImageSearchOptions struct {
 	RegistryAuth  string
 	PrivilegeFunc RequestPrivilegeFunc
 	Filters       filters.Args
-	Limit         int
+}
+
+// ImageTagOptions holds parameters to tag an image
+type ImageTagOptions struct {
+	Force bool
 }
 
 // ResizeOptions holds parameters to resize a tty.
@@ -243,58 +246,4 @@ type VersionResponse struct {
 // and parse the information received. It returns false otherwise.
 func (v VersionResponse) ServerOK() bool {
 	return v.Server != nil
-}
-
-// NodeListOptions holds parameters to list nodes with.
-type NodeListOptions struct {
-	Filter filters.Args
-}
-
-// NodeRemoveOptions holds parameters to remove nodes with.
-type NodeRemoveOptions struct {
-	Force bool
-}
-
-// ServiceCreateOptions contains the options to use when creating a service.
-type ServiceCreateOptions struct {
-	// EncodedRegistryAuth is the encoded registry authorization credentials to
-	// use when updating the service.
-	//
-	// This field follows the format of the X-Registry-Auth header.
-	EncodedRegistryAuth string
-}
-
-// ServiceCreateResponse contains the information returned to a client
-// on the  creation of a new service.
-type ServiceCreateResponse struct {
-	// ID is the ID of the created service.
-	ID string
-}
-
-// ServiceUpdateOptions contains the options to be used for updating services.
-type ServiceUpdateOptions struct {
-	// EncodedRegistryAuth is the encoded registry authorization credentials to
-	// use when updating the service.
-	//
-	// This field follows the format of the X-Registry-Auth header.
-	EncodedRegistryAuth string
-
-	// TODO(stevvooe): Consider moving the version parameter of ServiceUpdate
-	// into this field. While it does open API users up to racy writes, most
-	// users may not need that level of consistency in practice.
-}
-
-// ServiceListOptions holds parameters to list  services with.
-type ServiceListOptions struct {
-	Filter filters.Args
-}
-
-// TaskListOptions holds parameters to list  tasks with.
-type TaskListOptions struct {
-	Filter filters.Args
-}
-
-// PluginRemoveOptions holds parameters to remove plugins.
-type PluginRemoveOptions struct {
-	Force bool
 }
